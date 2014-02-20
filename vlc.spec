@@ -875,7 +875,7 @@ export CPPFLAGS="$CPPFLAGS -I/usr/include/ebml"
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/speex"
 # locate libsmbclient.h
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
-%configure2_5x
+%configure2_5x \
 	--disable-dependency-tracking \
 %ifarch %{ix86}
 	--disable-sse \
