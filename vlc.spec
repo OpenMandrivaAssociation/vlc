@@ -842,16 +842,17 @@ the VLC media player.
 %else
 %setup -q -n %{fname}
 %endif
-%patch1 -p1 -b .automake12~
-#gw if we want to regenerate libtool, we must remove the local versions of
-# the libtool m4 files, aclocal will replace them
-cd m4
-%__rm -fv argz.m4 libtool.m4 ltdl.m4 ltoptions.m4 ltsugar.m4 ltversion.m4 lt~obsolete.m4
-cd ..
 
+%patch1 -p1 -b .automake12~
 %patch20 -p1 -b .fonts
 %patch21 -p1 -b .live555
 %patch22 -p1 -b .live555
+
+#gw if we want to regenerate libtool, we must remove the local versions of
+# the libtool m4 files, aclocal will replace them
+pushd m4
+rm -fv argz.m4 libtool.m4 ltdl.m4 ltoptions.m4 ltsugar.m4 ltversion.m4 lt~obsolete.m4
+popd
 
 %if %{snapshot}
 ./bootstrap
@@ -865,7 +866,7 @@ cd ..
 libtoolize --install --force
 aclocal -I m4
 autoheader
-autoconf
+autoreconf
 automake -a
 
 %build
