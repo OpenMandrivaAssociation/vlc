@@ -284,7 +284,7 @@ BuildRequires:	pkgconfig(xcb-keysyms)
 BuildRequires:	pkgconfig(xpm)
 
 %if %{with_live}
-BuildRequires:	live555-devel
+BuildRequires:	live-devel
 %endif
 %if %{with_sysfs}
 BuildRequires:	sysfsutils-devel
