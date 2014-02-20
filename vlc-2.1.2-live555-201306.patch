@@ -1,0 +1,13 @@
+diff -urN vlc-2.1.2/modules/access/live555.cpp vlc-2.1.2-patched/modules/access/live555.cpp
+--- vlc-2.1.2/modules/access/live555.cpp	2013-07-25 21:05:03.000000000 +1100
++++ vlc-2.1.2-patched/modules/access/live555.cpp	2013-12-12 20:31:07.916681359 +1100
+@@ -244,9 +244,7 @@
+                    demux_sys_t *p_sys) :
+                    RTSPClient( env, rtspURL, verbosityLevel, applicationName,
+                    tunnelOverHTTPPortNum
+-#if LIVEMEDIA_LIBRARY_VERSION_INT >= 1373932800
+                    , -1
+-#endif
+                    )
+     {
+         this->p_sys = p_sys;

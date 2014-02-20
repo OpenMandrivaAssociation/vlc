@@ -246,7 +246,7 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	2.1.2
+Version:	2.1.3
 Release:	%{release}%{?extrarelsuffix}
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
@@ -258,7 +258,9 @@ Source0:	http://nightlies.videolan.org/build/source/%{fname}.tar.xz
 Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{fname}.tar.xz
 %endif
 Patch1:		vlc-2.0.1-automake-1.12.patch
-Patch20:	vlc-2.0.0-fix-default-font.patch
+Patch20:	vlc-2.1.2-fix-default-font.patch
+Patch21:	vlc-2.1.2-live555-path.patch
+Patch22:	vlc-2.1.2-live555-201306.patch
 
 BuildRequires:	desktop-file-utils
 BuildRequires:	libtool
@@ -331,6 +333,7 @@ BuildRequires:	pkgconfig(speex) >= 1.1.16
 %endif
 %if %{with_flac}
 BuildRequires:	pkgconfig(flac)
+Suggests:	vlc-plugin-flac
 %endif
 %if %{with_mkv}
 BuildRequires:	libmatroska-devel >= 1.0.0
@@ -420,7 +423,7 @@ BuildRequires:	pkgconfig(libbluray) >= 0.2.1
 Suggests:	vlc-plugin-theora
 %if %{with_pulse}
 # needed when using pulseaudio
-Suggests:	vlc-plugin-pulse
+Requires:	vlc-plugin-pulse
 %endif
 Requires:	fonts-ttf-vera
 Requires(post,postun):	desktop-file-utils
@@ -512,7 +515,7 @@ This package adds support for subtitles based on the libass library to VLC.
 %endif
 
 %if %{with_lua}
-%package	plugin-lua
+%package plugin-lua
 Summary:	Add Lua scripting to vlc
 Group:		Video
 Requires:	%{name} = %{version}
@@ -845,7 +848,11 @@ the VLC media player.
 cd m4
 %__rm -fv argz.m4 libtool.m4 ltdl.m4 ltoptions.m4 ltsugar.m4 ltversion.m4 lt~obsolete.m4
 cd ..
+
 %patch20 -p1 -b .fonts
+%patch21 -p1 -b .live555
+%patch22 -p1 -b .live555
+
 %if %{snapshot}
 ./bootstrap
 %endif
@@ -868,7 +875,8 @@ export CPPFLAGS="$CPPFLAGS -I/usr/include/ebml"
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/speex"
 # locate libsmbclient.h
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
-%configure2_5x --disable-dependency-tracking \
+%configure2_5x
+	--disable-dependency-tracking \
 %ifarch %{ix86}
 	--disable-sse \
 %endif
