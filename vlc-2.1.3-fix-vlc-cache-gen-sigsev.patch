@@ -1,0 +1,10 @@
+--- vlc-2.1.3/src/config/keys.c	2014-01-27 16:07:46.000000000 +0000
++++ vlc-2.1.3/src/config/keys.c.tpg	2014-02-20 23:49:49.785947459 +0000
+@@ -546,7 +546,6 @@
+     var_DelCallback (libvlc, "key-pressed", vlc_key_to_action, &as->map);
+ 
+     tdestroy (as->global_map, free);
+-    tdestroy (as->map, free);
+     free (as);
+     libvlc->p_hotkeys = NULL;
+ }
