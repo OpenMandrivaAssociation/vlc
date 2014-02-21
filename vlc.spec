@@ -259,7 +259,6 @@ Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{fname}.t
 %endif
 Patch1:		vlc-2.0.1-automake-1.12.patch
 Patch20:	vlc-2.1.2-fix-default-font.patch
-Patch21:	vlc-2.1.2-live555-path.patch
 Patch22:	vlc-2.1.2-live555-201306.patch
 Patch23:	vlc-2.1.3-fix-vlc-cache-gen-sigsev.patch
 
@@ -284,9 +283,6 @@ BuildRequires:	pkgconfig(xcb-util)
 BuildRequires:	pkgconfig(xcb-keysyms)
 BuildRequires:	pkgconfig(xpm)
 
-%if %{with_live}
-BuildRequires:	live-devel
-%endif
 %if %{with_sysfs}
 BuildRequires:	sysfsutils-devel
 %endif
@@ -846,7 +842,6 @@ the VLC media player.
 
 %patch1 -p1 -b .automake12~
 %patch20 -p1 -b .fonts
-%patch21 -p1 -b .live555
 %patch22 -p1 -b .live555
 %patch23 -p1
 
