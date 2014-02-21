@@ -75,7 +75,7 @@
 %define with_lame 0
 %define with_dts 0
 %define with_x264 0
-%define with_live 1
+%define with_live 0
 %define with_libv4l 1
 %define with_sysfs 1
 %define with_shout 1
