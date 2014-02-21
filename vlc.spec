@@ -32,7 +32,6 @@
 %define with_aa 1
 %define with_sdl 1
 %define with_sdl_image 1
-%define with_xosd 0
 %define with_xvideo 1
 %define with_twolame 1
 %define with_schroedinger 1
@@ -48,12 +47,6 @@
 %define with_taglib 1
 %define with_mtp 1
 %define with_xcb_randr 1
-
-%ifarch %{ix86}
-%define with_loader 1
-%else
-%define with_loader 0
-%endif
 
 %define with_mad 1
 %define with_ogg 1
@@ -109,7 +102,6 @@
 
 %{?_without_aa:   	%{expand: %%global with_aa 0}}
 %{?_without_sdl:   	%{expand: %%global with_sdl 0}}
-%{?_without_xosd:	%{expand: %%global with_xosd 0}}
 %{?_without_xvideo:	%{expand: %%global with_xvideo 0}}
 %{?_without_twolame:	%{expand: %%global with_twolame 0}}
 %{?_without_schroedinger: %{expand: %%global with_schroedinger 0}}
@@ -167,7 +159,6 @@
 
 %{?_with_aa:		%{expand: %%global with_aa 1}}
 %{?_with_sdl:		%{expand: %%global with_sdl 1}}
-%{?_with_xosd:		%{expand: %%global with_xosd 1}}
 %{?_with_xvideo:	%{expand: %%global with_xvideo 1}}
 %{?_with_twolame:	%{expand: %%global with_twolame 1}}
 %{?_with_schroedinger: 	%{expand: %%global with_schroedinger 1}}
@@ -215,7 +206,6 @@
 %{?_with_bluray:	%{expand: %%global with_bluray 1}}
 
 %if %{mdvver} <= 201100
-%define with_xosd 1
 %define with_goom 1
 %endif
 
@@ -276,9 +266,13 @@ BuildRequires:	pkgconfig(libcdio)
 BuildRequires:	pkgconfig(libnotify)
 BuildRequires:	pkgconfig(libproxy-1.0)
 BuildRequires:	pkgconfig(librsvg-2.0)
+BuildRequires:	pkgconfig(libssh2)
 BuildRequires:	pkgconfig(libchromaprint)
+BuildRequires:	pkgconfig(opencv)
 BuildRequires:	pkgconfig(opus)
 BuildRequires:	pkgconfig(portaudio-2.0)
+BuildRequires:	pkgconfig(vdpau)
+BuildRequires:	pkgconfig(libvncclient)
 BuildRequires:	pkgconfig(xcb-util)
 BuildRequires:	pkgconfig(xcb-keysyms)
 BuildRequires:	pkgconfig(xpm)
@@ -615,19 +609,6 @@ the VLC media player.
 
 # visualization plugins
 
-%if %{with_xosd}
-%package plugin-xosd
-Summary:	X On-Screen Display plugin for the VLC media player
-Group:		Video
-BuildRequires:	xosd-devel >= 2
-Requires:	%{name} = %{version}
-
-%description plugin-xosd
-This is an On-Screen Display plugin for the VLC media player. To activate
-it, use the `--extraintf xosd' flag or select the `xosd' interface plugin
-from the preferences menu.
-%endif
-
 %if %{with_goom}
 %package plugin-goom
 Summary:	Visualization plugin for the VLC media player
@@ -885,9 +866,9 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 	--disable-bonjour \
 %endif
 %if %{with_smb}
-	--enable-smb \
+	--enable-smbclient \
 %else
-	--disable-smb \
+	--disable-smbclient \
 %endif
 %if %{with_ncurses}
 	--enable-ncurses \
@@ -901,11 +882,6 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 %endif
 %if %{with_sdl}
 	--enable-sdl \
-%endif
-%if %{with_xosd}
-	--enable-xosd \
-%else
-	--disable-xosd \
 %endif
 %if %{with_mad}
 	--enable-mad \
@@ -936,9 +912,9 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 	--disable-mkv \
 %endif
 %if %{with_dv}
-	--enable-dv \
+	--enable-dv1394 \
 %else
-	--disable-dv \
+	--disable-dv1394 \
 %endif
 %if %{with_dvbpsi}
 	--enable-dvbpsi \
@@ -995,9 +971,6 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 	--enable-x264 \
 %else
 	--disable-x264 \
-%endif
-%if %{with_loader}
-	--enable-loader \
 %endif
 %if %{with_twolame}
 	--enable-twolame \
@@ -1099,6 +1072,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/access/libaccess_tcp_plugin.so*
 %{_libdir}/vlc/plugins/access/libaccess_udp_plugin.so*
 %{_libdir}/vlc/plugins/access/libaccess_vdr_plugin.so*
+%{_libdir}/vlc/plugins/access/libdv1394_plugin.so*
 %{_libdir}/vlc/plugins/access/libdtv_plugin.so*
 %{_libdir}/vlc/plugins/access/libdvb_plugin.so*
 %{_libdir}/vlc/plugins/access/libidummy_plugin.so
@@ -1202,9 +1176,6 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/codec/libdvbsub_plugin.so*
 %if %{with_faad}
 %{_libdir}/vlc/plugins/codec/libfaad_plugin.so*
-%endif
-%if %{with_loader}
-%{_libdir}/vlc/plugins/codec/libdmo_plugin.so*
 %endif
 %{_libdir}/vlc/plugins/codec/libtelx_plugin.so
 %{_libdir}/vlc/plugins/codec/libg711_plugin.so
@@ -1553,13 +1524,6 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %files plugin-aa
 %doc README
 %{_libdir}/vlc/plugins/video_output/libaa_plugin.so*
-%endif
-
-# visualization plugin
-%if %{with_xosd}
-%files plugin-xosd
-%doc README
-%{_libdir}/vlc/plugins/notify/libxosd_plugin.so*
 %endif
 
 %if %{with_goom}
