@@ -1257,10 +1257,12 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %endif
 %{_libdir}/vlc/plugins/misc/libdbus_screensaver_plugin.so
 
+%ifnarch %arm aarch64
 %dir %{_libdir}/vlc/plugins/mmx
 %{_libdir}/vlc/plugins/mmx/libi420_rgb_mmx_plugin.so
 %{_libdir}/vlc/plugins/mmx/libi420_yuy2_mmx_plugin.so
 %{_libdir}/vlc/plugins/mmx/libi422_yuy2_mmx_plugin.so
+%endif
 
 %dir %{_libdir}/vlc/plugins/mux
 %{_libdir}/vlc/plugins/mux/libmux_asf_plugin.so*
