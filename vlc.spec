@@ -250,6 +250,7 @@ Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{fname}.t
 Patch1:		vlc-2.0.1-automake-1.12.patch
 Patch20:	vlc-2.1.2-fix-default-font.patch
 Patch22:	vlc-2.1.2-live555-201306.patch
+Patch23:	vlc-2.1.5-ffmpeg2.4.patch
 
 BuildRequires:	desktop-file-utils
 BuildRequires:	libtool
@@ -275,6 +276,7 @@ BuildRequires:	pkgconfig(libvncclient)
 BuildRequires:	pkgconfig(xcb-util)
 BuildRequires:	pkgconfig(xcb-keysyms)
 BuildRequires:	pkgconfig(xpm)
+BuildRequires:	crystalhd-devel
 
 %if %{with_sysfs}
 BuildRequires:	sysfsutils-devel
@@ -823,6 +825,7 @@ the VLC media player.
 %patch1 -p1 -b .automake12~
 %patch20 -p1 -b .fonts
 %patch22 -p1 -b .live555
+%patch23 -p1 -b .ffmpeg24
 
 #gw if we want to regenerate libtool, we must remove the local versions of
 # the libtool m4 files, aclocal will replace them
@@ -833,17 +836,7 @@ popd
 %if %{snapshot}
 ./bootstrap
 %endif
-#gw we always need to call libtoolize to replace Debian's libtool
-#we get this error on 2011.0 and 2010.0, but not on 2010.1
-##libtool: Version mismatch error.  This is libtool 2.2.6b Debian-2.2.6b-2, but the
-##libtool: definition of this LT_INIT comes from libtool 2.2.10.
-##libtool: You should recreate aclocal.m4 with macros from libtool 2.2.6b Debian-2.2.6b-2
-##libtool: and run autoconf again.
-libtoolize --install --force
-aclocal -I m4
-autoheader
-autoreconf
-automake -a
+autoreconf -fiv
 
 %build
 # add missing ebml include dir
@@ -1152,6 +1145,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/codec/libavcodec_plugin.so
 %{_libdir}/vlc/plugins/codec/libcc_plugin.so
 %{_libdir}/vlc/plugins/codec/libcdg_plugin.so
+%{_libdir}/vlc/plugins/codec/libcrystalhd_plugin.so
 %{_libdir}/vlc/plugins/codec/libcvdsub_plugin.so*
 %{_libdir}/vlc/plugins/codec/libddummy_plugin.so
 %{_libdir}/vlc/plugins/codec/libdirac_plugin.so
