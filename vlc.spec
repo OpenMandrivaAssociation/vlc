@@ -85,7 +85,8 @@
 %define with_gnutls 1
 
 %define with_bluray 1
-
+# is non-free stuf
+%define with_crystalhd 0
 
 %define libname %mklibname %{name} %{libmajor}
 %define libnamecore %mklibname vlccore %{coremajor}
@@ -277,7 +278,9 @@ BuildRequires:	pkgconfig(libvncclient)
 BuildRequires:	pkgconfig(xcb-util)
 BuildRequires:	pkgconfig(xcb-keysyms)
 BuildRequires:	pkgconfig(xpm)
+%if %{with_crystalhd}
 BuildRequires:	crystalhd-devel
+%endif
 
 %if %{with_sysfs}
 BuildRequires:	sysfsutils-devel
@@ -1149,7 +1152,9 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/codec/libavcodec_plugin.so
 %{_libdir}/vlc/plugins/codec/libcc_plugin.so
 %{_libdir}/vlc/plugins/codec/libcdg_plugin.so
+%if %{with_crystalhd}
 %{_libdir}/vlc/plugins/codec/libcrystalhd_plugin.so
+%endif
 %{_libdir}/vlc/plugins/codec/libcvdsub_plugin.so*
 %{_libdir}/vlc/plugins/codec/libddummy_plugin.so
 %{_libdir}/vlc/plugins/codec/libdirac_plugin.so
