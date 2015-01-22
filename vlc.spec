@@ -148,6 +148,7 @@
 %{?_without_gnutls:	%{expand: %%global with_gnutls 0}}
 
 %{?_without_bluray:	%{expand: %%global with_bluray 0}}
+%{?_without_bluray:	%{expand: %%global with_crystalhd 0}}
 
 # with
 %{?_with_plf:		%{expand: %%global with_plf 1}}
