@@ -1,15 +1,17 @@
-diff -urN vlc-2.1.2/modules/text_renderer/freetype.c vlc-2.1.2-patched/modules/text_renderer/freetype.c
---- vlc-2.1.2/modules/text_renderer/freetype.c	2013-12-06 05:04:55.000000000 +1100
-+++ vlc-2.1.2-patched/modules/text_renderer/freetype.c	2013-12-12 00:42:21.051141122 +1100
-@@ -67,9 +67,9 @@
+--- vlc-2.2.0/modules/text_renderer/platform_fonts.h.omv~	2015-03-01 00:16:58.201784843 +0100
++++ vlc-2.2.0/modules/text_renderer/platform_fonts.h	2015-03-01 00:18:07.592357054 +0100
+@@ -55,10 +55,10 @@
  # define SYSTEM_DEFAULT_MONOSPACE_FONT_FILE "/system/fonts/DroidSansMono.ttf"
  # define SYSTEM_DEFAULT_MONOSPACE_FAMILY "Droid Sans Mono"
  #else
 -# define SYSTEM_DEFAULT_FONT_FILE "/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf"
-+# define SYSTEM_DEFAULT_FONT_FILE "/usr/share/fonts/TTF/VeraBd.ttf"
- # define SYSTEM_DEFAULT_FAMILY "Serif Bold"
+-# define SYSTEM_DEFAULT_FAMILY "Serif Bold"
 -# define SYSTEM_DEFAULT_MONOSPACE_FONT_FILE "/usr/share/fonts/truetype/freefont/FreeMono.ttf"
-+# define SYSTEM_DEFAULT_MONOSPACE_FONT_FILE "/usr/share/fonts/TTF/VeraMono.ttf"
- # define SYSTEM_DEFAULT_MONOSPACE_FAMILY "Monospace"
+-# define SYSTEM_DEFAULT_MONOSPACE_FAMILY "Monospace"
++# define SYSTEM_DEFAULT_FONT_FILE "/usr/share/fonts/truetype/oxygen/Oxygen-Sans-Bold.ttf"
++# define SYSTEM_DEFAULT_FAMILY "Oxygen Sans Bold"
++# define SYSTEM_DEFAULT_MONOSPACE_FONT_FILE "/usr/share/fonts/truetype/oxygen/OxygenMono-Regular.ttf"
++# define SYSTEM_DEFAULT_MONOSPACE_FAMILY "Oxygen Mono"
  #endif
  
+ #ifndef DEFAULT_FONT_FILE
