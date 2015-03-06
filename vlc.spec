@@ -1,6 +1,6 @@
 %define snapshot 0
 %define pre 0
-%define rel 4
+%define rel 1
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %elsif %{snapshot}
@@ -255,10 +255,13 @@ Patch22:	vlc-2.1.2-live555-201306.patch
 
 BuildRequires:	desktop-file-utils
 BuildRequires:	libtool
+BuildRequires:	yasm
 BuildRequires:	gettext-devel
+BuildRequires:	libmpcdec-devel
 BuildRequires:	pkgconfig(caca)
 BuildRequires:	pkgconfig(dirac)
 BuildRequires:	pkgconfig(dvdread)
+BuildRequires:	pkgconfig(egl)
 BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(glu)
 BuildRequires:	pkgconfig(gnome-vfs-2.0)
