@@ -1,6 +1,6 @@
 %define snapshot 0
 %define pre 0
-%define rel 1
+%define rel 2
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %elsif %{snapshot}
@@ -26,7 +26,8 @@
 %define with_xml 1
 %define with_ncurses 1
 %define with_lirc 1
-%define with_qt4 1
+%define with_qt4 0
+%define with_qt5 1
 %define with_svlc 1
 %define with_udev 1
 %define with_aa 1
@@ -99,6 +100,7 @@
 %{?_without_ncurses:	%{expand: %%global with_ncurses 0}}
 %{?_without_lirc:	%{expand: %%global with_lirc 0}}
 %{?_without_qt4:	%{expand: %%global with_qt4 0}}
+%{?_without_qt5:	%{expand: %%global with_qt5 0}}
 %{?_without_svlc:	%{expand: %%global with_svlc 0}}
 
 %{?_without_aa:   	%{expand: %%global with_aa 0}}
@@ -157,6 +159,7 @@
 %{?_with_ncurses:	%{expand: %%global with_ncurses 1}}
 %{?_with_lirc:		%{expand: %%global with_lirc 1}}
 %{?_with_qt4:		%{expand: %%global with_qt4 1}}
+%{?_with_qt5:		%{expand: %%global with_qt5 1}}
 %{?_with_svlc:		%{expand: %%global with_svlc 1}}
 
 %{?_with_aa:		%{expand: %%global with_aa 1}}
@@ -305,6 +308,13 @@ BuildRequires:	pkgconfig(udev)
 %endif
 %if %{with_qt4}
 BuildRequires:	qt4-devel
+%endif
+%if %{with_qt5}
+BuildRequires:	cmake(Qt5Core)
+BuildRequires:	cmake(Qt5Widgets)
+BuildRequires:	cmake(Qt5Gui)
+BuildRequires:	cmake(Qt5X11Extras)
+BuildRequires:	qmake5
 %endif
 %if %{with_taglib}
 BuildRequires:	pkgconfig(taglib)
@@ -853,6 +863,9 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/speex"
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 %configure \
 --disable-dependency-tracking \
+%if %{with_qt5}
+--disable-qt4 \
+%endif
 %ifarch %{ix86}
 --disable-sse \
 %endif
@@ -1278,7 +1291,9 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/mux/libmux_ts_plugin.so
 %{_libdir}/vlc/plugins/mux/libmux_wav_plugin.so*
 %dir %{_libdir}/vlc/plugins/gui/
+%if %{with_qt4}
 %{_libdir}/vlc/plugins/gui/libqt4_plugin.so
+%endif
 %dir %{_libdir}/vlc/plugins/packetizer
 %{_libdir}/vlc/plugins/packetizer/libpacketizer_copy_plugin.so*
 %{_libdir}/vlc/plugins/packetizer/libpacketizer_dirac_plugin.so
