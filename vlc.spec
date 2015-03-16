@@ -995,7 +995,7 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 --with-pic
 %endif
 
-%make
+%make V=1
 
 %install
 %__mkdir_p %{buildroot}%{_libdir}
