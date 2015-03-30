@@ -1298,6 +1298,9 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %if %{with_qt4}
 %{_libdir}/vlc/plugins/gui/libqt4_plugin.so
 %endif
+%if %{with_qt5}
+%{_libdir}/vlc/plugins/gui/libqt4_plugin.so
+%endif
 %dir %{_libdir}/vlc/plugins/packetizer
 %{_libdir}/vlc/plugins/packetizer/libpacketizer_copy_plugin.so*
 %{_libdir}/vlc/plugins/packetizer/libpacketizer_dirac_plugin.so
