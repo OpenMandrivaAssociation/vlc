@@ -849,7 +849,11 @@ popd
 %if %{snapshot}
 ./bootstrap
 %endif
-autoreconf -fiv
+libtoolize --install --force --copy
+aclocal -I m4
+autoheader
+autoconf
+automake -acf
 
 %build
 #export CC=gcc
