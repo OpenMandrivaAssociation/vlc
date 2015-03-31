@@ -1,6 +1,6 @@
 %define snapshot 0
 %define pre 0
-%define rel 3
+%define rel 4
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %elsif %{snapshot}
@@ -40,7 +40,7 @@
 %define with_gme 1
 %define with_zvbi 1
 %define with_kate 1
-%define with_kde 1
+%define with_kde 0
 %define with_goom 0
 %define with_projectm 1
 %define with_ass 1
