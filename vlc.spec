@@ -991,6 +991,9 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 --disable-bluray \
 %endif
 --enable-realrtsp \
+%if !%{with_kde}
+--without-kde-solid \
+%endif
 %ifarch x86_64
 --with-pic
 %endif
