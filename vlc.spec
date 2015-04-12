@@ -26,7 +26,7 @@
 %define with_xml 1
 %define with_ncurses 1
 %define with_lirc 1
-%ifarch %{ix_86}
+%ifarch %{ix86}
 %define with_qt4 1
 %define with_qt5 0
 %else
