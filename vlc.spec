@@ -26,8 +26,13 @@
 %define with_xml 1
 %define with_ncurses 1
 %define with_lirc 1
+%ifarch %{ix_86}
+%define with_qt4 1
+%define with_qt5 0
+%else
 %define with_qt4 0
 %define with_qt5 1
+%endif
 %define with_svlc 1
 %define with_udev 1
 %define with_aa 1
@@ -865,9 +870,6 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/speex"
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 %configure \
 --disable-dependency-tracking \
-%if %{with_qt5}
---disable-qt4 \
-%endif
 %ifarch %{ix86}
 --disable-sse \
 %endif
