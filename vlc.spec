@@ -92,7 +92,11 @@
 
 %define with_bluray 1
 # is non-free stuf
+%ifarch %{arm}
+%define with_crystalhd 0
+%else
 %define with_crystalhd 1
+%endif
 
 %define libname %mklibname %{name} %{libmajor}
 %define libnamecore %mklibname vlccore %{coremajor}
@@ -421,6 +425,9 @@ BuildRequires:	kdelibs4-core
 %endif
 %if %{with_bluray}
 BuildRequires:	pkgconfig(libbluray) >= 0.2.1
+%endif
+%if %{with_crystalhd}
+BuildRequires: crystalhd-devel
 %endif
 
 %rename	gvlc
