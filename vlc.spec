@@ -383,11 +383,11 @@ BuildRequires:	pkgconfig(libmpeg2)
 BuildRequires:	libmpcdec-devel
 %endif
 %if %{with_faad}
-BuildRequires:	libfaad2-devel >= 2.0
+BuildRequires:	faad2-devel >= 2.0
 %rename	vlc-plugin-faad
 %endif
 %if %{with_faac}
-BuildRequires:	libfaac-devel
+BuildRequires:	faac-devel
 %endif
 %if %{with_alsa}
 BuildRequires:	pkgconfig(alsa)
