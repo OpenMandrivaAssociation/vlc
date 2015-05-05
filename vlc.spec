@@ -262,7 +262,7 @@ BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(glu)
 BuildRequires:	pkgconfig(gnome-vfs-2.0)
 BuildRequires:	pkgconfig(gtk+-2.0)
-BuildRequires:	pkgconfig(libavcodec)
+BuildRequires:	pkgconfig(libavcodec) >= 2.5.4
 BuildRequires:	pkgconfig(libcdio)
 BuildRequires:	pkgconfig(libnotify)
 BuildRequires:	pkgconfig(libproxy-1.0)
