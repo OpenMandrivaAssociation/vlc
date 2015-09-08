@@ -1,6 +1,6 @@
 %define snapshot 0
 %define pre 0
-%define rel 6
+%define rel 7
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %elsif %{snapshot}
