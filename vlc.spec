@@ -875,6 +875,8 @@ export CPPFLAGS="$CPPFLAGS -I/usr/include/ebml"
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/speex"
 # locate libsmbclient.h
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
+# reduce memory on linking
+export LDFLAGS="%{ldflags} -Wl,--reduce-memory-overheads -Wl,--no-keep-memory -Wl,--as-needed"
 %configure \
 --disable-dependency-tracking \
 %ifarch %{ix86}
