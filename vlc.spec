@@ -346,6 +346,7 @@ BuildRequires:	pkgconfig(xcb)
 %endif
 %if %{with_speex}
 BuildRequires:	pkgconfig(speex) >= 1.1.16
+BuildRequires:	pkgconfig(speexdsp)
 %endif
 %if %{with_flac}
 BuildRequires:	pkgconfig(flac)
