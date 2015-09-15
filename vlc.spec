@@ -26,9 +26,9 @@
 %define with_xml 1
 %define with_ncurses 1
 %define with_lirc 1
-%ifarch %{ix86} x86_64 %{arm}
-%define with_qt4 1
-%define with_qt5 0
+%ifarch %{ix86} %{arm}
+%define with_qt4 0
+%define with_qt5 1
 %else
 %define with_qt4 0
 %define with_qt5 1
