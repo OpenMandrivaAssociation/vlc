@@ -1,6 +1,6 @@
 %define snapshot 0
 %define pre 0
-%define rel 7
+%define rel 8
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %elsif %{snapshot}
@@ -27,8 +27,8 @@
 %define with_ncurses 1
 %define with_lirc 1
 %ifarch %{ix86} x86_64 %{arm}
-%define with_qt4 1
-%define with_qt5 0
+%define with_qt4 0
+%define with_qt5 1
 %else
 %define with_qt4 0
 %define with_qt5 1
