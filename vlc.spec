@@ -1,6 +1,6 @@
 %define snapshot 0
 %define pre 0
-%define rel 8
+%define rel 1
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %elsif %{snapshot}
@@ -74,6 +74,7 @@
 %define with_lame 0
 %define with_dts 0
 %define with_x264 0
+%define with_x265 0
 %define with_live 1
 %define with_libv4l 1
 %define with_sysfs 1
@@ -134,6 +135,7 @@
 %{?_without_faad:	%{expand: %%global with_faad 0}}
 %{?_without_faac:	%{expand: %%global with_faac 0}}
 %{?_without_x264:	%{expand: %%global with_x264 0}}
+%{?_without_x265:	%{expand: %%global with_x265 0}}
 %{?_without_lame:	%{expand: %%global with_lame 0}}
 %{?_without_dts:	%{expand: %%global with_dts 0}}
 %{?_without_live:	%{expand: %%global with_live 0}}
@@ -193,6 +195,7 @@
 %{?_with_faad:		%{expand: %%global with_faad 1}}
 %{?_with_faac:		%{expand: %%global with_faac 1}}
 %{?_with_x264:		%{expand: %%global with_x264 1}}
+%{?_with_x265:		%{expand: %%global with_x265 1}}
 %{?_with_lame:		%{expand: %%global with_lame 1}}
 %{?_with_dts:		%{expand: %%global with_dts 1}}
 %{?_with_live:		%{expand: %%global with_live 1}}
@@ -244,13 +247,14 @@
 %global with_lame 1
 %global with_dts 1
 %global with_x264 1
+%global with_x265 1
 %endif
 
 %define git_url git://git.videolan.org/vlc.git
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	2.2.1
+Version:	2.2.2
 Release:	%{release}%{?extrarelsuffix}
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
@@ -411,6 +415,9 @@ BuildRequires:	pkgconfig(libdts)
 %endif
 %if %{with_x264}
 BuildRequires:	pkgconfig(x264)
+%endif
+%if %{with_x265}
+BuildRequires:	pkgconfig(x265)
 %endif
 %if %{with_xml}
 BuildRequires:	pkgconfig(libxml-2.0)
@@ -861,6 +868,9 @@ pushd m4
 rm -fv argz.m4 libtool.m4 ltdl.m4 ltoptions.m4 ltsugar.m4 ltversion.m4 lt~obsolete.m4
 popd
 
+# Our Qt is patched with the bit below -- no point in erroring out
+sed -i -e 's/.*ERROR.*I78ef29975181ee22429c9bd4b11d96d9e68b7a9c.*/AC_MSG_WARN([OMV Qt is good])/' configure.ac
+
 %if %{snapshot}
 ./bootstrap
 %endif
@@ -994,6 +1004,11 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 --enable-x264 \
 %else
 --disable-x264 \
+%endif
+%if %{with_x265}
+--enable-x265 \
+%else
+--disable-x265 \
 %endif
 %if %{with_twolame}
 --enable-twolame \
@@ -1196,6 +1211,9 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/codec/libsubsdec_plugin.so*
 %if %{with_x264}
 %{_libdir}/vlc/plugins/codec/libx264_plugin.so*
+%endif
+%if %{with_x265}
+%{_libdir}/vlc/plugins/codec/libx265_plugin.so*
 %endif
 %{_libdir}/vlc/plugins/codec/libspudec_plugin.so*
 %{_libdir}/vlc/plugins/codec/libdvbsub_plugin.so*
