@@ -1,0 +1,54 @@
+--- vlc-2.2.2/configure.ac.orig	2016-03-09 14:38:47.040434047 +0000
++++ vlc-2.2.2/configure.ac	2016-03-09 14:41:01.433425453 +0000
+@@ -2323,9 +2323,9 @@
+ [  --enable-avcodec        libavcodec codec (default enabled)])
+ AS_IF([test "${enable_avcodec}" != "no"], [
+   PKG_CHECK_MODULES(AVCODEC,[libavcodec >= 53.34.0 libavutil >= 51.22.0], [
+-    PKG_CHECK_EXISTS([libavutil < 55],, [
+-      AC_MSG_ERROR([libavutil versions 55 and later are not supported.])
+-    ])
++    dnl PKG_CHECK_EXISTS([libavutil < 55],, [
++    dnl  AC_MSG_ERROR([libavutil versions 55 and later are not supported.])
++    dnl ])
+     VLC_SAVE_FLAGS
+     CPPFLAGS="${CPPFLAGS} ${AVCODEC_CFLAGS}"
+     CFLAGS="${CFLAGS} ${AVCODEC_CFLAGS}"
+@@ -2382,9 +2382,9 @@
+ AS_IF([test "${have_vaapi}" = "yes" -a "${have_avcodec}" = "yes"], [
+   case "${avfork}" in
+     ffmpeg)
+-      PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
+-        AC_MSG_ERROR([VA API requires FFmpeg libavcodec < 57.10 or libav.])
+-      ])
++      dnl PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
++      dnl   AC_MSG_ERROR([VA API requires FFmpeg libavcodec < 57.10 or libav.])
++      dnl ])
+       ;;
+   esac
+   VLC_SAVE_FLAGS
+@@ -2416,9 +2416,9 @@
+   AS_IF([test "x${have_avcodec}" = "xyes"], [
+     case "${avfork}" in
+       ffmpeg)
+-        PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
+-          AC_MSG_ERROR([DXVA2 requires FFmpeg libavcodec < 57.10 or libav.])
+-        ])
++        dnl PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
++        dnl   AC_MSG_ERROR([DXVA2 requires FFmpeg libavcodec < 57.10 or libav.])
++        dnl ])
+         ;;
+     esac
+     AC_CHECK_HEADERS(dxva2api.h,
+@@ -3180,9 +3180,9 @@
+   case "${avfork}" in
+     libav) av_vdpau_ver="55.26.0" ;;
+     ffmpeg) av_vdpau_ver="55.42.100"
+-      PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
+-        AC_MSG_ERROR([VDPAU requires FFmpeg libavcodec < 57.10 or libav.])
+-      ])
++      dnl PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
++      dnl  AC_MSG_ERROR([VDPAU requires FFmpeg libavcodec < 57.10 or libav.])
++      dnl ])
+       ;;
+   esac
+   PKG_CHECK_EXISTS([libavutil >= 52.4.0 libavcodec >= ${av_vdpau_ver}], [

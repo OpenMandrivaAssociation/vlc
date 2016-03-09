@@ -269,6 +269,11 @@ Patch1:		vlc-2.0.1-automake-1.12.patch
 Patch20:	vlc-2.1.2-fix-default-font.patch
 Patch22:	vlc-2.1.2-live555-201306.patch
 Patch23:	vlc-2.1.5-fix-skins2-default-skin-creation.patch
+# Disable errors when ffmpeg 3.0 is used, apparently it is safe as the
+# commit in 2.9 causing issues was reverted for 3.0
+Patch24:	vlc-ffmpeg3.patch
+# Debian patch for compiling with ffmpeg 2.9+
+Patch25:	ffmpeg_2.9.patch
 
 BuildRequires:	desktop-file-utils
 BuildRequires:	libtool
@@ -861,6 +866,8 @@ the VLC media player.
 %patch20 -p1 -b .fonts
 %patch22 -p1 -b .live555
 %patch23 -p1 -b .skintar
+%patch24 -p1
+%patch25 -p1
 
 #gw if we want to regenerate libtool, we must remove the local versions of
 # the libtool m4 files, aclocal will replace them
