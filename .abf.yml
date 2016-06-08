@@ -1,2 +1,4 @@
-sources:
+removed_sources:
   vlc-2.2.2.tar.xz: 7983168069fc2024707c21d38a639d23f3245c8a
+sources:
+  vlc-2.2.4.tar.xz: ec171b0ad731d9d114540cd7b7fcb41fc3293696
