@@ -1098,6 +1098,9 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/access/libattachment_plugin.so
 %{_libdir}/vlc/plugins/access/libavio_plugin.so
 %{_libdir}/vlc/plugins/access/libaccess_bd_plugin.so
+%if %{with_dvdnav}
+%{_libdir}/vlc/plugins/access/libdvdnav_plugin.so
+%endif
 %{_libdir}/vlc/plugins/access/libgnomevfs_plugin.so
 %{_libdir}/vlc/plugins/access/libimem_plugin.so
 %if %{with_mtp}
