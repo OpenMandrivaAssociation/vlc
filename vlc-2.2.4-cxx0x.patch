@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index 83141cd..77d6e40 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3740,7 +3740,7 @@ AS_IF([test "${enable_qt}" != "no"], [
+   PKG_CHECK_MODULES([QT], [Qt5Core >= 5.1.0 Qt5Widgets Qt5Gui], [
+       PKG_CHECK_MODULES([QTX11], [Qt5X11Extras], [
+           VLC_ADD_LIBS([qt4],[${QTX11_LIBS}])
+-          VLC_ADD_CXXFLAGS([qt4],[${QTX11_CFLAGS} -DQT5_HAS_X11])
++          VLC_ADD_CXXFLAGS([qt4],[${QTX11_CFLAGS} -DQT5_HAS_X11 -std=c++0x])
+           PKG_CHECK_MODULES([XI], [xi], [
+             VLC_ADD_LIBS([qt4], [${XI_LIBS}])
+             VLC_ADD_CXXFLAGS([qt4], [${XI_CFLAGS} -DHAVE_XI])

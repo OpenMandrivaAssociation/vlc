@@ -274,6 +274,8 @@ Patch23:	vlc-2.1.5-fix-skins2-default-skin-creation.patch
 Patch24:	vlc-ffmpeg3.patch
 # Debian patch for compiling with ffmpeg 2.9+
 Patch25:	ffmpeg_2.9.patch
+Patch26:	vlc-2.2.4-cxx0x.patch
+Patch27:	vlc-2.2.4-qt57.patch
 
 BuildRequires:	desktop-file-utils
 BuildRequires:	libtool
@@ -861,13 +863,7 @@ the VLC media player.
 %else
 %setup -q -n %{fname}
 %endif
-
-%patch1 -p1 -b .automake12~
-%patch20 -p1 -b .fonts
-%patch22 -p1 -b .live555
-%patch23 -p1 -b .skintar
-%patch24 -p1
-%patch25 -p1
+%apply_patches
 
 #gw if we want to regenerate libtool, we must remove the local versions of
 # the libtool m4 files, aclocal will replace them
