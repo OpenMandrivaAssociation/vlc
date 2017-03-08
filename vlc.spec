@@ -1,6 +1,6 @@
 %define snapshot 0
 %define pre 0
-%define rel 6
+%define rel 7
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %elsif %{snapshot}
@@ -470,7 +470,7 @@ MPEG4 (aka DivX) files, DVDs, VCDs, SVCDs, from a satellite card, from
 a stream sent by VLS (VideoLAN Server), from another VLC, or from a Web
 server.
 This package contains no CSS unscrambling functionality for DVDs ;
-you need the libdvdcss library available from 
+you need the libdvdcss library available from
 http://www.videolan.org/libdvdcss/
 
 %if %{with_plf}
@@ -484,7 +484,7 @@ Group:		System/Libraries
 
 %description -n %{libname}
 Shared code for the VLC media player
-This package contains code that is shared by different modules of the 
+This package contains code that is shared by different modules of the
 VLC media player.
 
 %package -n %{libnamecore}
