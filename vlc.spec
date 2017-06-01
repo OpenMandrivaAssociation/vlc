@@ -275,7 +275,6 @@ Patch24:	vlc-ffmpeg3.patch
 # Debian patch for compiling with ffmpeg 2.9+
 Patch25:	ffmpeg_2.9.patch
 Patch26:	vlc-2.2.4-cxx0x.patch
-Patch27:	vlc-2.2.4-qt57.patch
 
 BuildRequires:	desktop-file-utils
 BuildRequires:	libtool
@@ -317,6 +316,7 @@ BuildRequires:	pkgconfig(libmodplug)
 %endif
 %if %{with_gnutls}
 BuildRequires:	pkgconfig(gnutls)
+Requires:       %{name}-plugin-gnutls
 %endif
 %if %{with_fribidi}
 BuildRequires:	pkgconfig(fribidi)
