@@ -1,6 +1,6 @@
 %define snapshot 0
 %define pre 0
-%define rel 7
+%define rel 1
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %elsif %{snapshot}
@@ -71,7 +71,7 @@
 %define with_mpc 1
 %define with_faad 0
 %define with_faac 0
-%define with_lame 0
+%define with_lame 1
 %define with_dts 0
 %define with_x264 0
 %define with_x265 0
@@ -254,7 +254,7 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	2.2.4
+Version:	2.2.6
 Release:	%{release}%{?extrarelsuffix}
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
