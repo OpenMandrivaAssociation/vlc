@@ -1,8 +1,8 @@
---- vlc-2.2.0/modules/text_renderer/platform_fonts.h.omv~	2015-03-01 00:16:58.201784843 +0100
-+++ vlc-2.2.0/modules/text_renderer/platform_fonts.h	2015-03-01 00:18:07.592357054 +0100
-@@ -55,10 +55,10 @@
+--- vlc-3.0.0-git/modules/text_renderer/freetype/platform_fonts.h.0020~	2017-08-21 20:16:10.229387792 +0200
++++ vlc-3.0.0-git/modules/text_renderer/freetype/platform_fonts.h	2017-08-21 20:17:21.699264663 +0200
+@@ -73,10 +73,10 @@ extern "C" {
  # define SYSTEM_DEFAULT_MONOSPACE_FONT_FILE "/system/fonts/DroidSansMono.ttf"
- # define SYSTEM_DEFAULT_MONOSPACE_FAMILY "Droid Sans Mono"
+ # define SYSTEM_DEFAULT_MONOSPACE_FAMILY "Monospace"
  #else
 -# define SYSTEM_DEFAULT_FONT_FILE "/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf"
 -# define SYSTEM_DEFAULT_FAMILY "Serif Bold"

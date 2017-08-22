@@ -1,10 +1,10 @@
-%define snapshot 0
+%define snapshot 20170821-0243-git
 %define pre 0
 %define rel 1
 %if %{pre}
 %define release 0.%{pre}.%{rel}
-%elsif %{snapshot}
-%define release 0.%{snapshot}.%{rel}
+%elseif "%{snapshot}" != ""
+%define release 0.%(echo %{snapshot} |sed -e 's,-,_,g').%{rel}
 %else
 %define release %{rel}
 %endif
@@ -12,12 +12,14 @@
 %define libmajor 5
 %define coremajor 8
 
-%if %{snapshot}
-%define fname %{name}-snapshot-%{snapshot}
-%elsif %{pre}
+%if "%{snapshot}" != "%{nil}"
+%define fname %{name}-%{version}-%{snapshot}
+%else
+%if %{pre}
 %define fname %{name}-%{version}-%{pre}
 %else
 %define fname %{name}-%{version}
+%endif
 %endif
 
 %define with_plf 0
@@ -26,13 +28,7 @@
 %define with_xml 1
 %define with_ncurses 1
 %define with_lirc 1
-%ifarch %{ix86} x86_64 %{arm}
-%define with_qt4 0
 %define with_qt5 1
-%else
-%define with_qt4 0
-%define with_qt5 1
-%endif
 %define with_svlc 1
 %define with_udev 1
 %define with_aa 1
@@ -109,7 +105,6 @@
 %{?_without_udev:	%{expand: %%global with_udev 0}}
 %{?_without_ncurses:	%{expand: %%global with_ncurses 0}}
 %{?_without_lirc:	%{expand: %%global with_lirc 0}}
-%{?_without_qt4:	%{expand: %%global with_qt4 0}}
 %{?_without_qt5:	%{expand: %%global with_qt5 0}}
 %{?_without_svlc:	%{expand: %%global with_svlc 0}}
 
@@ -169,7 +164,6 @@
 %{?_with_udev:		%{expand: %%global with_udev 1}}
 %{?_with_ncurses:	%{expand: %%global with_ncurses 1}}
 %{?_with_lirc:		%{expand: %%global with_lirc 1}}
-%{?_with_qt4:		%{expand: %%global with_qt4 1}}
 %{?_with_qt5:		%{expand: %%global with_qt5 1}}
 %{?_with_svlc:		%{expand: %%global with_svlc 1}}
 
@@ -254,39 +248,39 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	2.2.6
+Version:	3.0.0
 Release:	%{release}%{?extrarelsuffix}
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
 URL:		http://www.videolan.org/
-%if %{snapshot}
+%if "%{snapshot}" != ""
 Source0:	http://nightlies.videolan.org/build/source/%{fname}.tar.xz
 %else
 Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{fname}.tar.xz
 %endif
+Source100:	%{name}.rpmlintrc
 Patch1:		vlc-2.0.1-automake-1.12.patch
+Patch2:		vlc-3.0.0-libarchive-tar.patch
 Patch20:	vlc-2.1.2-fix-default-font.patch
 Patch22:	vlc-2.1.2-live555-201306.patch
-Patch23:	vlc-2.1.5-fix-skins2-default-skin-creation.patch
-# Disable errors when ffmpeg 3.0 is used, apparently it is safe as the
-# commit in 2.9 causing issues was reverted for 3.0
-Patch24:	vlc-ffmpeg3.patch
-# Debian patch for compiling with ffmpeg 2.9+
-Patch25:	ffmpeg_2.9.patch
-Patch26:	vlc-2.2.4-cxx0x.patch
+
+Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 
 BuildRequires:	desktop-file-utils
 BuildRequires:	libtool
 BuildRequires:	yasm
 BuildRequires:	gettext-devel
 BuildRequires:	libmpcdec-devel
+BuildRequires:	pkgconfig(wayland-protocols)
+BuildRequires:	pkgconfig(wayland-egl)
 BuildRequires:	pkgconfig(caca)
 BuildRequires:	pkgconfig(dirac)
 BuildRequires:	pkgconfig(dvdread)
 BuildRequires:	pkgconfig(egl)
 BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(glu)
+BuildRequires:	pkgconfig(libarchive) >= 3.1.0
 BuildRequires:	pkgconfig(gnome-vfs-2.0)
 BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(libavcodec)
@@ -326,9 +320,6 @@ BuildRequires:	pkgconfig(libv4l2)
 %endif
 %if %{with_udev}
 BuildRequires:	pkgconfig(udev)
-%endif
-%if %{with_qt4}
-BuildRequires:	qt4-devel
 %endif
 %if %{with_qt5}
 BuildRequires:	cmake(Qt5Core)
@@ -415,7 +406,7 @@ BuildRequires:	pkgconfig(samplerate)
 BuildRequires:	pkgconfig(avahi-client)
 %endif
 %if %{with_dvbpsi}
-BuildRequires:	pkgconfig(libdvbpsi)
+BuildRequires:	pkgconfig(libdvbpsi) >= 1.2.0
 %endif
 %if %{with_dts}
 BuildRequires:	pkgconfig(libdts)
@@ -641,15 +632,6 @@ BuildRequires:	pkgconfig(shout)
 This plugin adds support for Icecast and Shoutcast servers.
 %endif
 
-%package plugin-opengl
-Summary:	OpenGL video output plugin for the VLC media player
-Group:		Video
-Requires:	%{name} = %{version}
-
-%description plugin-opengl
-This plugin adds support for OpenGL video output to
-the VLC media player.
-
 # visualization plugins
 
 %if %{with_goom}
@@ -858,8 +840,8 @@ This plugin adds support for notification popup messages to
 the VLC media player.
 
 %prep
-%if %{snapshot}
-%setup -q -n %{name}
+%if "%{snapshot}" != ""
+%setup -q -n %{name}-%{version}-git
 %else
 %setup -q -n %{fname}
 %endif
@@ -874,7 +856,7 @@ popd
 # Our Qt is patched with the bit below -- no point in erroring out
 sed -i -e 's/.*ERROR.*I78ef29975181ee22429c9bd4b11d96d9e68b7a9c.*/AC_MSG_WARN([OMV Qt is good])/' configure.ac
 
-%if %{snapshot}
+%if "%{snapshot}" != ""
 ./bootstrap
 %endif
 autoreconf -fiv
@@ -1093,17 +1075,19 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %dir %{_libdir}/vlc/plugins/access
 %{_libdir}/vlc/plugins/access/libattachment_plugin.so
 %{_libdir}/vlc/plugins/access/libavio_plugin.so
-%{_libdir}/vlc/plugins/access/libaccess_bd_plugin.so
+%{_libdir}/vlc/plugins/access/libaccess_concat_plugin.so
+%{_libdir}/vlc/plugins/access/libimem_plugin.so
+%{_libdir}/vlc/plugins/access/libaccess_imem_plugin.so
+%{_libdir}/vlc/plugins/access/libhttps_plugin.so
+%{_libdir}/vlc/plugins/access/libsatip_plugin.so
+%{_libdir}/vlc/plugins/access/libwl_screenshooter_plugin.so
 %if %{with_dvdnav}
 %{_libdir}/vlc/plugins/access/libdvdnav_plugin.so
 %endif
-%{_libdir}/vlc/plugins/access/libgnomevfs_plugin.so
-%{_libdir}/vlc/plugins/access/libimem_plugin.so
 %if %{with_mtp}
 %{_libdir}/vlc/plugins/access/libaccess_mtp_plugin.so
 %{_libdir}/vlc/plugins/services_discovery/libmtp_plugin.so
 %endif
-%{_libdir}/vlc/plugins/access/librar_plugin.so
 %{_libdir}/vlc/plugins/access/libaccess_realrtsp_plugin.so
 %{_libdir}/vlc/plugins/access/libshm_plugin.so
 %{_libdir}/vlc/plugins/access/libsftp_plugin.so
@@ -1131,12 +1115,8 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/access/libtimecode_plugin.so
 %{_libdir}/vlc/plugins/access/libv4l2_plugin.so*
 %{_libdir}/vlc/plugins/access/libdvdread_plugin.so*
-%if %{with_vcd}
-%{_libdir}/vlc/plugins/access/libvcdx_plugin.so*
-%endif
 %{_libdir}/vlc/plugins/access/libvcd_plugin.so*
 %{_libdir}/vlc/plugins/access/libxcb_screen_plugin.so
-%{_libdir}/vlc/plugins/access/libzip_plugin.so
 %if %{with_bluray}
 %{_libdir}/vlc/plugins/access/liblibbluray_plugin.so
 %endif
@@ -1157,14 +1137,15 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/audio_filter/libdtstofloat32_plugin.so*
 %endif
 %{_libdir}/vlc/plugins/audio_filter/libdolby_surround_decoder_plugin.so*
-%{_libdir}/vlc/plugins/audio_filter/libdtstospdif_plugin.so*
 %{_libdir}/vlc/plugins/audio_filter/libequalizer_plugin.so*
 %{_libdir}/vlc/plugins/audio_filter/libheadphone_channel_mixer_plugin.so*
 %{_libdir}/vlc/plugins/audio_filter/libkaraoke_plugin.so
 %{_libdir}/vlc/plugins/audio_filter/libmono_plugin.so
 %if %{with_mad}
-%{_libdir}/vlc/plugins/audio_filter/libmpgatofixed32_plugin.so*
 %endif
+%{_libdir}/vlc/plugins/audio_filter/libmad_plugin.so
+%{_libdir}/vlc/plugins/audio_filter/libsoxr_plugin.so
+%{_libdir}/vlc/plugins/audio_filter/libtospdif_plugin.so
 %{_libdir}/vlc/plugins/audio_filter/libnormvol_plugin.so*
 %{_libdir}/vlc/plugins/audio_filter/libparam_eq_plugin.so*
 %{_libdir}/vlc/plugins/audio_filter/libsamplerate_plugin.so
@@ -1189,8 +1170,6 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %dir %{_libdir}/vlc/plugins/codec
 %if %{with_a52}
 %{_libdir}/vlc/plugins/codec/liba52_plugin.so*
-%{_libdir}/vlc/plugins/audio_filter/liba52tofloat32_plugin.so*
-%{_libdir}/vlc/plugins/audio_filter/liba52tospdif_plugin.so*
 %endif
 %{_libdir}/vlc/plugins/codec/libadpcm_plugin.so*
 %{_libdir}/vlc/plugins/codec/libaes3_plugin.so
@@ -1201,6 +1180,13 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %if %{with_crystalhd}
 %{_libdir}/vlc/plugins/codec/libcrystalhd_plugin.so
 %endif
+%{_libdir}/vlc/plugins/codec/liboggspots_plugin.so
+%{_libdir}/vlc/plugins/codec/librtpvideo_plugin.so
+%{_libdir}/vlc/plugins/codec/libscte18_plugin.so
+%{_libdir}/vlc/plugins/codec/libspdif_plugin.so
+%{_libdir}/vlc/plugins/codec/libtextst_plugin.so
+%{_libdir}/vlc/plugins/codec/libttml_plugin.so
+%{_libdir}/vlc/plugins/codec/libvaapi_dr_plugin.so
 %{_libdir}/vlc/plugins/codec/libcvdsub_plugin.so*
 %{_libdir}/vlc/plugins/codec/libddummy_plugin.so
 %{_libdir}/vlc/plugins/codec/libedummy_plugin.so
@@ -1209,10 +1195,8 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/codec/libstl_plugin.so
 %{_libdir}/vlc/plugins/codec/libsvcdsub_plugin.so*
 %{_libdir}/vlc/plugins/codec/libt140_plugin.so
-%{_libdir}/vlc/plugins/codec/libdts_plugin.so*
 %{_libdir}/vlc/plugins/codec/liblpcm_plugin.so*
 %{_libdir}/vlc/plugins/codec/liblibmpeg2_plugin.so*
-%{_libdir}/vlc/plugins/codec/libmpeg_audio_plugin.so*
 %{_libdir}/vlc/plugins/codec/libpng_plugin.so*
 %{_libdir}/vlc/plugins/codec/libsubsdec_plugin.so*
 %if %{with_x264}
@@ -1232,7 +1216,6 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/codec/libuleaddvaudio_plugin.so
 %{_libdir}/vlc/plugins/codec/libxwd_plugin.so
 %{_libdir}/vlc/plugins/codec/libgstdecode_plugin.so
-%{_libdir}/vlc/plugins/codec/libhwdummy_plugin.so
 %{_libdir}/vlc/plugins/codec/libjpeg_plugin.so
 %{_libdir}/vlc/plugins/codec/libsubstx3g_plugin.so
 %{_libdir}/vlc/plugins/codec/libsvgdec_plugin.so
@@ -1251,6 +1234,10 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/control/libxcb_hotkeys_plugin.so
 
 %dir %{_libdir}/vlc/plugins/demux
+%{_libdir}/vlc/plugins/demux/libadaptive_plugin.so
+%{_libdir}/vlc/plugins/demux/libdirectory_demux_plugin.so
+%{_libdir}/vlc/plugins/demux/libh26x_plugin.so
+%{_libdir}/vlc/plugins/demux/libnoseek_plugin.so
 %{_libdir}/vlc/plugins/demux/libaiff_plugin.so*
 %{_libdir}/vlc/plugins/demux/libasf_plugin.so*
 %{_libdir}/vlc/plugins/demux/libau_plugin.so*
@@ -1260,10 +1247,8 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/demux/libdemux_stl_plugin.so
 %{_libdir}/vlc/plugins/demux/libdemuxdump_plugin.so*
 %{_libdir}/vlc/plugins/demux/libes_plugin.so
-%{_libdir}/vlc/plugins/demux/libh264_plugin.so*
 %{_libdir}/vlc/plugins/demux/libimage_plugin.so
 %{_libdir}/vlc/plugins/demux/libmjpeg_plugin.so*
-%{_libdir}/vlc/plugins/demux/libmkv_plugin.so
 %{_libdir}/vlc/plugins/demux/libmp4_plugin.so*
 %{_libdir}/vlc/plugins/demux/libmpgv_plugin.so*
 %{_libdir}/vlc/plugins/demux/libnsc_plugin.so*
@@ -1294,10 +1279,21 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %endif
 %{_libdir}/vlc/plugins/demux/libcaf_plugin.so
 %{_libdir}/vlc/plugins/demux/libdiracsys_plugin.so
-%{_libdir}/vlc/plugins/demux/libhevc_plugin.so
 %if %{with_satellite}
 %{_libdir}/vlc/plugins/access/libsatellite_plugin.so*
 %endif
+
+%dir %{_libdir}/vlc/plugins/keystore
+%{_libdir}/vlc/plugins/keystore/libfile_keystore_plugin.so
+%{_libdir}/vlc/plugins/keystore/libkwallet_plugin.so
+%{_libdir}/vlc/plugins/keystore/libmemory_keystore_plugin.so
+
+%dir %{_libdir}/vlc/plugins/logger
+%{_libdir}/vlc/plugins/logger/libconsole_logger_plugin.so
+%{_libdir}/vlc/plugins/logger/libfile_logger_plugin.so
+%{_libdir}/vlc/plugins/logger/libsd_journal_plugin.so
+%{_libdir}/vlc/plugins/logger/libsyslog_plugin.so
+
 %dir %{_libdir}/vlc/plugins/meta_engine
 %{_libdir}/vlc/plugins/meta_engine/libfolder_plugin.so
 %if %{with_taglib}
@@ -1331,13 +1327,13 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/mux/libmux_ts_plugin.so
 %{_libdir}/vlc/plugins/mux/libmux_wav_plugin.so*
 %dir %{_libdir}/vlc/plugins/gui/
-%if %{with_qt4}
-%{_libdir}/vlc/plugins/gui/libqt4_plugin.so
-%endif
 %if %{with_qt5}
-%{_libdir}/vlc/plugins/gui/libqt4_plugin.so
+%{_libdir}/vlc/plugins/gui/libqt_plugin.so
 %endif
 %dir %{_libdir}/vlc/plugins/packetizer
+%{_libdir}/vlc/plugins/packetizer/libpacketizer_a52_plugin.so
+%{_libdir}/vlc/plugins/packetizer/libpacketizer_dts_plugin.so
+%{_libdir}/vlc/plugins/packetizer/libpacketizer_mpegaudio_plugin.so
 %{_libdir}/vlc/plugins/packetizer/libpacketizer_copy_plugin.so*
 %{_libdir}/vlc/plugins/packetizer/libpacketizer_dirac_plugin.so
 %{_libdir}/vlc/plugins/packetizer/libpacketizer_flac_plugin.so
@@ -1362,14 +1358,32 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %endif
 %{_libdir}/vlc/plugins/services_discovery/libxcb_apps_plugin.so
 
+%dir %{_libdir}/vlc/plugins/spu
+%{_libdir}/vlc/plugins/spu/libaudiobargraph_v_plugin.so
+%{_libdir}/vlc/plugins/spu/libdynamicoverlay_plugin.so
+%{_libdir}/vlc/plugins/spu/liblogo_plugin.so
+%{_libdir}/vlc/plugins/spu/libmarq_plugin.so
+%{_libdir}/vlc/plugins/spu/libmosaic_plugin.so
+%{_libdir}/vlc/plugins/spu/libremoteosd_plugin.so
+%{_libdir}/vlc/plugins/spu/librss_plugin.so
+%{_libdir}/vlc/plugins/spu/libsubsdelay_plugin.so
+
 %dir %{_libdir}/vlc/plugins/stream_filter/
+%{_libdir}/vlc/plugins/stream_filter/libadf_plugin.so
+%{_libdir}/vlc/plugins/stream_filter/libcache_block_plugin.so
+%{_libdir}/vlc/plugins/stream_filter/libcache_read_plugin.so
+%{_libdir}/vlc/plugins/stream_filter/libhds_plugin.so
+%{_libdir}/vlc/plugins/stream_filter/libinflate_plugin.so
+%{_libdir}/vlc/plugins/stream_filter/libprefetch_plugin.so
+%{_libdir}/vlc/plugins/stream_filter/libskiptags_plugin.so
 %{_libdir}/vlc/plugins/stream_filter/libdecomp_plugin.so
-%{_libdir}/vlc/plugins/stream_filter/libdash_plugin.so
-%{_libdir}/vlc/plugins/stream_filter/libhttplive_plugin.so
 %{_libdir}/vlc/plugins/stream_filter/librecord_plugin.so
-%{_libdir}/vlc/plugins/stream_filter/libsmooth_plugin.so
+
+%dir %{_libdir}/vlc/plugins/stream_extractor
+%{_libdir}/vlc/plugins/stream_extractor/libarchive_plugin.so
 
 %dir %{_libdir}/vlc/plugins/stream_out
+%{_libdir}/vlc/plugins/stream_out/libstream_out_cycle_plugin.so
 %{_libdir}/vlc/plugins/stream_out/libstream_out_autodel_plugin.so
 %{_libdir}/vlc/plugins/stream_out/libstream_out_bridge_plugin.so*
 %{_libdir}/vlc/plugins/stream_out/libstream_out_delay_plugin.so
@@ -1379,7 +1393,6 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/stream_out/libstream_out_duplicate_plugin.so*
 %{_libdir}/vlc/plugins/stream_out/libstream_out_es_plugin.so*
 %{_libdir}/vlc/plugins/stream_out/libstream_out_gather_plugin.so*
-%{_libdir}/vlc/plugins/stream_out/libstream_out_langfromtelx_plugin.so
 %{_libdir}/vlc/plugins/stream_out/libstream_out_mosaic_bridge_plugin.so*
 %{_libdir}/vlc/plugins/stream_out/libstream_out_raop_plugin.so
 %{_libdir}/vlc/plugins/stream_out/libstream_out_record_plugin.so
@@ -1395,15 +1408,21 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/text_renderer/libsvg_plugin.so
 %{_libdir}/vlc/plugins/text_renderer/libtdummy_plugin.so
 
+%dir %{_libdir}/vlc/plugins/vaapi
+%{_libdir}/vlc/plugins/vaapi/libvaapi_filters_plugin.so
+
 %dir %{_libdir}/vlc/plugins/video_chroma
 %{_libdir}/vlc/plugins/video_chroma/libgrey_yuv_plugin.so
 %{_libdir}/vlc/plugins/video_chroma/libi420_rgb_*plugin.so*
 %{_libdir}/vlc/plugins/video_chroma/libi420_yuy2_*plugin.so*
 %{_libdir}/vlc/plugins/video_chroma/libi422_i420_plugin.so
+%{_libdir}/vlc/plugins/video_chroma/libi420_10_p010_plugin.so
+%{_libdir}/vlc/plugins/video_chroma/libi420_nv12_plugin.so
 %{_libdir}/vlc/plugins/video_chroma/libi422_yuy2_*plugin.so*
 %{_libdir}/vlc/plugins/video_chroma/librv32_plugin.so
 %{_libdir}/vlc/plugins/video_chroma/libyuy2_i420_plugin.so
 %{_libdir}/vlc/plugins/video_chroma/libyuy2_i422_plugin.so
+%{_libdir}/vlc/plugins/video_chroma/libyuvp_plugin.so
 %{_libdir}/vlc/plugins/video_chroma/libswscale_plugin.so
 %{_libdir}/vlc/plugins/video_chroma/libchain_plugin.so
 
@@ -1411,8 +1430,6 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/video_filter/libadjust_plugin.so*
 %{_libdir}/vlc/plugins/video_filter/libalphamask_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libantiflicker_plugin.so
-%{_libdir}/vlc/plugins/video_filter/libaudiobargraph_v_plugin.so
-%{_libdir}/vlc/plugins/video_filter/libatmo_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libball_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libblendbench_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libblend_plugin.so*
@@ -1421,38 +1438,32 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/video_filter/libcolorthres_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libcroppadd_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libdeinterlace_plugin.so*
-%{_libdir}/vlc/plugins/video_filter/libdynamicoverlay_plugin.so
+%{_libdir}/vlc/plugins/video_filter/libedgedetection_plugin.so
 %{_libdir}/vlc/plugins/video_filter/liberase_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libextract_plugin.so
+%{_libdir}/vlc/plugins/video_filter/libfps_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libgaussianblur_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libgradient_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libgradfun_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libgrain_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libhqdn3d_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libinvert_plugin.so*
-%{_libdir}/vlc/plugins/video_filter/liblogo_plugin.so*
 %{_libdir}/vlc/plugins/video_filter/libmagnify_plugin.so*
-%{_libdir}/vlc/plugins/video_filter/libmarq_plugin.so*
 %{_libdir}/vlc/plugins/video_filter/libmirror_plugin.so
-%{_libdir}/vlc/plugins/video_filter/libmosaic_plugin.so*
 %{_libdir}/vlc/plugins/video_filter/libmotionblur_plugin.so*
 %{_libdir}/vlc/plugins/video_filter/libmotiondetect_plugin.so*
 %{_libdir}/vlc/plugins/video_filter/libposterize_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libpostproc_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libpsychedelic_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libpuzzle_plugin.so
-%{_libdir}/vlc/plugins/video_filter/libremoteosd_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libripple_plugin.so
 %{_libdir}/vlc/plugins/video_filter/librotate_plugin.so
-%{_libdir}/vlc/plugins/video_filter/librss_plugin.so*
 %{_libdir}/vlc/plugins/video_filter/libscale_plugin.so*
 %{_libdir}/vlc/plugins/video_filter/libscene_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libsepia_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libsharpen_plugin.so
-%{_libdir}/vlc/plugins/video_filter/libsubsdelay_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libtransform_plugin.so*
 %{_libdir}/vlc/plugins/video_filter/libwave_plugin.so
-%{_libdir}/vlc/plugins/video_filter/libyuvp_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libanaglyph_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libopencv_example_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libopencv_wrapper_plugin.so
@@ -1463,12 +1474,18 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %dir %{_libdir}/vlc/plugins/video_output
 %{_libdir}/vlc/plugins/video_output/libcaca_plugin.so
 %{_libdir}/vlc/plugins/video_output/libegl_x11_plugin.so*
+%{_libdir}/vlc/plugins/video_output/libegl_wl_plugin.so*
 %{_libdir}/vlc/plugins/video_output/libfb_plugin.so*
+%{_libdir}/vlc/plugins/video_output/libflaschen_plugin.so*
 %{_libdir}/vlc/plugins/video_output/libvmem_plugin.so
 %{_libdir}/vlc/plugins/video_output/libyuv_plugin.so
 %{_libdir}/vlc/plugins/video_output/libvdummy_plugin.so
+%{_libdir}/vlc/plugins/video_output/libwl_shell_plugin.so
+%{_libdir}/vlc/plugins/video_output/libwl_shm_plugin.so
+%{_libdir}/vlc/plugins/video_output/libxdg_shell_plugin.so
 %{_libdir}/vlc/plugins/video_output/libxcb_x11_plugin.so*
 %{_libdir}/vlc/plugins/video_output/libxcb_window_plugin.so*
+%{_libdir}/vlc/libvlc_xcb_events.so*
 %if %{with_xvideo}
 %{_libdir}/vlc/plugins/video_output/libxcb_xv_plugin.so*
 %endif
@@ -1492,6 +1509,17 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %if %{with_kde}
 %{_datadir}/apps/solid/actions/*.desktop
 %endif
+
+%{_datadir}/appdata/vlc.appdata.xml
+
+# FIXME should we just rm -rf this? Or pick a better name?
+# Contains icons etc. for a frontend, are they actually used
+# by any frontend we care about?
+%dir %{_datadir}/macosx
+%dir %{_datadir}/macosx/Contents
+%dir %{_datadir}/macosx/Contents/Resources
+%{_datadir}/macosx/Contents/Resources/*
+
 
 %files -n %{libname}
 %{_libdir}/libvlc.so.%{libmajor}*
@@ -1552,7 +1580,6 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %files plugin-lua
 %doc README
 %{_libdir}/vlc/plugins/lua/liblua_plugin.so
-%{_libdir}/vlc/lua
 %{_datadir}/vlc/lua
 %{_bindir}/rvlc
 %endif
@@ -1577,12 +1604,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %if %{with_sdl_image}
 %{_libdir}/vlc/plugins/codec/libsdl_image_plugin.so*
 %endif
-%{_libdir}/vlc/plugins/video_output/libvout_sdl_plugin.so*
 %endif
-
-%files plugin-opengl
-%doc README
-%{_libdir}/vlc/plugins/video_output/libxcb_glx_plugin.so*
 
 %if %{with_aa}
 %files plugin-aa
@@ -1669,6 +1691,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %if %{with_pulse}
 %files plugin-pulse
 %doc README
+%{_libdir}/vlc/libvlc_pulse.so*
 %{_libdir}/vlc/plugins/access/libpulsesrc_plugin.so
 %{_libdir}/vlc/plugins/audio_output/libpulse_plugin.so*
 %{_libdir}/vlc/plugins/services_discovery/libpulselist_plugin.so
@@ -1684,7 +1707,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %if %{with_bonjour}
 %files plugin-bonjour
 %doc README
-%{_libdir}/vlc/plugins/services_discovery/libbonjour_plugin.so*
+%{_libdir}/vlc/plugins/services_discovery/libavahi_plugin.so
 %endif
 
 %if %{with_upnp}
