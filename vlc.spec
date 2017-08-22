@@ -89,7 +89,7 @@
 
 %define with_bluray 1
 # is non-free stuf
-%ifarch %{arm}
+%ifarch %{arm} %{armx}
 %define with_crystalhd 0
 %else
 %define with_crystalhd 1
