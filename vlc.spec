@@ -1,4 +1,4 @@
-%define snapshot 20170821-0243-git
+%define snapshot 20171123-0233-git
 %define pre 0
 %define rel 1
 %if %{pre}
@@ -10,7 +10,7 @@
 %endif
 
 %define libmajor 5
-%define coremajor 8
+%define coremajor 9
 
 %if "%{snapshot}" != "%{nil}"
 %define fname %{name}-%{version}-%{snapshot}
@@ -262,6 +262,7 @@ Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{fname}.t
 Source100:	%{name}.rpmlintrc
 Patch1:		vlc-2.0.1-automake-1.12.patch
 Patch2:		vlc-3.0.0-libarchive-tar.patch
+Patch3:		vlc-3.0-clang.patch
 Patch20:	vlc-2.1.2-fix-default-font.patch
 Patch22:	vlc-2.1.2-live555-201306.patch
 
@@ -298,6 +299,8 @@ BuildRequires:	pkgconfig(libvncclient)
 BuildRequires:	pkgconfig(xcb-util)
 BuildRequires:	pkgconfig(xcb-keysyms)
 BuildRequires:	pkgconfig(xpm)
+BuildRequires:	pkgconfig(libmpg123)
+BuildRequires:	pkgconfig(libsecret-1)
 
 %if %{with_sysfs}
 BuildRequires:	sysfsutils-devel
@@ -1011,7 +1014,7 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 --with-pic
 %endif
 
-%make --output-sync=target -j1
+%make --output-sync=target
 
 %install
 %__mkdir_p %{buildroot}%{_libdir}
@@ -1079,6 +1082,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/access/libimem_plugin.so
 %{_libdir}/vlc/plugins/access/libaccess_imem_plugin.so
 %{_libdir}/vlc/plugins/access/libhttps_plugin.so
+%{_libdir}/vlc/plugins/access/libnfs_plugin.so
 %{_libdir}/vlc/plugins/access/libsatip_plugin.so
 %{_libdir}/vlc/plugins/access/libwl_screenshooter_plugin.so
 %if %{with_dvdnav}
@@ -1129,6 +1133,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/access_output/libaccess_output_udp_plugin.so*
 
 %dir %{_libdir}/vlc/plugins/audio_filter
+%{_libdir}/vlc/plugins/audio_filter/libscaletempo_pitch_plugin.so
 %{_libdir}/vlc/plugins/audio_filter/libaudiobargraph_a_plugin.so
 %{_libdir}/vlc/plugins/audio_filter/libaudio_format_plugin.so*
 %{_libdir}/vlc/plugins/audio_filter/libchorus_flanger_plugin.so
@@ -1177,6 +1182,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/codec/libavcodec_plugin.so
 %{_libdir}/vlc/plugins/codec/libcc_plugin.so
 %{_libdir}/vlc/plugins/codec/libcdg_plugin.so
+%{_libdir}/vlc/plugins/codec/libmpg123_plugin.so
 %if %{with_crystalhd}
 %{_libdir}/vlc/plugins/codec/libcrystalhd_plugin.so
 %endif
@@ -1186,7 +1192,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/codec/libspdif_plugin.so
 %{_libdir}/vlc/plugins/codec/libtextst_plugin.so
 %{_libdir}/vlc/plugins/codec/libttml_plugin.so
-%{_libdir}/vlc/plugins/codec/libvaapi_dr_plugin.so
+%{_libdir}/vlc/plugins/codec/libvaapi_plugin.so
 %{_libdir}/vlc/plugins/codec/libcvdsub_plugin.so*
 %{_libdir}/vlc/plugins/codec/libddummy_plugin.so
 %{_libdir}/vlc/plugins/codec/libedummy_plugin.so
@@ -1198,6 +1204,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/codec/liblpcm_plugin.so*
 %{_libdir}/vlc/plugins/codec/liblibmpeg2_plugin.so*
 %{_libdir}/vlc/plugins/codec/libpng_plugin.so*
+%{_libdir}/vlc/plugins/codec/libwebvtt_plugin.so
 %{_libdir}/vlc/plugins/codec/libsubsdec_plugin.so*
 %if %{with_x264}
 %{_libdir}/vlc/plugins/codec/libx264_plugin.so*
@@ -1220,7 +1227,6 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/codec/libsubstx3g_plugin.so
 %{_libdir}/vlc/plugins/codec/libsvgdec_plugin.so
 %{_libdir}/vlc/plugins/codec/libvaapi_drm_plugin.so
-%{_libdir}/vlc/plugins/codec/libvaapi_x11_plugin.so
 %{_libdir}/vlc/plugins/codec/libvpx_plugin.so
 
 %dir %{_libdir}/vlc/plugins/control
@@ -1285,6 +1291,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 
 %dir %{_libdir}/vlc/plugins/keystore
 %{_libdir}/vlc/plugins/keystore/libfile_keystore_plugin.so
+%{_libdir}/vlc/plugins/keystore/libsecret_plugin.so
 %{_libdir}/vlc/plugins/keystore/libkwallet_plugin.so
 %{_libdir}/vlc/plugins/keystore/libmemory_keystore_plugin.so
 
@@ -1394,7 +1401,6 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/stream_out/libstream_out_es_plugin.so*
 %{_libdir}/vlc/plugins/stream_out/libstream_out_gather_plugin.so*
 %{_libdir}/vlc/plugins/stream_out/libstream_out_mosaic_bridge_plugin.so*
-%{_libdir}/vlc/plugins/stream_out/libstream_out_raop_plugin.so
 %{_libdir}/vlc/plugins/stream_out/libstream_out_record_plugin.so
 %{_libdir}/vlc/plugins/stream_out/libstream_out_rtp_plugin.so*
 %{_libdir}/vlc/plugins/stream_out/libstream_out_stats_plugin.so
@@ -1491,6 +1497,10 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %endif
 %{_libdir}/vlc/plugins/video_output/libgl_plugin.so
 %{_libdir}/vlc/plugins/video_output/libglx_plugin.so
+%{_libdir}/vlc/plugins/video_output/libglconv_vaapi_drm_plugin.so
+%{_libdir}/vlc/plugins/video_output/libglconv_vaapi_wl_plugin.so
+%{_libdir}/vlc/plugins/video_output/libglconv_vaapi_x11_plugin.so
+%{_libdir}/vlc/plugins/video_output/libglconv_vdpau_plugin.so
 
 %dir %{_libdir}/vlc/plugins/visualization
 %{_libdir}/vlc/plugins/visualization/libvisual_plugin.so*
@@ -1510,7 +1520,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_datadir}/apps/solid/actions/*.desktop
 %endif
 
-%{_datadir}/appdata/vlc.appdata.xml
+%{_datadir}/metainfo/vlc.appdata.xml
 
 # FIXME should we just rm -rf this? Or pick a better name?
 # Contains icons etc. for a frontend, are they actually used

@@ -1,0 +1,11 @@
+--- vlc-3.0.0-git/modules/codec/webvtt/CSSGrammar.c.omv~	2017-11-23 21:06:53.478706345 +0100
++++ vlc-3.0.0-git/modules/codec/webvtt/CSSGrammar.c	2017-11-23 21:07:08.844722195 +0100
+@@ -311,7 +311,7 @@ typedef short int yytype_int16;
+ # define YYUSE(E) /* empty */
+ #endif
+ 
+-#if defined __GNUC__ && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
++#if !defined(__clang__) && defined __GNUC__ && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
+ /* Suppress an incorrect diagnostic about yylval being uninitialized.  */
+ # define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN \
+     _Pragma ("GCC diagnostic push") \
