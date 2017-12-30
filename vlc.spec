@@ -1,4 +1,4 @@
-%define snapshot 20171123-0233-git
+%define snapshot 20171230-0227-rc5
 %define pre 0
 %define rel 1
 %if %{pre}
@@ -813,6 +813,15 @@ Requires:	%{name} = %{version}
 This plugin adds support for Bonjour service discovery to
 the VLC media player.
 
+%package plugin-chromecast
+Summary:	ChromeCast output plugin for VLC
+Group:		Video
+Requires:	%{name} = %{version}
+
+%description plugin-chromecast
+This plugin adds ChromeCast output support to
+the VLC media player.
+
 %if %{with_upnp}
 %package plugin-upnp
 Summary:	UPNP service discovery plugin for the VLC media player
@@ -844,7 +853,7 @@ the VLC media player.
 
 %prep
 %if "%{snapshot}" != ""
-%setup -q -n %{name}-%{version}-git
+%setup -q -n %{name}-%{version}-%(echo %{snapshot} |cut -d- -f3)
 %else
 %setup -q -n %{fname}
 %endif
@@ -1084,7 +1093,6 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/access/libhttps_plugin.so
 %{_libdir}/vlc/plugins/access/libnfs_plugin.so
 %{_libdir}/vlc/plugins/access/libsatip_plugin.so
-%{_libdir}/vlc/plugins/access/libwl_screenshooter_plugin.so
 %if %{with_dvdnav}
 %{_libdir}/vlc/plugins/access/libdvdnav_plugin.so
 %endif
@@ -1736,3 +1744,6 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %doc README
 %{_libdir}/vlc/plugins/notify/libnotify_plugin.so*
 
+%files plugin-chromecast
+%{_libdir}/vlc/plugins/demux/libdemux_chromecast_plugin.so
+%{_libdir}/vlc/plugins/stream_out/libstream_out_chromecast_plugin.so
