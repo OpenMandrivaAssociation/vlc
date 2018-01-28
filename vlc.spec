@@ -1,4 +1,4 @@
-%define snapshot 20171230-0227-rc5
+%define snapshot 20180128-0225-rc8
 %define pre 0
 %define rel 1
 %if %{pre}
@@ -1530,15 +1530,6 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 
 %{_datadir}/metainfo/vlc.appdata.xml
 
-# FIXME should we just rm -rf this? Or pick a better name?
-# Contains icons etc. for a frontend, are they actually used
-# by any frontend we care about?
-%dir %{_datadir}/macosx
-%dir %{_datadir}/macosx/Contents
-%dir %{_datadir}/macosx/Contents/Resources
-%{_datadir}/macosx/Contents/Resources/*
-
-
 %files -n %{libname}
 %{_libdir}/libvlc.so.%{libmajor}*
 
@@ -1600,6 +1591,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/lua/liblua_plugin.so
 %{_datadir}/vlc/lua
 %{_bindir}/rvlc
+%{_libdir}/vlc/lua
 %endif
 
 %if %{with_ncurses}
