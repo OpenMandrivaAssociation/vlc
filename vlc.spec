@@ -284,7 +284,7 @@ BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(glu)
 BuildRequires:	pkgconfig(libarchive) >= 3.1.0
 BuildRequires:	pkgconfig(gnome-vfs-2.0)
-BuildRequires:	pkgconfig(gtk+-2.0)
+BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(libavcodec)
 BuildRequires:	pkgconfig(libcdio)
 BuildRequires:	pkgconfig(libnotify)
@@ -302,6 +302,9 @@ BuildRequires:	pkgconfig(xcb-keysyms)
 BuildRequires:	pkgconfig(xpm)
 BuildRequires:	pkgconfig(libmpg123)
 BuildRequires:	pkgconfig(libsecret-1)
+BuildRequires:	pkgconfig(libnfs)
+BuildRequires:	pkgconfig(protobuf-lite)
+BuildRequires:	pkgconfig(libnotify)
 
 %if %{with_sysfs}
 BuildRequires:	sysfsutils-devel
@@ -329,6 +332,7 @@ BuildRequires:	pkgconfig(udev)
 BuildRequires:	cmake(Qt5Core)
 BuildRequires:	cmake(Qt5Widgets)
 BuildRequires:	cmake(Qt5Gui)
+BuildRequires:	cmake(Qt5Svg)
 BuildRequires:	cmake(Qt5X11Extras)
 BuildRequires:	qmake5
 %endif
