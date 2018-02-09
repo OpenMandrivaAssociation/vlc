@@ -1,12 +1,14 @@
-%define snapshot 20180128-0225-rc8
+%define snapshot %{nil}
 %define pre 0
 %define rel 1
 %if %{pre}
 %define release 0.%{pre}.%{rel}
-%elseif "%{snapshot}" != ""
+%else
+%if "%{snapshot}" != ""
 %define release 0.%(echo %{snapshot} |sed -e 's,-,_,g').%{rel}
 %else
 %define release %{rel}
+%endif
 %endif
 
 %define libmajor 5
