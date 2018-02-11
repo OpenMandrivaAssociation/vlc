@@ -1296,6 +1296,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/demux/libvc1_plugin.so
 %{_libdir}/vlc/plugins/demux/libvoc_plugin.so*
 %{_libdir}/vlc/plugins/demux/libwav_plugin.so*
+%{_libdir}/vlc/plugins/demux/libmkv_plugin.so
 %if %{with_dvbpsi}
 %{_libdir}/vlc/plugins/demux/libts_plugin.so*
 %endif
