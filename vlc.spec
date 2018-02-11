@@ -276,6 +276,7 @@ BuildRequires:	libtool
 BuildRequires:	yasm
 BuildRequires:	gettext-devel
 BuildRequires:	libmpcdec-devel
+BuildRequires:	pkgconfig(libidn)
 BuildRequires:	pkgconfig(wayland-protocols)
 BuildRequires:	pkgconfig(wayland-egl)
 BuildRequires:	pkgconfig(caca)
