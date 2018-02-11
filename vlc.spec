@@ -274,6 +274,7 @@ Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 BuildRequires:	desktop-file-utils
 BuildRequires:	libtool
 BuildRequires:	yasm
+BuildRequires:	flex
 BuildRequires:	gettext-devel
 BuildRequires:	libmpcdec-devel
 BuildRequires:	pkgconfig(libidn)
@@ -308,6 +309,7 @@ BuildRequires:	pkgconfig(libsecret-1)
 BuildRequires:	pkgconfig(libnfs)
 BuildRequires:	pkgconfig(protobuf-lite)
 BuildRequires:	pkgconfig(libnotify)
+BuildRequires:	pkgconfig(libmatroska)
 
 %if %{with_sysfs}
 BuildRequires:	sysfsutils-devel
@@ -464,6 +466,9 @@ Requires:	vlc-plugin-pulse
 Requires:	fonts-ttf-vera
 Requires(post,postun):	desktop-file-utils
 Conflicts:	vlc-plugin-common < %{version}-%{release}
+%ifnarch %{armx}
+Requires:	vdpau-drivers
+%endif
 
 %description
 VideoLAN is an OpenSource streaming solution for every OS developed by
@@ -748,7 +753,7 @@ VLC media player.
 %package plugin-opus
 Summary:	Opus codec plugin for the VLC media player
 Group:		Sound
-Requires:	%name = %version
+Requires:	%{name} = %{version}
 
 %description plugin-opus
 These plugins add support for the Opus codec to the VLC media
