@@ -1,6 +1,6 @@
 %define snapshot %{nil}
 %define pre 0
-%define rel 3
+%define rel 1
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %else
@@ -250,7 +250,7 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	3.0.0
+Version:	3.0.1
 Release:	%{release}%{?extrarelsuffix}
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
