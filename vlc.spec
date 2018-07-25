@@ -1,6 +1,6 @@
 %define snapshot %{nil}
 %define pre 0
-%define rel 1
+%define rel 2
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %else
@@ -281,7 +281,6 @@ BuildRequires:	pkgconfig(libidn)
 BuildRequires:	pkgconfig(wayland-protocols)
 BuildRequires:	pkgconfig(wayland-egl)
 BuildRequires:	pkgconfig(caca)
-BuildRequires:	pkgconfig(dirac)
 BuildRequires:	pkgconfig(dvdread)
 BuildRequires:	pkgconfig(egl)
 BuildRequires:	pkgconfig(freetype2)
