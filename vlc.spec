@@ -278,6 +278,7 @@ BuildRequires:	flex
 BuildRequires:	bison
 BuildRequires:	gettext-devel
 BuildRequires:	libmpcdec-devel
+BuildRequires:	pkgconfig(minizip)
 BuildRequires:	pkgconfig(libgcrypt)
 BuildRequires:	pkgconfig(vpx)
 BuildRequires:	pkgconfig(libva)
