@@ -275,8 +275,13 @@ BuildRequires:	desktop-file-utils
 BuildRequires:	libtool
 BuildRequires:	yasm
 BuildRequires:	flex
+BuildRequires:	bison
 BuildRequires:	gettext-devel
 BuildRequires:	libmpcdec-devel
+BuildRequires:	pkgconfig(libgcrypt)
+BuildRequires:	pkgconfig(vpx)
+BuildRequires:	pkgconfig(libva)
+BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(libidn)
 BuildRequires:	pkgconfig(wayland-protocols)
 BuildRequires:	pkgconfig(wayland-egl)
