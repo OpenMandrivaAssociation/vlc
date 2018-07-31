@@ -45,7 +45,7 @@
 %define with_kate 1
 %define with_kde 0
 %define with_goom 0
-%define with_projectm 1
+%define with_projectm 0
 %define with_ass 1
 %define with_lua 1
 %define with_taglib 1
