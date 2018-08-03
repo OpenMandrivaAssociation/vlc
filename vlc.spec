@@ -319,7 +319,7 @@ BuildRequires:	pkgconfig(libnotify)
 BuildRequires:	pkgconfig(libmatroska)
 BuildRequires:	pkgconfig(soxr)
 BuildRequires:	pkgconfig(gstreamer-1.0)
-
+BuildRequires:	pkgconfig(gstreamer-app-1.0)
 %if %{with_sysfs}
 BuildRequires:	sysfsutils-devel
 %endif
