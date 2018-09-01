@@ -1,6 +1,6 @@
 %define snapshot %{nil}
 %define pre 0
-%define rel 2
+%define rel 1
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %else
