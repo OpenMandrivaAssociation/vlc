@@ -1502,15 +1502,15 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %dir %{_libdir}/vlc/plugins/video_output
 %{_libdir}/vlc/plugins/video_output/libcaca_plugin.so
 %{_libdir}/vlc/plugins/video_output/libegl_x11_plugin.so*
-%{_libdir}/vlc/plugins/video_output/libegl_wl_plugin.so*
+#{_libdir}/vlc/plugins/video_output/libegl_wl_plugin.so*
 %{_libdir}/vlc/plugins/video_output/libfb_plugin.so*
 %{_libdir}/vlc/plugins/video_output/libflaschen_plugin.so*
 %{_libdir}/vlc/plugins/video_output/libvmem_plugin.so
 %{_libdir}/vlc/plugins/video_output/libyuv_plugin.so
 %{_libdir}/vlc/plugins/video_output/libvdummy_plugin.so
-%{_libdir}/vlc/plugins/video_output/libwl_shell_plugin.so
-%{_libdir}/vlc/plugins/video_output/libwl_shm_plugin.so
-%{_libdir}/vlc/plugins/video_output/libxdg_shell_plugin.so
+#{_libdir}/vlc/plugins/video_output/libwl_shell_plugin.so
+#{_libdir}/vlc/plugins/video_output/libwl_shm_plugin.so
+#{_libdir}/vlc/plugins/video_output/libxdg_shell_plugin.so
 %{_libdir}/vlc/plugins/video_output/libxcb_x11_plugin.so*
 %{_libdir}/vlc/plugins/video_output/libxcb_window_plugin.so*
 %{_libdir}/vlc/libvlc_xcb_events.so*
@@ -1520,7 +1520,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/video_output/libgl_plugin.so
 %{_libdir}/vlc/plugins/video_output/libglx_plugin.so
 %{_libdir}/vlc/plugins/video_output/libglconv_vaapi_drm_plugin.so
-%{_libdir}/vlc/plugins/video_output/libglconv_vaapi_wl_plugin.so
+#{_libdir}/vlc/plugins/video_output/libglconv_vaapi_wl_plugin.so
 %{_libdir}/vlc/plugins/video_output/libglconv_vaapi_x11_plugin.so
 %{_libdir}/vlc/plugins/video_output/libglconv_vdpau_plugin.so
 
