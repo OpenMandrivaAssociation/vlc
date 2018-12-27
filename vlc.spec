@@ -1,6 +1,6 @@
 %define snapshot %{nil}
 %define pre 0
-%define rel 2
+%define rel 3
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %else
@@ -251,7 +251,7 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	3.0.4
+Version:	3.0.5
 Release:	%{release}%{?extrarelsuffix}
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
@@ -1374,6 +1374,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %endif
 %dir %{_libdir}/vlc/plugins/packetizer
 %{_libdir}/vlc/plugins/packetizer/libpacketizer_a52_plugin.so
+%{_libdir}/vlc/plugins/packetizer/libpacketizer_av1_plugin.so
 %{_libdir}/vlc/plugins/packetizer/libpacketizer_dts_plugin.so
 %{_libdir}/vlc/plugins/packetizer/libpacketizer_mpegaudio_plugin.so
 %{_libdir}/vlc/plugins/packetizer/libpacketizer_copy_plugin.so*
