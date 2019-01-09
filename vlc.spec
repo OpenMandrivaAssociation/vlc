@@ -878,7 +878,7 @@ the VLC media player.
 %else
 %setup -q -n %{fname}
 %endif
-%apply_patches
+%autopatch -p1
 
 #gw if we want to regenerate libtool, we must remove the local versions of
 # the libtool m4 files, aclocal will replace them
@@ -1049,11 +1049,11 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 --with-pic
 %endif
 
-%make --output-sync=target
+%make_build --output-sync=target
 
 %install
 %__mkdir_p %{buildroot}%{_libdir}
-%makeinstall_std transform=""
+%make_install transform=""
 find %{buildroot}%{_libdir}/vlc -name \*.la -exec %__rm -f {} \;
 %find_lang %{name}
 %__rm -rf installed-docs
