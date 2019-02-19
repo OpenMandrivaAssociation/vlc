@@ -884,9 +884,9 @@ the VLC media player.
 
 #gw if we want to regenerate libtool, we must remove the local versions of
 # the libtool m4 files, aclocal will replace them
-cd m4
-rm -fv argz.m4 libtool.m4 ltdl.m4 ltoptions.m4 ltsugar.m4 ltversion.m4 lt~obsolete.m4
-cd ..
+#cd m4
+#rm -fv argz.m4 libtool.m4 ltdl.m4 ltoptions.m4 ltsugar.m4 ltversion.m4 lt~obsolete.m4
+#cd ..
 
 # Our Qt is patched with the bit below -- no point in erroring out
 sed -i -e 's/.*ERROR.*I78ef29975181ee22429c9bd4b11d96d9e68b7a9c.*/AC_MSG_WARN([OMV Qt is good])/' configure.ac
@@ -895,12 +895,15 @@ sed -i -e 's/.*ERROR.*I78ef29975181ee22429c9bd4b11d96d9e68b7a9c.*/AC_MSG_WARN([O
 ./bootstrap
 %endif
 
-libtoolize --install --force --copy
-aclocal -I m4
-autoheader
-autoconf
-automake -acf
+#libtoolize --install --force --copy
+#aclocal -I m4
+#autoheader
+#autoconf
+#automake -acf
 
+# (crazy) try with autoreconf only
+# actually our libtool breaks huh?
+autoreconf -vif
 %build
 #export CC=gcc
 #export CXX=g++
