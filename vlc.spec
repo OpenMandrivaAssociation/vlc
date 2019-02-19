@@ -1,6 +1,6 @@
 %define snapshot %{nil}
 %define pre 0
-%define rel 4
+%define rel 5
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %else
@@ -282,7 +282,7 @@ BuildRequires:	gettext-devel
 BuildRequires:	libmpcdec-devel
 BuildRequires:	pkgconfig(minizip)
 BuildRequires:	pkgconfig(libgcrypt)
-BuildRequires:	pkgconfig(vpx)
+BuildRequires:	pkgconfig(vpx) >= 1.8.0
 BuildRequires:	pkgconfig(libva)
 BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(libidn)
