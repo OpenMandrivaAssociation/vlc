@@ -1110,6 +1110,7 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %dir %{_libdir}/vlc
 %{_libdir}/vlc/vlc-cache-gen
 %{_libdir}/vlc/libvlc_vdpau.so.*
+%{_libdir}/vlc/plugins/video_output/libgles2_plugin.so
 
 %dir %{_libdir}/vlc/plugins
 %{_libdir}/vlc/plugins/plugins.dat
