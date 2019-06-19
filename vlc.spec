@@ -916,6 +916,7 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 %configure \
 --disable-dependency-tracking \
 --enable-gles2 \
+--enable-vdpau \
 %ifarch %{ix86}
 --disable-sse \
 %endif
