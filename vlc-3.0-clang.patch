@@ -1,6 +1,5 @@
-diff -up ./vlc-3.0.8/modules/codec/webvtt/CSSGrammar.c ./vlc-3.0.8/modules/codec/webvtt/CSSGrammar.c-new
---- ./vlc-3.0.8/modules/codec/webvtt/CSSGrammar.c	2019-08-19 08:39:39.000000000 +0200
-+++ ./vlc-3.0.8/modules/codec/webvtt/CSSGrammar.c-new	2019-08-25 01:20:26.598129957 +0200
+--- vlc-3.0.8/modules/codec/webvtt/CSSGrammar.c	2019-08-19 08:39:39.000000000 +0200
++++ vlc-3.0.8/modules/codec/webvtt/CSSGrammar.c-new	2019-08-25 01:20:26.598129957 +0200
 @@ -310,7 +310,7 @@ typedef short yytype_int16;
  # define YYUSE(E) /* empty */
  #endif
