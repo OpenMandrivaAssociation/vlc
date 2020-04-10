@@ -1,22 +1,25 @@
---- vlc-3.0.0-git/share/Makefile.am.omv~	2017-08-21 21:20:47.489611520 +0200
-+++ vlc-3.0.0-git/share/Makefile.am	2017-08-21 21:20:53.733599085 +0200
-@@ -92,7 +92,7 @@ skins2/default.vlt: $(skins2_default_vlt
- 	$(AM_V_at)rm -f -- skins2/default.vlt.tmp
- 	$(AM_V_GEN)GZIP=--no-name \
- 	tar cvvzf skins2/default.vlt.tmp \
--		--owner=root --group=root --directory="$(srcdir)/skins2" \
-+		--directory="$(srcdir)/skins2" \
- 		default/
- 	$(AM_V_at)mv -f -- skins2/default.vlt.tmp skins2/default.vlt
+diff -up vlc-3.0.9.2/share/Makefile.am vlc-3.0.9.2/share/Makefile.am-om 
+--- vlc-3.0.9.2/share/Makefile.am        2020-04-05 15:46:34.000000000 +0200
++++ vlc-3.0.9.2/share/Makefile.am-om     2020-04-10 16:08:35.776402334 +0200
+@@ -97,7 +97,7 @@ skins2/default.vlt: $(skins2_default_vlt
+        GZIP=--no-name \
+        tar cvvzf skins2/default.vlt.tmp \
+                --format=ustar $$tarsort \
+-               --owner=root --group=root --directory="$(srcdir)/skins2" \
++               --directory="$(srcdir)/skins2" \
+                default/
+        $(AM_V_at)mv -f -- skins2/default.vlt.tmp skins2/default.vlt
  
---- vlc-3.0.0-git/share/Makefile.in.omv~	2017-08-21 21:20:55.184596192 +0200
-+++ vlc-3.0.0-git/share/Makefile.in	2017-08-21 21:20:59.805586968 +0200
-@@ -1778,7 +1778,7 @@ skins2/default.vlt: $(skins2_default_vlt
- 	$(AM_V_at)rm -f -- skins2/default.vlt.tmp
- 	$(AM_V_GEN)GZIP=--no-name \
- 	tar cvvzf skins2/default.vlt.tmp \
--		--owner=root --group=root --directory="$(srcdir)/skins2" \
-+		--directory="$(srcdir)/skins2" \
- 		default/
- 	$(AM_V_at)mv -f -- skins2/default.vlt.tmp skins2/default.vlt
+
  
+diff -up vlc-3.0.9.2/share/Makefile.in vlc-3.0.9.2/share/Makefile.in-om 
+--- vlc-3.0.9.2/share/Makefile.in        2020-04-09 12:38:22.000000000 +0200
++++ vlc-3.0.9.2/share/Makefile.in-om     2020-04-10 16:09:47.250490950 +0200
+@@ -1845,7 +1845,7 @@ skins2/default.vlt: $(skins2_default_vlt
+        GZIP=--no-name \
+        tar cvvzf skins2/default.vlt.tmp \
+                --format=ustar $$tarsort \
+-               --owner=root --group=root --directory="$(srcdir)/skins2" \
++               --directory="$(srcdir)/skins2" \
+                default/
+        $(AM_V_at)mv -f -- skins2/default.vlt.tmp skins2/default.vlt
