@@ -47,7 +47,7 @@
 %define with_goom 0
 %define with_projectm 1
 %define with_ass 1
-%define with_lua 1
+%define with_lua 0
 %define with_taglib 1
 %define with_mtp 1
 %define with_xcb_randr 1
