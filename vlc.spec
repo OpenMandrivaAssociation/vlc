@@ -265,7 +265,7 @@ Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{fname}.t
 Source100:	%{name}.rpmlintrc
 Patch1:		vlc-2.0.1-automake-1.12.patch
 #Patch2:		vlc-3.0.0-libarchive-tar.patch
-Patch3:		vlc-3.0-clang.patch
+#Patch3:		vlc-3.0-clang.patch
 Patch4:		vlc-3.0-lua-5.3.patch
 Patch20:	vlc-2.1.2-fix-default-font.patch
 Patch22:	vlc-2.1.2-live555-201306.patch
