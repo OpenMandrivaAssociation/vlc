@@ -914,6 +914,7 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/speex"
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 
 %configure \
+--disable-lua \
 --disable-dependency-tracking \
 %ifarch %{ix86}
 --disable-sse \
