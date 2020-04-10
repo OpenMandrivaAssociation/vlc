@@ -903,8 +903,8 @@ sed -i -e 's/.*ERROR.*I78ef29975181ee22429c9bd4b11d96d9e68b7a9c.*/AC_MSG_WARN([O
 # actually our libtool breaks huh?
 autoreconf -vif
 %build
-#export CC=gcc
-#export CXX=g++
+export CC=gcc
+export CXX=g++
 
 # add missing ebml include dir
 export CPPFLAGS="$CPPFLAGS -I/usr/include/ebml"
