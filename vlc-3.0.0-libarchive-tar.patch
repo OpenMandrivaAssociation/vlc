@@ -9,7 +9,6 @@ diff -up vlc-3.0.9.2/share/Makefile.am vlc-3.0.9.2/share/Makefile.am-om
 +               --directory="$(srcdir)/skins2" \
                 default/
         $(AM_V_at)mv -f -- skins2/default.vlt.tmp skins2/default.vlt
-diff -up vlc-3.0.9.2/share/Makefile.in vlc-3.0.9.2/share/Makefile.in-om 
 --- vlc-3.0.9.2/share/Makefile.in       2020-04-14 01:25:13.246510994 +0200
 +++ vlc-3.0.9.2/share/Makefile.in-om    2020-04-14 01:25:25.669785881 +0200
 @@ -1845,7 +1845,7 @@ skins2/default.vlt: $(skins2_default_vlt
