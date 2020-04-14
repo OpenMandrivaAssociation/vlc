@@ -1,0 +1,45 @@
+diff -up vlc-3.0.9.2/modules/gui/qt/components/playlist/views.cpp.omv~ vlc-3.0.9.2/modules/gui/qt/components/playlist/views.cpp
+--- vlc-3.0.9.2/modules/gui/qt/components/playlist/views.cpp.omv~	2020-04-14 19:06:27.271181850 +0200
++++ vlc-3.0.9.2/modules/gui/qt/components/playlist/views.cpp	2020-04-14 19:06:31.692217522 +0200
+@@ -27,6 +27,7 @@
+ #include "input_manager.hpp"                      /* THEMIM */
+ 
+ #include <QPainter>
++#include <QPainterPath>
+ #include <QRect>
+ #include <QStyleOptionViewItem>
+ #include <QFontMetrics>
+diff -up vlc-3.0.9.2/modules/gui/qt/dialogs/plugins.cpp.omv~ vlc-3.0.9.2/modules/gui/qt/dialogs/plugins.cpp
+--- vlc-3.0.9.2/modules/gui/qt/dialogs/plugins.cpp.omv~	2020-04-14 19:05:39.066792132 +0200
++++ vlc-3.0.9.2/modules/gui/qt/dialogs/plugins.cpp	2020-04-14 19:05:45.064840709 +0200
+@@ -53,6 +53,7 @@
+ #include <QListView>
+ #include <QListWidget>
+ #include <QPainter>
++#include <QPainterPath>
+ #include <QStyleOptionViewItem>
+ #include <QKeyEvent>
+ #include <QPushButton>
+diff -up vlc-3.0.9.2/modules/gui/qt/util/input_slider.cpp.omv~ vlc-3.0.9.2/modules/gui/qt/util/input_slider.cpp
+--- vlc-3.0.9.2/modules/gui/qt/util/input_slider.cpp.omv~	2020-04-14 19:07:29.729684721 +0200
++++ vlc-3.0.9.2/modules/gui/qt/util/input_slider.cpp	2020-04-14 19:07:41.394778397 +0200
+@@ -37,6 +37,7 @@
+ 
+ #include <QPaintEvent>
+ #include <QPainter>
++#include <QPainterPath>
+ #include <QBitmap>
+ #include <QStyleOptionSlider>
+ #include <QLinearGradient>
+diff -up vlc-3.0.9.2/modules/gui/qt/util/timetooltip.cpp.omv~ vlc-3.0.9.2/modules/gui/qt/util/timetooltip.cpp
+diff -up vlc-3.0.9.2/modules/gui/qt/util/timetooltip.hpp.omv~ vlc-3.0.9.2/modules/gui/qt/util/timetooltip.hpp
+--- vlc-3.0.9.2/modules/gui/qt/util/timetooltip.hpp.omv~	2020-04-14 19:08:44.122280916 +0200
++++ vlc-3.0.9.2/modules/gui/qt/util/timetooltip.hpp	2020-04-14 19:08:51.475339696 +0200
+@@ -25,6 +25,7 @@
+ #include "qt.hpp"
+ 
+ #include <QWidget>
++#include <QPainterPath>
+ 
+ class TimeTooltip : public QWidget
+ {
