@@ -1379,8 +1379,8 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %{_libdir}/vlc/plugins/video_filter/libtransform_plugin.so*
 %{_libdir}/vlc/plugins/video_filter/libwave_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libanaglyph_plugin.so
-%{_libdir}/vlc/plugins/video_filter/libopencv_example_plugin.so
-%{_libdir}/vlc/plugins/video_filter/libopencv_wrapper_plugin.so
+#{_libdir}/vlc/plugins/video_filter/libopencv_example_plugin.so
+#{_libdir}/vlc/plugins/video_filter/libopencv_wrapper_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libfreeze_plugin.so
 %{_libdir}/vlc/plugins/video_filter/liboldmovie_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libvhs_plugin.so
