@@ -1,6 +1,6 @@
 %define snapshot %{nil}
 %define pre 0
-%define rel 3
+%define rel 1
 %if %{pre}
 %define release 0.%{pre}.%{rel}
 %else
@@ -114,8 +114,8 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	3.0.10
-Release:	3
+Version:	3.0.11
+Release:	1
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
@@ -125,6 +125,7 @@ Source0:	http://nightlies.videolan.org/build/source/%{fname}.tar.xz
 %else
 Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{fname}.tar.xz
 %endif
+# Faster releases can be found at github: https://github.com/videolan/vlc-3.0/releases
 Source100:	%{name}.rpmlintrc
 Patch1:		vlc-2.0.1-automake-1.12.patch
 Patch2:		vlc-3.0.0-libarchive-tar.patch
