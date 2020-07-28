@@ -115,7 +115,7 @@
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
 Version:	3.0.11
-Release:	2
+Release:	3
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
@@ -669,7 +669,7 @@ to the VLC media player.
 %package plugin-pulse
 Summary:	PulseAudio plugin for the VLC media player
 Group:		Video
-Requires:	%{name} = %{version}
+#Requires:	%{name} = %{version}
 %rename	vlc-pulse
 
 %description plugin-pulse
