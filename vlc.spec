@@ -140,7 +140,7 @@ Patch4:		vlc-3.0-lua-5.3.patch
 Patch6:		vlc-3.0.9.2-compile.patch
 
 Patch20:	vlc-2.1.2-fix-default-font.patch
-Patch22:	vlc-2.1.2-live555-201306.patch
+#Patch22:	vlc-2.1.2-live555-201306.patch
 Patch23:  vlc-live555-20210101.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
