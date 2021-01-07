@@ -69,7 +69,7 @@
 %bcond_without mpeg2dec
 %bcond_without mpc
 %bcond_without lame
-%bcond_without live
+%bcond_with live
 %bcond_without libv4l
 %bcond_without sysfs
 %bcond_without shout
