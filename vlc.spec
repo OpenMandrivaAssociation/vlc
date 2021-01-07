@@ -129,7 +129,7 @@ Source0:	http://nightlies.videolan.org/build/source/%{fname}.tar.xz
 #Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{fname}.tar.xz
 
 # Sources at VideoLan is not updated frequently. For faster source archive release use github:
-https://github.com/videolan/vlc-3.0/archive/%{version}/%{fname}.tar.gz
+Source0:  https://github.com/videolan/vlc-3.0/archive/%{version}/%{fname}.tar.gz
 %endif
 
 Source100:	%{name}.rpmlintrc
