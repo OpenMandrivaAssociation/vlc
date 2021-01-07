@@ -11,6 +11,9 @@
 %endif
 %endif
 
+%define gitcommit         8e19ecd05497
+%define revision          %version-0-%gitcommit
+
 %define libmajor 5
 %define coremajor 9
 
@@ -20,7 +23,7 @@
 %if %{pre}
 %define fname %{name}-%{version}-%{pre}
 %else
-%define fname %{name}-%{version}
+%define fname %{name}-3.0-%{version}
 %endif
 %endif
 
@@ -114,8 +117,8 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	3.0.11.1
-Release:	2
+Version:	3.0.12.1
+Release:	1
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
@@ -123,15 +126,17 @@ URL:		http://www.videolan.org/
 %if "%{snapshot}" != ""
 Source0:	http://nightlies.videolan.org/build/source/%{fname}.tar.xz
 %else
-Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{fname}.tar.xz
+#Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{fname}.tar.xz
+
+# Sources at VideoLan is not updated frequently. For faster source archive release use github:
+https://github.com/videolan/vlc-3.0/archive/%{version}/%{fname}.tar.gz
 %endif
-# Faster releases can be found at github: https://github.com/videolan/vlc-3.0/releases
+
 Source100:	%{name}.rpmlintrc
 Patch1:		vlc-2.0.1-automake-1.12.patch
 Patch2:		vlc-3.0.0-libarchive-tar.patch
 #Patch3:		vlc-3.0-clang.patch
 Patch4:		vlc-3.0-lua-5.3.patch
-Patch5:		vlc-3.0.9.2-qt-5.15.patch
 Patch6:		vlc-3.0.9.2-compile.patch
 
 Patch20:	vlc-2.1.2-fix-default-font.patch
@@ -139,6 +144,7 @@ Patch22:	vlc-2.1.2-live555-201306.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 
+BuildRequires:  git
 BuildRequires:	desktop-file-utils
 BuildRequires:	libtool
 BuildRequires:	yasm
@@ -776,6 +782,9 @@ export CPPFLAGS="$CPPFLAGS -I/usr/include/ebml"
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/speex"
 # locate libsmbclient.h
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
+
+echo "%revision" >> src/revision.txt
+echo "const char psz_vlc_changeset[] = \"%revision\";" >> src/revision.c
 
 %configure \
 %if %{without lua}
