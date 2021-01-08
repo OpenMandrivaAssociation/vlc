@@ -1,0 +1,11 @@
+--- vlc-3.0.11.1/modules/access/live555.cpp.orig	2020-12-30 18:00:48.094507068 -0500
++++ vlc-3.0.11.1/modules/access/live555.cpp	2020-12-30 18:01:36.255460992 -0500
+@@ -852,7 +852,7 @@ static int SessionsSetup( demux_t *p_dem
+             if( !p_sys->b_multicast )
+             {
+                 /* We need different rollover behaviour for multicast */
+-                p_sys->b_multicast = IsMulticastAddress( sub->connectionEndpointAddress() );
++                p_sys->b_multicast = IsMulticastAddress( sub->getConnectionEndpointAddress() );
+             }
+ 
+             tk = (live_track_t*)malloc( sizeof( live_track_t ) );
