@@ -599,6 +599,14 @@ This plugin adds support for video game music playback to VLC based on the
 GME library.
 %endif
 
+%package        plugin-rist
+Summary:        Rist plugin for the VLC media player
+Group:          Video/Players
+Requires:       %{name} = %{version}
+
+%description    plugin-rist
+This plugin adds support for the RIST (Reliable Internet Stream Transport) input module to the VLC media player.
+
 %if %{with schroedinger}
 %package plugin-schroedinger
 Summary:	Dirac plugin for VLC based on Schroedinger
@@ -1562,6 +1570,10 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 %doc README
 %{_libdir}/vlc/plugins/demux/libgme_plugin.so
 %endif
+
+%files plugin-rist
+%{_libdir}/vlc/plugins/access/librist_plugin.so
+%{_libdir}/vlc/plugins/access_output/libaccess_output_rist_plugin.so
 
 %if %{with schroedinger}
 %files plugin-schroedinger
