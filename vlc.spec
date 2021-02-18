@@ -1,3 +1,5 @@
+%global optflags %{optflags} -O3
+
 %define snapshot %{nil}
 %define pre 0
 %define rel 1
@@ -11,8 +13,8 @@
 %endif
 %endif
 
-%define gitcommit         8e19ecd05497
-%define revision          %version-0-%gitcommit
+%define gitcommit 8e19ecd05497
+%define revision %{version}-0-%{gitcommit}
 
 %define libmajor 5
 %define coremajor 9
@@ -141,11 +143,11 @@ Patch6:		vlc-3.0.9.2-compile.patch
 
 Patch20:	vlc-2.1.2-fix-default-font.patch
 #Patch22:	vlc-2.1.2-live555-201306.patch
-Patch23:  vlc-live555-20210101.patch
+Patch23:	vlc-live555-20210101.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 
-BuildRequires:  git
+BuildRequires:	git
 BuildRequires:	desktop-file-utils
 BuildRequires:	libtool
 BuildRequires:	yasm
@@ -204,7 +206,7 @@ BuildRequires:	pkgconfig(libmodplug)
 %endif
 %if %{with gnutls}
 BuildRequires:	pkgconfig(gnutls)
-Requires:       %{name}-plugin-gnutls
+Requires:	%{name}-plugin-gnutls
 %endif
 %if %{with fribidi}
 BuildRequires:	pkgconfig(fribidi)
@@ -599,12 +601,12 @@ This plugin adds support for video game music playback to VLC based on the
 GME library.
 %endif
 
-%package        plugin-rist
-Summary:        Rist plugin for the VLC media player
-Group:          Video/Players
-Requires:       %{name} = %{version}
+%package plugin-rist
+Summary:	Rist plugin for the VLC media player
+Group:		Video/Players
+Requires:	%{name} = %{version}
 
-%description    plugin-rist
+%description plugin-rist
 This plugin adds support for the RIST (Reliable Internet Stream Transport) input module to the VLC media player.
 
 %if %{with schroedinger}
@@ -797,159 +799,159 @@ echo "const char psz_vlc_changeset[] = \"%revision\";" >> src/revision.c
 
 %configure \
 %if %{without lua}
---disable-lua \
+	--disable-lua \
 %endif
---disable-dependency-tracking \
+	--disable-dependency-tracking \
 %ifarch %{ix86}
---disable-sse \
+	--disable-sse \
 %endif
---disable-sid \
+	--disable-sid \
 %if %{with bonjour}
---enable-bonjour \
+	--enable-bonjour \
 %else
---disable-bonjour \
+	--disable-bonjour \
 %endif
 %if %{with smb}
---enable-smbclient \
+	--enable-smbclient \
 %else
---disable-smbclient \
+	--disable-smbclient \
 %endif
 %if %{with ncurses}
---enable-ncurses \
+	--enable-ncurses \
 %endif
 %if %{with lirc}
---enable-lirc \
+	--enable-lirc \
 %endif
---enable-xvideo \
+	--enable-xvideo \
 %if %{with aa}
---enable-aa \
+	--enable-aa \
 %endif
 %if %{with sdl}
---enable-sdl \
+	--enable-sdl \
 %endif
 %if %{with mad}
---enable-mad \
+	--enable-mad \
 %endif
 %if %{with ogg}
---enable-vorbis \
---enable-ogg \
+	--enable-vorbis \
+	--enable-ogg \
 %else
---disable-vorbis \
---disable-ogg \
+	--disable-vorbis \
+	--disable-ogg \
 %endif
 %if %{with theora}
---enable-theora \
+	--enable-theora \
 %endif
 %if %{with speex}
---enable-speex \
+	--enable-speex \
 %else
---disable-speex \
+	--disable-speex \
 %endif
 %if %{with flac}
---enable-flac \
+	--enable-flac \
 %else
---disable-flac \
+	--disable-flac \
 %endif
 %if %{with mkv}
---enable-mkv \
+	--enable-mkv \
 %else
---disable-mkv \
+	--disable-mkv \
 %endif
 %if %{with dv}
---enable-dv1394 \
+	--enable-dv1394 \
 %else
---disable-dv1394 \
+	--disable-dv1394 \
 %endif
 %if %{with dvbpsi}
---enable-dvbpsi \
+	--enable-dvbpsi \
 %else
---disable-dvbpsi \
+	--disable-dvbpsi \
 %endif
 %if %{with shout}
---enable-shout \
+	--enable-shout \
 %endif
 %if ! %{with pulse}
---disable-pulse \
+	--disable-pulse \
 %endif
 %if %{with jack}
---enable-jack \
+	--enable-jack \
 %endif
 %if ! %{with alsa}
---disable-alsa \
+	--disable-alsa \
 %endif
 %if %{with mpeg2dec}
---enable-libmpeg2 \
+	--enable-libmpeg2 \
 %else
---disable-libmpeg2 \
+	--disable-libmpeg2 \
 %endif
 %if %{with faad}
---enable-faad \
+	--enable-faad \
 %endif
 %if %{with dts}
---enable-dca \
+	--enable-dca \
 %else
---disable-dca \
+	--disable-dca \
 %endif
 %if ! %{with svlc}
---disable-skins2 \
+	--disable-skins2 \
 %endif
 %if ! %{with dvdnav}
---disable-dvdnav \
+	--disable-dvdnav \
 %endif
 %if %{with live}
---enable-live555 \
+	--enable-live555 \
 %endif
 %if %{with gnutls}
---enable-gnutls \
+	--enable-gnutls \
 %endif
 --disable-rpath \
 %if %{with vcd}
---enable-vcdx \
+	--enable-vcdx \
 %endif
 %if %{with cddb}
---enable-libcddb \
+	--enable-libcddb \
 %else
---disable-libcddb \
+	--disable-libcddb \
 %endif
 %if %{with x264}
---enable-x264 \
+	--enable-x264 \
 %else
---disable-x264 \
+	--disable-x264 \
 %endif
 %if %{with x265}
---enable-x265 \
+	--enable-x265 \
 %else
---disable-x265 \
+	--disable-x265 \
 %endif
 %if %{with twolame}
---enable-twolame \
+	--enable-twolame \
 %endif
 %if %{with bluray}
---enable-bluray \
+	--enable-bluray \
 %else
---disable-bluray \
+	--disable-bluray \
 %endif
---enable-realrtsp \
+	--enable-realrtsp \
 %if %{with kde}
---with-kde-solid=%{_datadir}/apps/solid/actions \
+	--with-kde-solid=%{_datadir}/apps/solid/actions \
 %else
---without-kde-solid \
+	--without-kde-solid \
 %endif
 %ifarch x86_64
---with-pic
+	--with-pic
 %endif
 
 %make_build --output-sync=target
 
 %install
-%__mkdir_p %{buildroot}%{_libdir}
+mkdir -p %{buildroot}%{_libdir}
 %make_install transform=""
 find %{buildroot}%{_libdir}/vlc -name \*.la -exec %__rm -f {} \;
 %find_lang %{name}
-%__rm -rf installed-docs
-%__mv %{buildroot}%{_datadir}/doc/vlc installed-docs
+rm -rf installed-docs
+mv %{buildroot}%{_datadir}/doc/vlc installed-docs
 %if ! %{with svlc}
-%__rm -rf %{buildroot}%{_datadir}/vlc/skin*
+rm -rf %{buildroot}%{_datadir}/vlc/skin*
 %endif
 # menu
 
@@ -978,10 +980,10 @@ fgrep MimeType= %{buildroot}%{_datadir}/applications/vlc.desktop >> %{buildroot}
 
 # icons
 %define pngdir share/icons
-%__mkdir_p %{buildroot}/{%{_miconsdir},%{_liconsdir}}
-%__install -m 644 %{pngdir}/16x16/vlc.png %{buildroot}/%{_miconsdir}/vlc.png
-%__install -m 644 %{pngdir}/32x32/vlc.png %{buildroot}/%{_iconsdir}/vlc.png
-%__install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
+mkdir -p %{buildroot}/{%{_miconsdir},%{_liconsdir}}
+install -m 644 %{pngdir}/16x16/vlc.png %{buildroot}/%{_miconsdir}/vlc.png
+install -m 644 %{pngdir}/32x32/vlc.png %{buildroot}/%{_iconsdir}/vlc.png
+install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 
 %files -f %{name}.lang
 %doc NEWS README COPYING AUTHORS THANKS
