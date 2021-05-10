@@ -71,7 +71,7 @@
 %bcond_without mpeg2dec
 %bcond_without mpc
 %bcond_without lame
-%bcond_with live
+%bcond_without live
 %bcond_without libv4l
 %bcond_without sysfs
 %bcond_without shout
@@ -119,7 +119,7 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	3.0.12.1
+Version:	3.0.13
 Release:	1
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
