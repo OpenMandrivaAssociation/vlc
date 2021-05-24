@@ -342,6 +342,7 @@ BuildRequires: crystalhd-devel
 Suggests:	vlc-plugin-theora
 %if %{with pulse}
 # needed when using pulseaudio
+Requires:	vlc-plugin-opus
 Requires:	vlc-plugin-pulse
 %endif
 Requires:	fonts-ttf-vera
