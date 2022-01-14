@@ -197,6 +197,7 @@ BuildRequires:	pkgconfig(soxr)
 BuildRequires:	pkgconfig(gstreamer-1.0)
 BuildRequires:	pkgconfig(gstreamer-app-1.0)
 BuildRequires:	pkgconfig(libjpeg)
+BuildRequires:	pkgconfig(dav1d)
 %if %{with sysfs}
 BuildRequires:	sysfsutils-devel
 %endif
