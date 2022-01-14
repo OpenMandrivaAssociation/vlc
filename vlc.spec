@@ -1,4 +1,4 @@
-%global optflags %{optflags} -O3
+%global optflags %{optflags} -O3 -Wno-unknown-warning-option
 
 %define snapshot %{nil}
 %define pre 0
