@@ -198,6 +198,11 @@ BuildRequires:	pkgconfig(gstreamer-1.0)
 BuildRequires:	pkgconfig(gstreamer-app-1.0)
 BuildRequires:	pkgconfig(libjpeg)
 BuildRequires:	pkgconfig(dav1d)
+BuildRequires:	pkgconfig(aom)
+# Intel Media SDK is x86 only
+%ifarch %{x86_64}
+BuildRequires:	pkgconfig(mfx)
+%endif
 %if %{with sysfs}
 BuildRequires:	sysfsutils-devel
 %endif
@@ -1116,6 +1121,8 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %if %{with crystalhd}
 %{_libdir}/vlc/plugins/codec/libcrystalhd_plugin.so
 %endif
+%{_libdir}/vlc/plugins/codec/libaom_plugin.so
+%{_libdir}/vlc/plugins/codec/libdav1d_plugin.so
 %{_libdir}/vlc/plugins/codec/liboggspots_plugin.so
 %{_libdir}/vlc/plugins/codec/librtpvideo_plugin.so
 %{_libdir}/vlc/plugins/codec/libscte18_plugin.so
@@ -1141,6 +1148,10 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %endif
 %if %{with x265}
 %{_libdir}/vlc/plugins/codec/libx265_plugin.so*
+%endif
+%ifarch %{x86_64}
+# Intel Media SDK -- x86 only
+%{_libdir}/vlc/plugins/codec/libqsv_plugin.so
 %endif
 %{_libdir}/vlc/plugins/codec/libspudec_plugin.so*
 %{_libdir}/vlc/plugins/codec/libdvbsub_plugin.so*
