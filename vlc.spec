@@ -120,7 +120,7 @@
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
 Version:	3.0.16
-Release:	3
+Release:	4
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
@@ -144,6 +144,8 @@ Patch6:		vlc-3.0.9.2-compile.patch
 Patch20:	vlc-2.1.2-fix-default-font.patch
 #Patch22:	vlc-2.1.2-live555-201306.patch
 Patch23:	vlc-live555-20210101.patch
+
+Patch25:	vlc-3.0.16-dav1d-0.9.3.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 
@@ -756,11 +758,10 @@ the VLC media player.
 
 %prep
 %if "%{snapshot}" != ""
-%setup -q -n %{name}-%{version}-%(echo %{snapshot} |cut -d- -f3)
+%autosetup -p1 -n %{name}-%{version}-%(echo %{snapshot} |cut -d- -f3)
 %else
-%setup -q -n %{name}-%{version}
+%autosetup -p1 -n %{name}-%{version}
 %endif
-%autopatch -p1
 
 #gw if we want to regenerate libtool, we must remove the local versions of
 # the libtool m4 files, aclocal will replace them
