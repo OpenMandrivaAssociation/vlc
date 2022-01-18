@@ -146,6 +146,7 @@ Patch20:	vlc-2.1.2-fix-default-font.patch
 Patch23:	vlc-live555-20210101.patch
 
 Patch25:	vlc-3.0.16-dav1d-0.9.3.patch
+Patch26:	vlc-3.0.16-ffmpeg-5.0.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 
@@ -1129,7 +1130,7 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/codec/libspdif_plugin.so
 %{_libdir}/vlc/plugins/codec/libtextst_plugin.so
 %{_libdir}/vlc/plugins/codec/libttml_plugin.so
-%{_libdir}/vlc/plugins/codec/libvaapi_plugin.so
+#%{_libdir}/vlc/plugins/codec/libvaapi_plugin.so
 %{_libdir}/vlc/plugins/codec/libcvdsub_plugin.so*
 %{_libdir}/vlc/plugins/codec/libddummy_plugin.so
 %{_libdir}/vlc/plugins/codec/libedummy_plugin.so
@@ -1167,7 +1168,7 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/codec/libjpeg_plugin.so
 %{_libdir}/vlc/plugins/codec/libsubstx3g_plugin.so
 %{_libdir}/vlc/plugins/codec/libsvgdec_plugin.so
-%{_libdir}/vlc/plugins/codec/libvaapi_drm_plugin.so
+#{_libdir}/vlc/plugins/codec/libvaapi_drm_plugin.so
 %{_libdir}/vlc/plugins/codec/libvpx_plugin.so
 
 %dir %{_libdir}/vlc/plugins/control

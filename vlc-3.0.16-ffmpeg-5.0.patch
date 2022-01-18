@@ -1,0 +1,136 @@
+diff -up vlc-3.0.16/modules/codec/avcodec/avcommon.h.omv~ vlc-3.0.16/modules/codec/avcodec/avcommon.h
+--- vlc-3.0.16/modules/codec/avcodec/avcommon.h.omv~	2022-01-15 23:17:35.310275659 +0100
++++ vlc-3.0.16/modules/codec/avcodec/avcommon.h	2022-01-15 23:17:40.536301952 +0100
+@@ -105,8 +105,6 @@ static inline void vlc_init_avformat(vlc
+ 
+     avformat_network_init();
+ 
+-    av_register_all();
+-
+     vlc_avcodec_unlock();
+ }
+ #endif
+@@ -119,8 +117,6 @@ static inline void vlc_init_avcodec(vlc_
+ 
+     vlc_init_avutil(obj);
+ 
+-    avcodec_register_all();
+-
+     vlc_avcodec_unlock();
+ }
+ #endif
+diff -up vlc-3.0.16/modules/codec/avcodec/encoder.c.omv~ vlc-3.0.16/modules/codec/avcodec/encoder.c
+--- vlc-3.0.16/modules/codec/avcodec/encoder.c.omv~	2022-01-15 23:23:14.249890120 +0100
++++ vlc-3.0.16/modules/codec/avcodec/encoder.c	2022-01-15 23:27:06.859923114 +0100
+@@ -1233,27 +1233,6 @@ static block_t *EncodeVideo( encoder_t *
+ 
+     block_t *p_block = encode_avframe( p_enc, p_sys, frame );
+ 
+-    if( p_block )
+-    {
+-       switch ( p_sys->p_context->coded_frame->pict_type )
+-       {
+-       case AV_PICTURE_TYPE_I:
+-       case AV_PICTURE_TYPE_SI:
+-           p_block->i_flags |= BLOCK_FLAG_TYPE_I;
+-           break;
+-       case AV_PICTURE_TYPE_P:
+-       case AV_PICTURE_TYPE_SP:
+-           p_block->i_flags |= BLOCK_FLAG_TYPE_P;
+-           break;
+-       case AV_PICTURE_TYPE_B:
+-       case AV_PICTURE_TYPE_BI:
+-           p_block->i_flags |= BLOCK_FLAG_TYPE_B;
+-           break;
+-       default:
+-           p_block->i_flags |= BLOCK_FLAG_TYPE_PB;
+-       }
+-    }
+-
+     return p_block;
+ }
+ 
+diff -up vlc-3.0.16/modules/codec/avcodec/subtitle.c.omv~ vlc-3.0.16/modules/codec/avcodec/subtitle.c
+--- vlc-3.0.16/modules/codec/avcodec/subtitle.c.omv~	2022-01-15 23:21:59.243546279 +0100
++++ vlc-3.0.16/modules/codec/avcodec/subtitle.c	2022-01-15 23:22:22.590653980 +0100
+@@ -91,7 +91,7 @@ int InitSubtitleDec(vlc_object_t *obj)
+     context->extradata = NULL;
+ 
+ #if LIBAVFORMAT_VERSION_MICRO >= 100
+-    av_codec_set_pkt_timebase(context, AV_TIME_BASE_Q);
++    context->pkt_timebase=AV_TIME_BASE_Q;
+ #endif
+ 
+     /* */
+diff -up vlc-3.0.16/modules/codec/avcodec/va.c.omv~ vlc-3.0.16/modules/codec/avcodec/va.c
+--- vlc-3.0.16/modules/codec/avcodec/va.c.omv~	2022-01-15 23:22:38.050724953 +0100
++++ vlc-3.0.16/modules/codec/avcodec/va.c	2022-01-15 23:22:41.386740236 +0100
+@@ -37,7 +37,7 @@ vlc_fourcc_t vlc_va_GetChroma(enum Pixel
+      * fatal, especially not if a software format. */
+     switch (hwfmt)
+     {
+-        case AV_PIX_FMT_VAAPI_VLD:
++        case AV_PIX_FMT_VAAPI:
+             switch (swfmt)
+             {
+                 case AV_PIX_FMT_YUVJ420P:
+diff -up vlc-3.0.16/modules/codec/avcodec/video.c.omv~ vlc-3.0.16/modules/codec/avcodec/video.c
+--- vlc-3.0.16/modules/codec/avcodec/video.c.omv~	2022-01-15 23:18:55.566673801 +0100
++++ vlc-3.0.16/modules/codec/avcodec/video.c	2022-01-15 23:19:15.997773339 +0100
+@@ -1110,7 +1110,7 @@ static picture_t *DecodeBlock( decoder_t
+         }
+ 
+         /* Compute the PTS */
+-#ifdef FF_API_PKT_PTS
++#if 1 //def FF_API_PKT_PTS
+         mtime_t i_pts = frame->pts;
+ #else
+         mtime_t i_pts = frame->pkt_pts;
+@@ -1614,7 +1614,7 @@ no_reuse:
+ #endif
+         AV_PIX_FMT_DXVA2_VLD,
+ #endif
+-        AV_PIX_FMT_VAAPI_VLD,
++        AV_PIX_FMT_VAAPI,
+ #if (LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(52, 4, 0))
+         AV_PIX_FMT_VDPAU,
+ #endif
+diff -up vlc-3.0.16/modules/demux/avformat/mux.c.omv~ vlc-3.0.16/modules/demux/avformat/mux.c
+--- vlc-3.0.16/modules/demux/avformat/mux.c.omv~	2022-01-15 23:28:52.133377932 +0100
++++ vlc-3.0.16/modules/demux/avformat/mux.c	2022-01-15 23:33:08.432462739 +0100
+@@ -86,14 +86,10 @@ static int IOWriteTyped(void *opaque, ui
+  *****************************************************************************/
+ int avformat_OpenMux( vlc_object_t *p_this )
+ {
+-    AVOutputFormat *file_oformat;
++    const AVOutputFormat *file_oformat;
+     sout_mux_t *p_mux = (sout_mux_t*)p_this;
+     bool dummy = !strcmp( p_mux->p_access->psz_access, "dummy");
+ 
+-    if( dummy && strlen(p_mux->p_access->psz_path)
+-                              >= sizeof (((AVFormatContext *)NULL)->filename) )
+-        return VLC_EGENERIC;
+-
+     msg_Dbg( p_mux, "using %s %s", AVPROVIDER(LIBAVFORMAT), LIBAVFORMAT_IDENT );
+ 
+     vlc_init_avformat(p_this);
+@@ -127,7 +123,7 @@ int avformat_OpenMux( vlc_object_t *p_th
+     p_sys->oc->oformat = file_oformat;
+     /* If we use dummy access, let avformat write output */
+     if( dummy )
+-        strcpy( p_sys->oc->filename, p_mux->p_access->psz_path );
++        p_sys->oc->url = av_strdup(p_mux->p_access->psz_path);
+ 
+     /* Create I/O wrapper */
+     p_sys->io_buffer_size = 10 * 1024 * 1024;  /* FIXME */
+@@ -369,10 +365,6 @@ static int MuxBlock( sout_mux_t *p_mux,
+         pkt.dts = p_data->i_dts * p_stream->time_base.den /
+             CLOCK_FREQ / p_stream->time_base.num;
+ 
+-    /* this is another hack to prevent libavformat from triggering the "non monotone timestamps" check in avformat/utils.c */
+-    p_stream->cur_dts = ( p_data->i_dts * p_stream->time_base.den /
+-            CLOCK_FREQ / p_stream->time_base.num ) - 1;
+-
+     if( av_write_frame( p_sys->oc, &pkt ) < 0 )
+     {
+         msg_Err( p_mux, "could not write frame (pts: %"PRId64", dts: %"PRId64") "
