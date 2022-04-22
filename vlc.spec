@@ -146,7 +146,6 @@ Patch20:	vlc-2.1.2-fix-default-font.patch
 Patch23:	vlc-live555-20210101.patch
 
 Patch25:	vlc-3.0.16-dav1d-0.9.3.patch
-Patch26:	vlc-3.0.16-ffmpeg-5.0.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 
