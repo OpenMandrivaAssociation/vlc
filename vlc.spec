@@ -128,7 +128,7 @@ URL:		http://www.videolan.org/
 %if "%{snapshot}" != ""
 Source0:	http://nightlies.videolan.org/build/source/%{fname}.tar.xz
 %else
-Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{fname}.tar.xz
+Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}.tar.xz
 
 # Sources at VideoLan is not updated frequently. For faster source archive release use github:
 #Source0:  https://github.com/videolan/vlc/archive/%{version}/%{name}-%{version}.tar.gz
