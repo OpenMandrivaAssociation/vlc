@@ -792,6 +792,8 @@ sed -i -e 's/.*ERROR.*I78ef29975181ee22429c9bd4b11d96d9e68b7a9c.*/AC_MSG_WARN([O
 # actually our libtool breaks huh?
 autoreconf -vif
 %build
+# No longer compile with Clang 14 (vlc 3.0.17.4) due to codec/webvtt/CSSGrammar.c:1241:3: error: unknown warning group 
+# '-Wmaybe-uninitialized', ignored [-Werror,-Wunknown-warning-option] YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
 export CC=gcc
 export CXX=g++
 
