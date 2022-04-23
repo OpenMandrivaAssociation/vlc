@@ -119,8 +119,8 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	3.0.16
-Release:	6
+Version:	3.0.17.4
+Release:	1
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
@@ -128,10 +128,10 @@ URL:		http://www.videolan.org/
 %if "%{snapshot}" != ""
 Source0:	http://nightlies.videolan.org/build/source/%{fname}.tar.xz
 %else
-#Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{fname}.tar.xz
+Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
 
 # Sources at VideoLan is not updated frequently. For faster source archive release use github:
-Source0:  https://github.com/videolan/vlc/archive/%{version}/%{name}-%{version}.tar.gz
+#Source0:  https://github.com/videolan/vlc/archive/%{version}/%{name}-%{version}.tar.gz
 %endif
 
 Source100:	%{name}.rpmlintrc
@@ -146,7 +146,6 @@ Patch20:	vlc-2.1.2-fix-default-font.patch
 Patch23:	vlc-live555-20210101.patch
 
 Patch25:	vlc-3.0.16-dav1d-0.9.3.patch
-Patch26:	vlc-3.0.16-ffmpeg-5.0.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 
@@ -793,8 +792,10 @@ sed -i -e 's/.*ERROR.*I78ef29975181ee22429c9bd4b11d96d9e68b7a9c.*/AC_MSG_WARN([O
 # actually our libtool breaks huh?
 autoreconf -vif
 %build
-#export CC=gcc
-#export CXX=g++
+# No longer compile with Clang 14 (vlc 3.0.17.4) due to codec/webvtt/CSSGrammar.c:1241:3: error: unknown warning group 
+# '-Wmaybe-uninitialized', ignored [-Werror,-Wunknown-warning-option] YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
+export CC=gcc
+export CXX=g++
 
 # add missing ebml include dir
 export CPPFLAGS="$CPPFLAGS -I/usr/include/ebml"
@@ -803,8 +804,8 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/speex"
 # locate libsmbclient.h
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 
-echo "%revision" >> src/revision.txt
-echo "const char psz_vlc_changeset[] = \"%revision\";" >> src/revision.c
+#echo "%revision" >> src/revision.txt
+#echo "const char psz_vlc_changeset[] = \"%revision\";" >> src/revision.c
 
 %configure \
 %if %{without lua}
@@ -1421,7 +1422,7 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/video_filter/liboldmovie_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libvhs_plugin.so
 
-%dir %{_libdir}/vlc/plugins/
+%dir %{_libdir}/vlc/plugins/video_output/
 %{_libdir}/vlc/plugins/video_output/libcaca_plugin.so
 %{_libdir}/vlc/plugins/video_output/libegl_x11_plugin.so*
 #{_libdir}/vlc/plugins/video_output/libegl_wl_plugin.so*
