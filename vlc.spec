@@ -1420,7 +1420,7 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/video_filter/liboldmovie_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libvhs_plugin.so
 
-%dir %{_libdir}/vlc/plugins/
+%dir %{_libdir}/vlc/plugins/video_output/
 %{_libdir}/vlc/plugins/video_output/libcaca_plugin.so
 %{_libdir}/vlc/plugins/video_output/libegl_x11_plugin.so*
 #{_libdir}/vlc/plugins/video_output/libegl_wl_plugin.so*
