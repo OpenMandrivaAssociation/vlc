@@ -143,7 +143,7 @@ Patch6:		vlc-3.0.9.2-compile.patch
 
 Patch20:	vlc-2.1.2-fix-default-font.patch
 #Patch22:	vlc-2.1.2-live555-201306.patch
-Patch23:	vlc-live555-20210101.patch
+#Patch23:	vlc-live555-20210101.patch
 
 Patch25:	vlc-3.0.16-dav1d-0.9.3.patch
 Patch26:	Remove_legacy_caca.patch
