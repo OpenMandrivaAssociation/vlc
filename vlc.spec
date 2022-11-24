@@ -120,7 +120,7 @@
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
 Version:	3.0.18
-Release:	1
+Release:	2
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
@@ -349,17 +349,11 @@ BuildRequires: crystalhd-devel
 %rename	wxvlc
 # might be useful too:
 Suggests:	vlc-plugin-theora
-%if %{with pulse}
-# needed when using pulseaudio
-Requires:	vlc-plugin-opus
-Requires:	vlc-plugin-pulse
-%endif
 Requires:	fonts-ttf-vera
 Requires(post,postun):	desktop-file-utils
 Conflicts:	vlc-plugin-common < %{version}-%{release}
-%ifnarch %{armx}
-Requires:	vdpau-drivers
-%endif
+Suggests:	vdpau-drivers
+Requires:	%{name}-core = %{EVRD}
 
 %description
 VideoLAN is an OpenSource streaming solution for every OS developed by
@@ -415,7 +409,7 @@ for the VLC media player, or standalone applications using features from VLC.
 %package plugin-zvbi
 Summary:	Add Teletext and Closed Caption support to VLC
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 BuildRequires:	pkgconfig(zvbi-0.2)
 
 %description plugin-zvbi
@@ -427,7 +421,7 @@ the ZVBI library to VLC.
 %package plugin-kate
 Summary:	Add subtitle and Karaoke text support to VLC
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 BuildRequires:	pkgconfig(tiger)
 
 %description plugin-kate
@@ -439,7 +433,7 @@ the libkate library to VLC.
 %package plugin-libass
 Summary:	Add subtitle support to VLC using libass
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 BuildRequires:	pkgconfig(libass)
 
 %description plugin-libass
@@ -450,7 +444,7 @@ This package adds support for subtitles based on the libass library to VLC.
 %package plugin-lua
 Summary:	Add Lua scripting to vlc
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 BuildRequires:	pkgconfig(lua)
 
 %description plugin-lua
@@ -461,7 +455,7 @@ This plugin adds lua scripting and provides a few example scripts as well.
 %package plugin-ncurses
 Summary:	Ncurses console-based plugin for the VLC media player
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 BuildRequires:	pkgconfig(ncurses)
 
 %description plugin-ncurses
@@ -473,7 +467,7 @@ activate it, use the `--intf ncurses' flag.
 %package plugin-lirc
 Summary:	Lirc plugin for the VLC media player
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 %rename	vlc-lirc
 BuildRequires:	pkgconfig(liblircclient0)
 
@@ -485,7 +479,7 @@ activate it, use the `--extraintf lirc' flag.
 %package -n svlc
 Summary:	Skinned GUI plugin for the VLC media player
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 Provides:	vlc-gui
 Requires(post,postun): desktop-file-utils
 
@@ -499,7 +493,7 @@ activate it, run the `svlc' program.
 %package plugin-aa
 Summary:	ASCII art video plugin for the VLC media player
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 %rename	vlc-aa
 BuildRequires:	aalib-devel
 
@@ -513,7 +507,7 @@ plugin from the preferences menu.
 %package plugin-sdl
 Summary:	Simple DirectMedia Layer video plugin for the VLC media player
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 %rename	vlc-sdl
 %if %{with sdl_image}
 BuildRequires:	pkgconfig(SDL_image)
@@ -532,7 +526,7 @@ from the preferences menu.
 %package plugin-shout
 Summary:	Shoutcast and Icecast connector
 Group:		Sound
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 BuildRequires:	pkgconfig(shout)
 
 %description plugin-shout
@@ -546,10 +540,13 @@ This plugin adds support for Icecast and Shoutcast servers.
 Summary:	Visualization plugin for the VLC media player
 Group:		Video
 BuildRequires:	libgoom2-devel
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 
 %description plugin-goom
 This is a visualization plugin for VLC media player based on the Goom library.
+
+%post plugin-goom
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
 %endif
 
 %if %{with projectm}
@@ -557,7 +554,7 @@ This is a visualization plugin for VLC media player based on the Goom library.
 Summary:	Visualization plugin for the VLC media player
 Group:		Video
 BuildRequires:	pkgconfig(libprojectM)
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 
 %description plugin-projectm
 This is a visualization plugin for VLC media player based on projectm.
@@ -567,7 +564,7 @@ This is a visualization plugin for VLC media player based on projectm.
 %package plugin-theora
 Summary:	Theora video codec for the VLC media player
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 BuildRequires:	pkgconfig(theora)
 
 %description plugin-theora
@@ -579,7 +576,7 @@ media player. They are autodetected.
 %package plugin-twolame
 Summary:	MP2 encoder plugin for VLC
 Group:		Sound
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 BuildRequires:	pkgconfig(twolame)
 
 %description plugin-twolame
@@ -591,7 +588,7 @@ to the VLC media player. They are autodetected.
 %package plugin-fluidsynth
 Summary:	Add MIDI playback support to VLC based on Fluidsynth
 Group:		Sound
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 BuildRequires:	pkgconfig(fluidsynth)
 
 %description plugin-fluidsynth
@@ -603,7 +600,7 @@ library.
 %package plugin-gme
 Summary:	Add game music playback support to VLC based on libgme
 Group:		Sound
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 BuildRequires:	libgme-devel
 
 %description plugin-gme
@@ -614,7 +611,7 @@ GME library.
 %package plugin-rist
 Summary:	Rist plugin for the VLC media player
 Group:		Video/Players
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 
 %description plugin-rist
 This plugin adds support for the RIST (Reliable Internet Stream Transport) input module to the VLC media player.
@@ -623,7 +620,7 @@ This plugin adds support for the RIST (Reliable Internet Stream Transport) input
 %package plugin-schroedinger
 Summary:	Dirac plugin for VLC based on Schroedinger
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 BuildRequires:	pkgconfig(schroedinger-1.0)
 
 %description plugin-schroedinger
@@ -634,7 +631,7 @@ to the VLC media player.
 %package plugin-speex
 Summary:	Ogg Speex codec plugin for the VLC media player
 Group:		Sound
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 
 %description plugin-speex
 These plugins add support for the Ogg Speex codec to the VLC media
@@ -643,7 +640,7 @@ player. They are autodetected.
 %package plugin-flac
 Summary:	Flac codec plugin for the VLC media player
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 
 %description plugin-flac
 These plugins add support for the FLAC compressed audio format to the
@@ -652,7 +649,7 @@ VLC media player.
 %package plugin-opus
 Summary:	Opus codec plugin for the VLC media player
 Group:		Sound
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 
 %description plugin-opus
 These plugins add support for the Opus codec to the VLC media
@@ -662,7 +659,7 @@ player. They are autodetected.
 %package plugin-dv
 Summary:	DV codec plugin for the VLC media player
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 BuildRequires:	pkgconfig(libavc1394)
 BuildRequires:	pkgconfig(libdc1394-2)
 BuildRequires:	pkgconfig(libdv)
@@ -676,7 +673,7 @@ The plugin is autodetected.
 %package plugin-mod
 Summary:	MOD audio decoder plugin for the VLC media player
 Group:		Sound
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 
 %description plugin-mod
 This plugin adds support for music module playback based on libmodplug
@@ -685,7 +682,7 @@ to the VLC media player.
 %package plugin-mpc
 Summary:	MPC audio decoder plugin for the VLC media player
 Group:		Sound
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 
 %description plugin-mpc
 This plugin adds support for Musepack audio playback based on libmpcdec
@@ -696,7 +693,7 @@ to the VLC media player.
 %package plugin-pulse
 Summary:	PulseAudio plugin for the VLC media player
 Group:		Video
-#Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 %rename	vlc-pulse
 
 %description plugin-pulse
@@ -708,7 +705,7 @@ media player. To activate it, use the `--aout pulse' flag or select the
 %package plugin-jack
 Summary:	Jack audio plugin for the VLC media player
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 %rename	vlc-jack
 
 %description plugin-jack
@@ -719,7 +716,7 @@ media player. To activate it, use the `--aout jack' flag or select the
 %package plugin-bonjour
 Summary:	Bonjour service discovery plugin for the VLC media player
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 
 %description plugin-bonjour
 This plugin adds support for Bonjour service discovery to
@@ -728,7 +725,7 @@ the VLC media player.
 %package plugin-chromecast
 Summary:	ChromeCast output plugin for VLC
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 
 %description plugin-chromecast
 This plugin adds ChromeCast output support to
@@ -738,7 +735,7 @@ the VLC media player.
 %package plugin-upnp
 Summary:	UPNP service discovery plugin for the VLC media player
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 BuildRequires:	pkgconfig(libupnp)
 
 %description plugin-upnp
@@ -749,7 +746,7 @@ the VLC media player.
 %package plugin-gnutls
 Summary:	Secure Socket Layer plugin for the VLC media player
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 
 %description plugin-gnutls
 This plugin adds support for SSL/TLS to the VLC media player.
@@ -757,11 +754,27 @@ This plugin adds support for SSL/TLS to the VLC media player.
 %package plugin-libnotify
 Summary:	Notification popup plugin for the VLC media player
 Group:		Video
-Requires:	%{name} = %{version}
+Requires:	%{name}-core = %{version}
 
 %description plugin-libnotify
 This plugin adds support for notification popup messages to
 the VLC media player.
+
+%package core
+Summary:	Core components of the VLC media player
+Group:		Video
+%if %{with pulse}
+# needed when using pulseaudio
+Requires:	vlc-plugin-opus
+Requires:	vlc-plugin-pulse
+%endif
+
+%description core
+Core components of the VLC media player
+
+This includes core plugins used by libvlc, needed if you want
+to use an application that uses VLC libraries (e.g. the Phonon
+VLC plugin) even if you don't want to use the VLC player itself.
 
 %prep
 %if "%{snapshot}" != ""
@@ -769,6 +782,12 @@ the VLC media player.
 %else
 %autosetup -p1 -n %{name}-%{version}
 %endif
+# Make prebuilt stuff with old flex/bison great again...
+cd modules/codec/webvtt
+flex -o CSSLexer.c CSSLexer.l
+bison --update CSSGrammar.y
+bison -HCSSGrammar.h -oCSSGrammar.c CSSGrammar.y
+cd ../../..
 
 #gw if we want to regenerate libtool, we must remove the local versions of
 # the libtool m4 files, aclocal will replace them
@@ -793,11 +812,6 @@ sed -i -e 's/.*ERROR.*I78ef29975181ee22429c9bd4b11d96d9e68b7a9c.*/AC_MSG_WARN([O
 # actually our libtool breaks huh?
 autoreconf -vif
 %build
-# No longer compile with Clang 14 (vlc 3.0.17.4) due to codec/webvtt/CSSGrammar.c:1241:3: error: unknown warning group 
-# '-Wmaybe-uninitialized', ignored [-Werror,-Wunknown-warning-option] YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
-export CC=gcc
-export CXX=g++
-
 # add missing ebml include dir
 export CPPFLAGS="$CPPFLAGS -I/usr/include/ebml"
 #gw the speex headers have moved
@@ -996,6 +1010,49 @@ install -m 644 %{pngdir}/16x16/vlc.png %{buildroot}/%{_miconsdir}/vlc.png
 install -m 644 %{pngdir}/32x32/vlc.png %{buildroot}/%{_iconsdir}/vlc.png
 install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 
+%files core
+%dir %{_libdir}/vlc
+%{_libdir}/vlc/vlc-cache-gen
+%dir %{_libdir}/vlc/plugins
+%ghost %{_libdir}/vlc/plugins/plugins.dat
+%dir %{_libdir}/vlc/plugins/access
+%{_libdir}/vlc/plugins/access/libfilesystem_plugin.so
+%dir %{_libdir}/vlc/plugins/audio_output
+%if %{with alsa}
+%{_libdir}/vlc/plugins/audio_output/libalsa_plugin.so*
+%endif
+%dir %{_libdir}/vlc/plugins/codec
+%{_libdir}/vlc/plugins/codec/libavcodec_plugin.so
+%if %{with ogg}
+%{_libdir}/vlc/plugins/demux/libogg_plugin.so*
+%{_libdir}/vlc/plugins/codec/libvorbis_plugin.so*
+%endif
+%dir %{_libdir}/vlc/plugins/demux
+%{_libdir}/vlc/plugins/demux/libavformat_plugin.so
+%dir %{_libdir}/vlc/plugins/video_chroma
+%{_libdir}/vlc/plugins/video_chroma/libgrey_yuv_plugin.so
+%{_libdir}/vlc/plugins/video_chroma/libi420_rgb_*plugin.so*
+%{_libdir}/vlc/plugins/video_chroma/libi420_yuy2_*plugin.so*
+%{_libdir}/vlc/plugins/video_chroma/libi422_i420_plugin.so
+%{_libdir}/vlc/plugins/video_chroma/libi420_10_p010_plugin.so
+%{_libdir}/vlc/plugins/video_chroma/libi420_nv12_plugin.so
+%{_libdir}/vlc/plugins/video_chroma/libi422_yuy2_*plugin.so*
+%{_libdir}/vlc/plugins/video_chroma/librv32_plugin.so
+%{_libdir}/vlc/plugins/video_chroma/libyuy2_i420_plugin.so
+%{_libdir}/vlc/plugins/video_chroma/libyuy2_i422_plugin.so
+%{_libdir}/vlc/plugins/video_chroma/libyuvp_plugin.so
+%{_libdir}/vlc/plugins/video_chroma/libswscale_plugin.so
+%{_libdir}/vlc/plugins/video_chroma/libchain_plugin.so
+%dir %{_libdir}/vlc/plugins/video_output/
+%{_libdir}/vlc/plugins/video_output/libxcb_x11_plugin.so*
+%{_libdir}/vlc/plugins/video_output/libxcb_window_plugin.so*
+%{_libdir}/vlc/libvlc_xcb_events.so*
+%if %{with xvideo}
+%{_libdir}/vlc/plugins/video_output/libxcb_xv_plugin.so*
+%endif
+%{_libdir}/vlc/plugins/video_output/libgl_plugin.so
+%{_libdir}/vlc/plugins/video_output/libglx_plugin.so
+
 %files -f %{name}.lang
 %doc NEWS README COPYING AUTHORS THANKS
 %doc installed-docs/* doc/lirc/
@@ -1008,16 +1065,11 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_datadir}/vlc/*.*
 %{_datadir}/vlc/utils
 %dir %{_libdir}/vlc
-%{_libdir}/vlc/vlc-cache-gen
 %{_libdir}/vlc/libvlc_vdpau.so.*
 
-%dir %{_libdir}/vlc/plugins
-%{_libdir}/vlc/plugins/plugins.dat
-
-%dir %{_libdir}/vlc/plugins/access
 %{_libdir}/vlc/plugins/access/libattachment_plugin.so
-%{_libdir}/vlc/plugins/access/libavio_plugin.so
 %{_libdir}/vlc/plugins/access/libaccess_concat_plugin.so
+%{_libdir}/vlc/plugins/access/libavio_plugin.so
 %{_libdir}/vlc/plugins/access/libimem_plugin.so
 %{_libdir}/vlc/plugins/access/libaccess_imem_plugin.so
 %{_libdir}/vlc/plugins/access/libhttps_plugin.so
@@ -1047,7 +1099,6 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/access/libdtv_plugin.so*
 %{_libdir}/vlc/plugins/access/libdvb_plugin.so*
 %{_libdir}/vlc/plugins/access/libidummy_plugin.so
-%{_libdir}/vlc/plugins/access/libfilesystem_plugin.so
 %if %{with live}
 %{_libdir}/vlc/plugins/access/liblive555_plugin.so
 %endif
@@ -1085,8 +1136,8 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/audio_filter/libkaraoke_plugin.so
 %{_libdir}/vlc/plugins/audio_filter/libmono_plugin.so
 %if %{with mad}
-%endif
 %{_libdir}/vlc/plugins/audio_filter/libmad_plugin.so
+%endif
 %{_libdir}/vlc/plugins/audio_filter/libsoxr_plugin.so
 %{_libdir}/vlc/plugins/audio_filter/libtospdif_plugin.so
 %{_libdir}/vlc/plugins/audio_filter/libnormvol_plugin.so*
@@ -1105,7 +1156,6 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/audio_mixer/libfloat_mixer_plugin.so
 %{_libdir}/vlc/plugins/audio_mixer/libinteger_mixer_plugin.so
 
-%dir %{_libdir}/vlc/plugins/audio_output
 %{_libdir}/vlc/plugins/audio_output/libadummy_plugin.so
 %{_libdir}/vlc/plugins/audio_output/libamem_plugin.so
 %{_libdir}/vlc/plugins/audio_output/libafile_plugin.so
@@ -1117,7 +1167,6 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/codec/libadpcm_plugin.so*
 %{_libdir}/vlc/plugins/codec/libaes3_plugin.so
 %{_libdir}/vlc/plugins/codec/libaraw_plugin.so*
-%{_libdir}/vlc/plugins/codec/libavcodec_plugin.so
 %{_libdir}/vlc/plugins/codec/libcc_plugin.so
 %{_libdir}/vlc/plugins/codec/libcdg_plugin.so
 %{_libdir}/vlc/plugins/codec/libmpg123_plugin.so
@@ -1191,7 +1240,6 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/demux/libaiff_plugin.so*
 %{_libdir}/vlc/plugins/demux/libasf_plugin.so*
 %{_libdir}/vlc/plugins/demux/libau_plugin.so*
-%{_libdir}/vlc/plugins/demux/libavformat_plugin.so
 %{_libdir}/vlc/plugins/demux/libavi_plugin.so*
 %{_libdir}/vlc/plugins/demux/libdemux_cdg_plugin.so
 %{_libdir}/vlc/plugins/demux/libdemux_stl_plugin.so
@@ -1224,10 +1272,6 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/demux/libts_plugin.so*
 %endif
 %{_libdir}/vlc/plugins/demux/libxa_plugin.so*
-%if %{with ogg}
-%{_libdir}/vlc/plugins/demux/libogg_plugin.so*
-%{_libdir}/vlc/plugins/codec/libvorbis_plugin.so*
-%endif
 %{_libdir}/vlc/plugins/demux/libcaf_plugin.so
 %{_libdir}/vlc/plugins/demux/libdiracsys_plugin.so
 %if %{with satellite}
@@ -1363,21 +1407,6 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %dir %{_libdir}/vlc/plugins/vaapi
 %{_libdir}/vlc/plugins/vaapi/libvaapi_filters_plugin.so
 
-%dir %{_libdir}/vlc/plugins/video_chroma
-%{_libdir}/vlc/plugins/video_chroma/libgrey_yuv_plugin.so
-%{_libdir}/vlc/plugins/video_chroma/libi420_rgb_*plugin.so*
-%{_libdir}/vlc/plugins/video_chroma/libi420_yuy2_*plugin.so*
-%{_libdir}/vlc/plugins/video_chroma/libi422_i420_plugin.so
-%{_libdir}/vlc/plugins/video_chroma/libi420_10_p010_plugin.so
-%{_libdir}/vlc/plugins/video_chroma/libi420_nv12_plugin.so
-%{_libdir}/vlc/plugins/video_chroma/libi422_yuy2_*plugin.so*
-%{_libdir}/vlc/plugins/video_chroma/librv32_plugin.so
-%{_libdir}/vlc/plugins/video_chroma/libyuy2_i420_plugin.so
-%{_libdir}/vlc/plugins/video_chroma/libyuy2_i422_plugin.so
-%{_libdir}/vlc/plugins/video_chroma/libyuvp_plugin.so
-%{_libdir}/vlc/plugins/video_chroma/libswscale_plugin.so
-%{_libdir}/vlc/plugins/video_chroma/libchain_plugin.so
-
 %dir %{_libdir}/vlc/plugins/video_filter
 %{_libdir}/vlc/plugins/video_filter/libadjust_plugin.so*
 %{_libdir}/vlc/plugins/video_filter/libalphamask_plugin.so
@@ -1423,7 +1452,6 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/video_filter/liboldmovie_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libvhs_plugin.so
 
-%dir %{_libdir}/vlc/plugins/video_output/
 %{_libdir}/vlc/plugins/video_output/libcaca_plugin.so
 %{_libdir}/vlc/plugins/video_output/libegl_x11_plugin.so*
 #{_libdir}/vlc/plugins/video_output/libegl_wl_plugin.so*
@@ -1435,14 +1463,6 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 #{_libdir}/vlc/plugins/video_output/libwl_shell_plugin.so
 #{_libdir}/vlc/plugins/video_output/libwl_shm_plugin.so
 #{_libdir}/vlc/plugins/video_output/libxdg_shell_plugin.so
-%{_libdir}/vlc/plugins/video_output/libxcb_x11_plugin.so*
-%{_libdir}/vlc/plugins/video_output/libxcb_window_plugin.so*
-%{_libdir}/vlc/libvlc_xcb_events.so*
-%if %{with xvideo}
-%{_libdir}/vlc/plugins/video_output/libxcb_xv_plugin.so*
-%endif
-%{_libdir}/vlc/plugins/video_output/libgl_plugin.so
-%{_libdir}/vlc/plugins/video_output/libglx_plugin.so
 %{_libdir}/vlc/plugins/video_output/libglconv_vaapi_drm_plugin.so
 #{_libdir}/vlc/plugins/video_output/libglconv_vaapi_wl_plugin.so
 %{_libdir}/vlc/plugins/video_output/libglconv_vaapi_x11_plugin.so
@@ -1453,7 +1473,6 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/visualization/libglspectrum_plugin.so*
 %if %{with alsa}
 %{_libdir}/vlc/plugins/access/libaccess_alsa_plugin.so
-%{_libdir}/vlc/plugins/audio_output/libalsa_plugin.so*
 %endif
 %{_mandir}/man1/vlc.*
 %{_mandir}/man1/vlc-wrapper.1*
@@ -1681,3 +1700,96 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %files plugin-chromecast
 %{_libdir}/vlc/plugins/demux/libdemux_chromecast_plugin.so
 %{_libdir}/vlc/plugins/stream_out/libstream_out_chromecast_plugin.so
+
+%post core
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-zvbi
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-kate
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-libass
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-lua
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-ncurses
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-lirc
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-aa
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-sdl
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-shout
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-projectm
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-theora
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-twolame
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-fluidsynth
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-gme
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-rist
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-schroedinger
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-speex
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-flac
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-opus
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-dv
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-mod
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-mpc
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-pulse
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-jack
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-bonjour
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-chromecast
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-upnp
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-gnutls
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+%post plugin-libnotify
+%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
