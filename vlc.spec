@@ -120,7 +120,7 @@
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
 Version:	3.0.18
-Release:	2
+Release:	3
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
@@ -1707,89 +1707,8 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %post
 %{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
 
-%post plugin-zvbi
+%transfiletriggerin -- %{_libdir}/vlc/plugins
 %{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
 
-%post plugin-kate
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-libass
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-lua
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-ncurses
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-lirc
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-aa
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-sdl
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-shout
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-projectm
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-theora
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-twolame
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-fluidsynth
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-gme
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-rist
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-schroedinger
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-speex
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-flac
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-opus
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-dv
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-mod
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-mpc
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-pulse
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-jack
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-bonjour
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-chromecast
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-upnp
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-gnutls
-%{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-%post plugin-libnotify
+%transfiletriggerpostun -- %{_libdir}/vlc/plugins
 %{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
