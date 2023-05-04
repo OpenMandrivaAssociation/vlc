@@ -2,16 +2,6 @@
 
 %define snapshot %{nil}
 %define pre 0
-%define rel 1
-%if %{pre}
-%define release 0.%{pre}.%{rel}
-%else
-%if "%{snapshot}" != ""
-%define release 0.%(echo %{snapshot} |sed -e 's,-,_,g').%{rel}
-%else
-%define release %{rel}
-%endif
-%endif
 
 %define gitcommit 8e19ecd05497
 %define revision %{version}-0-%{gitcommit}
@@ -120,7 +110,7 @@
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
 Version:	3.0.18
-Release:	5
+Release:	6
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
@@ -142,6 +132,7 @@ Patch4:		vlc-3.0-lua-5.3.patch
 Patch6:		vlc-3.0.9.2-compile.patch
 
 Patch20:	vlc-2.1.2-fix-default-font.patch
+Patch21:	https://git.alpinelinux.org/aports/plain/community/vlc/libplacebo-5.patch
 #Patch22:	vlc-2.1.2-live555-201306.patch
 #Patch23:	vlc-live555-20210101.patch
 
