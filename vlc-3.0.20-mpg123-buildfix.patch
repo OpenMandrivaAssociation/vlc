@@ -1,0 +1,11 @@
+diff -up vlc-3.0.20/modules/codec/mpg123.c.omv~ vlc-3.0.20/modules/codec/mpg123.c
+--- vlc-3.0.20/modules/codec/mpg123.c.omv~	2023-10-31 15:53:26.759890671 +0100
++++ vlc-3.0.20/modules/codec/mpg123.c	2023-10-31 15:53:56.604204520 +0100
+@@ -30,6 +30,7 @@
+ 
+ #include <assert.h>
+ 
++#undef _FILE_OFFSET_BITS // prevent mpg123 from redefining its API to *_64
+ #include <mpg123.h>
+ 
+ #include <vlc_common.h>
