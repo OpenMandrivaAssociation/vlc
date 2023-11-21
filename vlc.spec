@@ -175,7 +175,12 @@ BuildRequires:	pkgconfig(libchromaprint)
 BuildRequires:	pkgconfig(opencv4)
 BuildRequires:	pkgconfig(opus)
 BuildRequires:	pkgconfig(portaudio-2.0)
-BuildRequires:	pkgconfig(vdpau)
+# vdpau is disabled for now because it causes crashes
+# with ffmpeg 6.1
+# https://trac.ffmpeg.org/ticket/10672#ticket
+#BuildRequires:	pkgconfig(vdpau)
+#Suggests:	vdpau-drivers
+BuildConflicts:	pkgconfig(vdpau)
 BuildRequires:	pkgconfig(libvncclient)
 BuildRequires:	pkgconfig(xcb-util)
 BuildRequires:	pkgconfig(xcb-keysyms)
@@ -186,7 +191,11 @@ BuildRequires:	pkgconfig(libnfs)
 BuildRequires:	pkgconfig(protobuf-lite)
 BuildRequires:	pkgconfig(libnotify)
 BuildRequires:	pkgconfig(libmatroska)
-BuildRequires:	pkgconfig(libplacebo)
+# libplacebo is disabled for now becauase vlc can't
+# handle the current version (and porting is a
+# considerable effort that likely won't happen
+# before vlc 4.0)
+#BuildRequires:	pkgconfig(libplacebo)
 BuildRequires:	pkgconfig(soxr)
 BuildRequires:	pkgconfig(gstreamer-1.0)
 BuildRequires:	pkgconfig(gstreamer-app-1.0)
@@ -345,7 +354,6 @@ Suggests:	vlc-plugin-theora
 Requires:	fonts-ttf-vera
 Requires(post,postun):	desktop-file-utils
 Conflicts:	vlc-plugin-common < %{version}-%{release}
-Suggests:	vdpau-drivers
 Requires:	%{name}-core = %{EVRD}
 
 %description
@@ -1058,7 +1066,7 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_datadir}/vlc/*.*
 %{_datadir}/vlc/utils
 %dir %{_libdir}/vlc
-%{_libdir}/vlc/libvlc_vdpau.so.*
+#{_libdir}/vlc/libvlc_vdpau.so.*
 
 %{_libdir}/vlc/plugins/access/libattachment_plugin.so
 %{_libdir}/vlc/plugins/access/libaccess_concat_plugin.so
@@ -1336,7 +1344,7 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/packetizer/libpacketizer_avparser_plugin.so
 %{_libdir}/vlc/plugins/packetizer/libpacketizer_hevc_plugin.so
 
-%{_libdir}/vlc/plugins/vdpau
+#{_libdir}/vlc/plugins/vdpau
 %{_libdir}/vlc/plugins/video_splitter
 
 %dir %{_libdir}/vlc/plugins/services_discovery/
@@ -1459,7 +1467,7 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/video_output/libglconv_vaapi_drm_plugin.so
 #{_libdir}/vlc/plugins/video_output/libglconv_vaapi_wl_plugin.so
 %{_libdir}/vlc/plugins/video_output/libglconv_vaapi_x11_plugin.so
-%{_libdir}/vlc/plugins/video_output/libglconv_vdpau_plugin.so
+#{_libdir}/vlc/plugins/video_output/libglconv_vdpau_plugin.so
 
 %dir %{_libdir}/vlc/plugins/visualization
 %{_libdir}/vlc/plugins/visualization/libvisual_plugin.so*
@@ -1491,7 +1499,7 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %dir %{_includedir}/vlc
 %{_libdir}/libvlc.so
 %{_libdir}/libvlccore.so
-%{_libdir}/vlc/libvlc_vdpau.so
+#{_libdir}/vlc/libvlc_vdpau.so
 %{_libdir}/vlc/libcompat.a
 %{_includedir}/vlc/*
 %if %{mdvver} <= 201100
