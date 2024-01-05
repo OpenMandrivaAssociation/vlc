@@ -110,7 +110,7 @@
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
 Version:	3.0.20
-Release:	2
+Release:	3
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
@@ -177,9 +177,8 @@ BuildRequires:	pkgconfig(portaudio-2.0)
 # vdpau is disabled for now because it causes crashes
 # with ffmpeg 6.1
 # https://trac.ffmpeg.org/ticket/10672#ticket
-#BuildRequires:	pkgconfig(vdpau)
-#Suggests:	vdpau-drivers
-BuildConflicts:	pkgconfig(vdpau)
+BuildRequires:	pkgconfig(vdpau)
+Suggests:	vdpau-drivers
 BuildRequires:	pkgconfig(libvncclient)
 BuildRequires:	pkgconfig(xcb-util)
 BuildRequires:	pkgconfig(xcb-keysyms)
@@ -1067,7 +1066,7 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_datadir}/vlc/*.*
 %{_datadir}/vlc/utils
 %dir %{_libdir}/vlc
-#{_libdir}/vlc/libvlc_vdpau.so.*
+%{_libdir}/vlc/libvlc_vdpau.so.*
 
 %{_libdir}/vlc/plugins/access/libattachment_plugin.so
 %{_libdir}/vlc/plugins/access/libaccess_concat_plugin.so
@@ -1345,7 +1344,7 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/packetizer/libpacketizer_avparser_plugin.so
 %{_libdir}/vlc/plugins/packetizer/libpacketizer_hevc_plugin.so
 
-#{_libdir}/vlc/plugins/vdpau
+%{_libdir}/vlc/plugins/vdpau
 %{_libdir}/vlc/plugins/video_splitter
 
 %dir %{_libdir}/vlc/plugins/services_discovery/
@@ -1500,7 +1499,7 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %dir %{_includedir}/vlc
 %{_libdir}/libvlc.so
 %{_libdir}/libvlccore.so
-#{_libdir}/vlc/libvlc_vdpau.so
+%{_libdir}/vlc/libvlc_vdpau.so
 %{_libdir}/vlc/libcompat.a
 %{_includedir}/vlc/*
 %if %{mdvver} <= 201100
