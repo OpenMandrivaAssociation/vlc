@@ -1466,7 +1466,7 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/video_output/libglconv_vaapi_drm_plugin.so
 #{_libdir}/vlc/plugins/video_output/libglconv_vaapi_wl_plugin.so
 %{_libdir}/vlc/plugins/video_output/libglconv_vaapi_x11_plugin.so
-#{_libdir}/vlc/plugins/video_output/libglconv_vdpau_plugin.so
+%{_libdir}/vlc/plugins/video_output/libglconv_vdpau_plugin.so
 
 %dir %{_libdir}/vlc/plugins/visualization
 %{_libdir}/vlc/plugins/visualization/libvisual_plugin.so*
