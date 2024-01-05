@@ -962,7 +962,6 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 	--without-kde-solid \
 %endif
 	--disable-libplacebo \
-	--disable-vdpau \
 %ifarch x86_64
 	--with-pic
 %endif
