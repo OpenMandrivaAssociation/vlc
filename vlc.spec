@@ -147,6 +147,7 @@ BuildRequires:	libtool
 BuildRequires:	yasm
 BuildRequires:	flex
 BuildRequires:	bison
+BuildRequires:  ffmpeg4-devel
 BuildRequires:	gettext-devel
 BuildRequires:	libmpcdec-devel
 BuildRequires:	pkgconfig(minizip)
