@@ -127,3 +127,106 @@
      }
  
      aout_FormatPrepare( &p_dec->fmt_out.audio );
+--- vlc-3.0.20/modules/codec/avcodec/fourcc.c.orig	2024-04-11 23:18:24.472481862 +0100
++++ vlc-3.0.20/modules/codec/avcodec/fourcc.c	2024-04-11 23:17:13.105163354 +0100
+@@ -182,7 +182,7 @@
+     /* AV_CODEC_ID_V210X */
+     { VLC_CODEC_TMV, AV_CODEC_ID_TMV },
+     { VLC_CODEC_V210, AV_CODEC_ID_V210 },
+-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT( 54, 50, 100 ) && LIBAVCODEC_VERSION_MICRO >= 100
++#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT( 54, 50, 100 ) && LIBAVCODEC_VERSION_MICRO >= 100 && LIBAVCODEC_VERSION_MAJOR < 61
+     { VLC_CODEC_VUYA, AV_CODEC_ID_AYUV },
+ #endif
+     /* AV_CODEC_ID_DPX */
+--- vlc-3.0.20/modules/codec/avcodec/encoder.c.orig	2024-04-11 23:16:32.476696552 +0100
++++ vlc-3.0.20/modules/codec/avcodec/encoder.c	2024-04-11 23:38:17.189055804 +0100
+@@ -739,9 +739,10 @@
+         date_Set( &p_sys->buffer_date, AV_NOPTS_VALUE );
+         p_context->time_base.num = 1;
+         p_context->time_base.den = p_context->sample_rate;
+-        p_context->channels      = p_enc->fmt_out.audio.i_channels;
++        p_context->ch_layout.order            = AV_CHANNEL_ORDER_NATIVE;
++        p_context->ch_layout.nb_channels      = p_enc->fmt_out.audio.i_channels;
+ #if LIBAVUTIL_VERSION_CHECK( 52, 2, 6, 0, 0)
+-        p_context->channel_layout = channel_mask[p_context->channels][1];
++        p_context->ch_layout.u.mask = channel_mask[p_context->ch_layout.nb_channels][1];
+ 
+         /* Setup Channel ordering for multichannel audio
+          * as VLC channel order isn't same as libavcodec expects
+@@ -752,17 +753,17 @@
+         /* Specified order
+          * Copied from audio.c
+          */
+-        const unsigned i_order_max = 8 * sizeof(p_context->channel_layout);
++        const unsigned i_order_max = 8 * sizeof(p_context->ch_layout.u.mask);
+         uint32_t pi_order_dst[AOUT_CHAN_MAX] = { };
+         uint32_t order_mask = 0;
+         int i_channels_src = 0;
+ 
+-        if( p_context->channel_layout )
++        if( p_context->ch_layout.u.mask )
+         {
+             msg_Dbg( p_enc, "Creating channel order for reordering");
+             for( unsigned i = 0; i < sizeof(pi_channels_map)/sizeof(*pi_channels_map); i++ )
+             {
+-                if( p_context->channel_layout & pi_channels_map[i][0] )
++                if( p_context->ch_layout.u.mask & pi_channels_map[i][0] )
+                 {
+                     msg_Dbg( p_enc, "%d %"PRIx64" mapped to %"PRIx64"", i_channels_src, pi_channels_map[i][0], pi_channels_map[i][1]);
+                     pi_order_dst[i_channels_src++] = pi_channels_map[i][1];
+@@ -774,7 +775,7 @@
+         {
+             msg_Dbg( p_enc, "Creating default channel order for reordering");
+             /* Create default order  */
+-            for( unsigned int i = 0; i < __MIN( i_order_max, (unsigned)p_sys->p_context->channels ); i++ )
++            for( unsigned int i = 0; i < __MIN( i_order_max, (unsigned)p_sys->p_context->ch_layout.nb_channels ); i++ )
+             {
+                 if( i < sizeof(pi_channels_map)/sizeof(*pi_channels_map) )
+                 {
+@@ -916,10 +917,10 @@
+             goto error;
+         }
+ 
+-        if( p_context->channels > 2 )
++        if( p_context->ch_layout.nb_channels > 2 )
+         {
+-            p_context->channels = 2;
+-            p_context->channel_layout = channel_mask[p_context->channels][1];
++            p_context->ch_layout.nb_channels = 2;
++            p_context->ch_layout.u.mask = channel_mask[p_context->channels][1];
+ 
+             /* Change fmt_in in order to ask for a channels conversion */
+             p_enc->fmt_in.audio.i_channels =
+@@ -1277,8 +1278,7 @@
+     av_frame_unref( p_sys->frame );
+     p_sys->frame->format     = p_sys->p_context->sample_fmt;
+     p_sys->frame->nb_samples = leftover_samples + p_sys->i_samples_delay;
+-    p_sys->frame->channel_layout = p_sys->p_context->channel_layout;
+-    p_sys->frame->channels = p_sys->p_context->channels;
++    av_channel_layout_copy(&p_sys->frame->ch_layout, &p_sys->p_context->channel_layout);
+ 
+     p_sys->frame->pts        = date_Get( &p_sys->buffer_date ) * p_sys->p_context->time_base.den /
+                                 CLOCK_FREQ / p_sys->p_context->time_base.num;
+@@ -1408,11 +1408,10 @@
+         p_sys->frame->pts        = date_Get( &p_sys->buffer_date ) * p_sys->p_context->time_base.den /
+                                     CLOCK_FREQ / p_sys->p_context->time_base.num;
+ 
+-        p_sys->frame->channel_layout = p_sys->p_context->channel_layout;
+-        p_sys->frame->channels = p_sys->p_context->channels;
++        av_channel_layout_copy(&p_sys->frame->ch_layout, &p_sys->p_context->channel_layout);
+ 
+         const int in_bytes = p_sys->frame->nb_samples *
+-            p_sys->p_context->channels * p_sys->i_sample_bytes;
++            p_sys->p_context->ch_layout.nb_channels * p_sys->i_sample_bytes;
+ 
+         if( p_sys->b_planar )
+         {
+@@ -1451,7 +1450,7 @@
+     if( p_aout_buf->i_nb_samples > 0 )
+     {
+        memcpy( p_sys->p_buffer + buffer_delay, p_aout_buf->p_buffer,
+-               p_aout_buf->i_nb_samples * p_sys->i_sample_bytes * p_sys->p_context->channels);
++               p_aout_buf->i_nb_samples * p_sys->i_sample_bytes * p_sys->p_context->ch_layout.nb_channels);
+        p_sys->i_samples_delay += p_aout_buf->i_nb_samples;
+     }
+ 
