@@ -817,6 +817,11 @@ export CPPFLAGS="$CPPFLAGS -I/usr/include/ebml"
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/speex"
 # locate libsmbclient.h
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
+# remove warnings
+export CPPFLAGS="$CPPFLAGS -Wno-unreachable-code-generic-assoc"
+
+# for abseil being built with 20 (needed via protobuf)
+export CXX="clang++ -std=gnu++20"
 
 #echo "%revision" >> src/revision.txt
 #echo "const char psz_vlc_changeset[] = \"%revision\";" >> src/revision.c
