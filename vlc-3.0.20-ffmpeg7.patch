@@ -1,0 +1,129 @@
+--- vlc-3.0.20/modules/codec/avcodec/audio.c.orig	2024-04-11 22:04:48.840481336 +0100
++++ vlc-3.0.20/modules/codec/avcodec/audio.c	2024-04-11 22:56:54.658799280 +0100
+@@ -65,7 +65,7 @@
+     bool    b_extract;
+     int     pi_extraction[AOUT_CHAN_MAX];
+     int     i_previous_channels;
+-    uint64_t i_previous_layout;
++    AVChannelLayout i_previous_layout;
+ };
+ 
+ #define BLOCK_FLAG_PRIVATE_REALLOCATED (1 << BLOCK_FLAG_PRIVATE_SHIFT)
+@@ -139,7 +139,7 @@
+     }
+ 
+     ctx->sample_rate = p_dec->fmt_in.audio.i_rate;
+-    ctx->channels = p_dec->fmt_in.audio.i_channels;
++    ctx->ch_layout.nb_channels = p_dec->fmt_in.audio.i_channels;
+     ctx->block_align = p_dec->fmt_in.audio.i_blockalign;
+     ctx->bit_rate = p_dec->fmt_in.i_bitrate;
+     ctx->bits_per_coded_sample = p_dec->fmt_in.audio.i_bitspersample;
+@@ -245,7 +245,7 @@
+     p_sys->i_reject_count = 0;
+     p_sys->b_extract = false;
+     p_sys->i_previous_channels = 0;
+-    p_sys->i_previous_layout = 0;
++    p_sys->i_previous_layout = (AVChannelLayout){0};
+ 
+     /* */
+     /* Try to set as much information as possible but do not trust it */
+@@ -396,11 +396,11 @@
+         if( ret == 0 )
+         {
+             /* checks and init from first decoded frame */
+-            if( ctx->channels <= 0 || ctx->channels > INPUT_CHAN_MAX
++            if( ctx->ch_layout.nb_channels <= 0 || ctx->ch_layout.nb_channels > INPUT_CHAN_MAX
+              || ctx->sample_rate <= 0 )
+             {
+                 msg_Warn( p_dec, "invalid audio properties channels count %d, sample rate %d",
+-                          ctx->channels, ctx->sample_rate );
++                          ctx->ch_layout.nb_channels, ctx->sample_rate );
+                 goto drop;
+             }
+             else if( p_dec->fmt_out.audio.i_rate != (unsigned int)ctx->sample_rate )
+@@ -484,15 +484,15 @@
+     /* Interleave audio if required */
+     if( av_sample_fmt_is_planar( ctx->sample_fmt ) )
+     {
+-        p_block = block_Alloc(frame->linesize[0] * ctx->channels);
++        p_block = block_Alloc(frame->linesize[0] * ctx->ch_layout.nb_channels);
+         if ( likely(p_block) )
+         {
+-            const void *planes[ctx->channels];
+-            for (int i = 0; i < ctx->channels; i++)
++            const void *planes[ctx->ch_layout.nb_channels];
++            for (int i = 0; i < ctx->ch_layout.nb_channels; i++)
+                 planes[i] = frame->extended_data[i];
+ 
+             aout_Interleave(p_block->p_buffer, planes, frame->nb_samples,
+-                            ctx->channels, p_dec->fmt_out.audio.i_format);
++                            ctx->ch_layout.nb_channels, p_dec->fmt_out.audio.i_format);
+             p_block->i_nb_samples = frame->nb_samples;
+         }
+         av_frame_free(&frame);
+@@ -511,7 +511,7 @@
+         {
+             aout_ChannelExtract( p_buffer->p_buffer,
+                                  p_dec->fmt_out.audio.i_channels,
+-                                 p_block->p_buffer, ctx->channels,
++                                 p_block->p_buffer, ctx->ch_layout.nb_channels,
+                                  p_block->i_nb_samples, p_sys->pi_extraction,
+                                  p_dec->fmt_out.audio.i_bitspersample );
+             p_buffer->i_nb_samples = p_block->i_nb_samples;
+@@ -580,33 +580,36 @@
+     p_dec->fmt_out.audio.i_rate = p_sys->p_context->sample_rate;
+ 
+     /* */
+-    if( p_sys->i_previous_channels == p_sys->p_context->channels &&
+-        p_sys->i_previous_layout == p_sys->p_context->channel_layout )
++    if( p_sys->i_previous_channels == p_sys->p_context->ch_layout.nb_channels &&
++        av_channel_layout_compare(&p_sys->i_previous_layout,&p_sys->p_context->ch_layout) == 0 )
+         return;
+     if( b_trust )
+     {
+-        p_sys->i_previous_channels = p_sys->p_context->channels;
+-        p_sys->i_previous_layout = p_sys->p_context->channel_layout;
++        p_sys->i_previous_channels = p_sys->p_context->ch_layout.nb_channels;
++        av_channel_layout_copy(&p_sys->i_previous_layout, &p_sys->p_context->ch_layout);
+     }
+ 
+     const unsigned i_order_max = sizeof(pi_channels_map)/sizeof(*pi_channels_map);
+     uint32_t pi_order_src[i_order_max];
+ 
+     int i_channels_src = 0;
+-    int64_t channel_layout =
+-        p_sys->p_context->channel_layout ? p_sys->p_context->channel_layout :
+-        av_get_default_channel_layout( p_sys->p_context->channels );
++    AVChannelLayout channel_layout;
++    if(p_sys->p_context->ch_layout.u.mask) {
++       av_channel_layout_copy(&channel_layout, &p_sys->p_context->ch_layout);
++    } else {
++       av_channel_layout_default(&channel_layout, p_sys->p_context->ch_layout.nb_channels );
++    }
+ 
+-    if( channel_layout )
++    if(av_channel_layout_check(&channel_layout))
+     {
+         for( unsigned i = 0; i < i_order_max
+-         && i_channels_src < p_sys->p_context->channels; i++ )
++         && i_channels_src < p_sys->p_context->ch_layout.nb_channels; i++ )
+         {
+-            if( channel_layout & pi_channels_map[i][0] )
++            if( channel_layout.u.mask & pi_channels_map[i][0] )
+                 pi_order_src[i_channels_src++] = pi_channels_map[i][1];
+         }
+ 
+-        if( i_channels_src != p_sys->p_context->channels && b_trust )
++        if( i_channels_src != p_sys->p_context->ch_layout.nb_channels && b_trust )
+             msg_Err( p_dec, "Channel layout not understood" );
+ 
+         /* Detect special dual mono case */
+@@ -638,7 +641,7 @@
+     {
+         msg_Warn( p_dec, "no channel layout found");
+         p_dec->fmt_out.audio.i_physical_channels = 0;
+-        p_dec->fmt_out.audio.i_channels = p_sys->p_context->channels;
++        p_dec->fmt_out.audio.i_channels = p_sys->p_context->ch_layout.nb_channels;
+     }
+ 
+     aout_FormatPrepare( &p_dec->fmt_out.audio );
