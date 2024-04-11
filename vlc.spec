@@ -164,7 +164,7 @@ BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(glu)
 BuildRequires:	pkgconfig(libarchive) >= 3.1.0
 BuildRequires:	pkgconfig(gtk+-3.0)
-BuildRequires:	pkgconfig(libavcodec-4)
+BuildRequires:	pkgconfig(libavcodec)
 BuildRequires:	pkgconfig(libcdio)
 BuildRequires:	pkgconfig(libnotify)
 BuildRequires:	pkgconfig(libproxy-1.0)
