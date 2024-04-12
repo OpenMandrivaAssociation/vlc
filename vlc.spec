@@ -75,6 +75,8 @@
 %bcond_without mod
 %bcond_without gnutls
 %bcond_without bluray
+#cant compile this at the moment with abseil/protobuf issues
+%bcond_with chromecast
 
 # is non-free stuf
 %ifarch %{arm} %{armx}
@@ -721,6 +723,7 @@ Requires:	%{name}-core = %{version}
 This plugin adds support for Bonjour service discovery to
 the VLC media player.
 
+%if %{with chromecast}
 %package plugin-chromecast
 Summary:	ChromeCast output plugin for VLC
 Group:		Video
@@ -729,6 +732,7 @@ Requires:	%{name}-core = %{version}
 %description plugin-chromecast
 This plugin adds ChromeCast output support to
 the VLC media player.
+%endif
 
 %if %{with upnp}
 %package plugin-upnp
@@ -819,9 +823,6 @@ export CPPFLAGS="$CPPFLAGS -I%{_includedir}/speex"
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
 # remove warnings
 export CPPFLAGS="$CPPFLAGS -Wno-unreachable-code-generic-assoc"
-
-# for abseil being built with 20 (needed via protobuf)
-export CXX="clang++ -std=gnu++20"
 
 #echo "%revision" >> src/revision.txt
 #echo "const char psz_vlc_changeset[] = \"%revision\";" >> src/revision.c
@@ -968,7 +969,12 @@ export CXX="clang++ -std=gnu++20"
 %endif
 	--disable-libplacebo \
 %ifarch x86_64
-	--with-pic
+	--with-pic \
+%endif
+%if %{with chromecast}
+        --enable-chromecast \
+%else
+       --disable-chromecast
 %endif
 
 %make_build --output-sync=target
@@ -1702,9 +1708,11 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %doc README
 %{_libdir}/vlc/plugins/notify/libnotify_plugin.so*
 
+%if %{with chromecast}
 %files plugin-chromecast
 %{_libdir}/vlc/plugins/demux/libdemux_chromecast_plugin.so
 %{_libdir}/vlc/plugins/stream_out/libstream_out_chromecast_plugin.so
+%endif
 
 %post core
 %{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
