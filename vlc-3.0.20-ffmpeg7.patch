@@ -305,3 +305,56 @@
         p_sys->i_samples_delay += p_aout_buf->i_nb_samples;
      }
  
+--- vlc-3.0.20/modules/demux/avformat/mux.c.orig	2024-04-12 09:43:14.176674968 +0100
++++ vlc-3.0.20/modules/demux/avformat/mux.c	2024-04-12 09:46:15.032487553 +0100
+@@ -74,10 +74,10 @@
+ static void DelStream( sout_mux_t *, sout_input_t * );
+ static int Mux      ( sout_mux_t * );
+ 
+-static int IOWrite( void *opaque, uint8_t *buf, int buf_size );
++static int IOWrite( void *opaque, const uint8_t *buf, int buf_size );
+ static int64_t IOSeek( void *opaque, int64_t offset, int whence );
+ #if LIBAVFORMAT_VERSION_CHECK( 57, 7, 0, 40, 100 )
+-static int IOWriteTyped(void *opaque, uint8_t *buf, int buf_size,
++static int IOWriteTyped(void *opaque, const uint8_t *buf, int buf_size,
+                               enum AVIODataMarkerType type, int64_t time);
+ #endif
+ 
+@@ -267,7 +267,7 @@
+     {
+     case AUDIO_ES:
+         codecpar->codec_type = AVMEDIA_TYPE_AUDIO;
+-        codecpar->channels = fmt->audio.i_channels;
++        codecpar->ch_layout.nb_channels = fmt->audio.i_channels;
+         codecpar->sample_rate = fmt->audio.i_rate;
+         stream->time_base = (AVRational){1, codecpar->sample_rate};
+         if (fmt->i_bitrate == 0) {
+@@ -407,7 +407,7 @@
+ }
+ 
+ #if LIBAVFORMAT_VERSION_CHECK( 57, 7, 0, 40, 100 )
+-int IOWriteTyped(void *opaque, uint8_t *buf, int buf_size,
++int IOWriteTyped(void *opaque, const uint8_t *buf, int buf_size,
+                               enum AVIODataMarkerType type, int64_t time)
+ {
+     VLC_UNUSED(time);
+@@ -508,7 +508,7 @@
+ /*****************************************************************************
+  * I/O wrappers for libavformat
+  *****************************************************************************/
+-static int IOWrite( void *opaque, uint8_t *buf, int buf_size )
++static int IOWrite( void *opaque, const uint8_t *buf, int buf_size )
+ {
+     sout_mux_t *p_mux = opaque;
+     sout_mux_sys_t *p_sys = p_mux->p_sys;
+--- vlc-3.0.20/modules/demux/avformat/demux.c.orig	2024-04-12 09:43:02.724067453 +0100
++++ vlc-3.0.20/modules/demux/avformat/demux.c	2024-04-12 09:46:46.224422142 +0100
+@@ -401,7 +401,7 @@
+             es_format_Init( &es_fmt, AUDIO_ES, fcc );
+             es_fmt.i_original_fourcc = CodecTagToFourcc( cp->codec_tag );
+             es_fmt.i_bitrate = cp->bit_rate;
+-            es_fmt.audio.i_channels = cp->channels;
++            es_fmt.audio.i_channels = cp->ch_layout.nb_channels;
+             es_fmt.audio.i_rate = cp->sample_rate;
+             es_fmt.audio.i_bitspersample = cp->bits_per_coded_sample;
+             es_fmt.audio.i_blockalign = cp->block_align;
