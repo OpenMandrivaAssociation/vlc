@@ -111,16 +111,16 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	3.0.20
-Release:	5
+Version:	3.0.21
+Release:	1
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
-URL:		http://www.videolan.org/
+URL:		https://www.videolan.org/
 %if "%{snapshot}" != ""
-Source0:	http://nightlies.videolan.org/build/source/%{fname}.tar.xz
+Source0:	https://nightlies.videolan.org/build/source/%{fname}.tar.xz
 %else
-Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
+Source0:	https://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
 
 # Sources at VideoLan is not updated frequently. For faster source archive release use github:
 #Source0:  https://github.com/videolan/vlc/archive/%{version}/%{name}-%{version}.tar.gz
