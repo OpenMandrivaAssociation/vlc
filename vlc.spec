@@ -218,12 +218,14 @@ BuildRequires:	pkgconfig(libv4l2)
 BuildRequires:	pkgconfig(udev)
 %endif
 %if %{with qt5}
-BuildRequires:	cmake(Qt5Core)
-BuildRequires:	cmake(Qt5Widgets)
-BuildRequires:	cmake(Qt5Gui)
-BuildRequires:	cmake(Qt5Svg)
-BuildRequires:	cmake(Qt5X11Extras)
-BuildRequires:	qmake5
+BuildRequires:	cmake(Qt6Core)
+BuildRequires:	cmake(Qt6Widgets)
+BuildRequires:	cmake(Qt6Gui)
+BuildRequires:	cmake(Qt6Svg)
+#BuildRequires:	cmake(Qt5X11Extras)
+BuildRequires:	qmake-qt6
+
+BuildRequires:	pkgconfig(KF6WindowSystem)
 %endif
 %if %{with taglib}
 BuildRequires:	pkgconfig(taglib)
