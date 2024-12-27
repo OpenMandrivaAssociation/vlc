@@ -1,7 +1,7 @@
 %define _disable_ld_no_undefined 1
 %global optflags %{optflags} -O3 -Wno-unknown-warning-option
 
-%define snapshot 20231120
+%define snapshot 20241218
 %define pre 0
 
 %define gitcommit de025b60
@@ -116,8 +116,8 @@ Release:	%{?snapshot:0.%{snapshot}.}1
 License:	GPLv2+ and LGPLv2+
 Group:		Video
 URL:		http://www.videolan.org/
-%if 0%{?snapshot:1}
-Source0:	https://code.videolan.org/videolan/vlc/-/archive/master/vlc-master.tar.bz2#/vlc-%{snapshot}.tar.bz2
+%if 1%{?snapshot:1}
+Source0:	https://code.videolan.org/videolan/vlc/-/archive/master/vlc-master.tar.bz2
 %else
 Source0:	http://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
 %endif
