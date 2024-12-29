@@ -140,6 +140,7 @@ Patch20:	vlc-2.1.2-fix-default-font.patch
 
 #Patch25:	vlc-3.0.16-dav1d-0.9.3.patch
 #Patch26:	Remove_legacy_caca.patch
+Patch27:	https://gitlab.archlinux.org/archlinux/packaging/packages/vlc/-/raw/main/taglib-2.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 
