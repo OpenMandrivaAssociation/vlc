@@ -112,7 +112,7 @@
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
 Version:	3.0.21
-Release:	4
+Release:	5
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
@@ -141,6 +141,8 @@ Patch20:	vlc-2.1.2-fix-default-font.patch
 #Patch25:	vlc-3.0.16-dav1d-0.9.3.patch
 #Patch26:	Remove_legacy_caca.patch
 Patch27:	https://gitlab.archlinux.org/archlinux/packaging/packages/vlc/-/raw/main/taglib-2.patch
+# vaapi support with current ffmpeg
+Patch28:	https://code.videolan.org/videolan/vlc/-/merge_requests/6606.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 
@@ -1193,7 +1195,7 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/codec/libspdif_plugin.so
 %{_libdir}/vlc/plugins/codec/libtextst_plugin.so
 %{_libdir}/vlc/plugins/codec/libttml_plugin.so
-#%{_libdir}/vlc/plugins/codec/libvaapi_plugin.so
+%{_libdir}/vlc/plugins/codec/libvaapi_plugin.so
 %{_libdir}/vlc/plugins/codec/libcvdsub_plugin.so*
 %{_libdir}/vlc/plugins/codec/libddummy_plugin.so
 %{_libdir}/vlc/plugins/codec/libedummy_plugin.so
@@ -1231,7 +1233,7 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/codec/libjpeg_plugin.so
 %{_libdir}/vlc/plugins/codec/libsubstx3g_plugin.so
 %{_libdir}/vlc/plugins/codec/libsvgdec_plugin.so
-#{_libdir}/vlc/plugins/codec/libvaapi_drm_plugin.so
+%{_libdir}/vlc/plugins/codec/libvaapi_drm_plugin.so
 %{_libdir}/vlc/plugins/codec/libvpx_plugin.so
 
 %dir %{_libdir}/vlc/plugins/control
