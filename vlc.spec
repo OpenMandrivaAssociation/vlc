@@ -142,7 +142,7 @@ Patch20:	vlc-2.1.2-fix-default-font.patch
 #Patch26:	Remove_legacy_caca.patch
 Patch27:	https://gitlab.archlinux.org/archlinux/packaging/packages/vlc/-/raw/main/taglib-2.patch
 # vaapi support with current ffmpeg
-Patch28:	https://code.videolan.org/videolan/vlc/-/merge_requests/6606.patch
+#Patch28:	https://code.videolan.org/videolan/vlc/-/merge_requests/6606.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 
