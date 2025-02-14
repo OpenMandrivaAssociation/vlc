@@ -133,7 +133,7 @@ Patch3:		vlc-3.0.20-mpg123-buildfix.patch
 #Patch3:		vlc-3.0-clang.patch
 Patch4:		vlc-3.0-lua-5.3.patch
 Patch6:		vlc-3.0.9.2-compile.patch
-Patch7:		vlc-3.0.20-ffmpeg7.patch
+#Patch7:		vlc-3.0.20-ffmpeg7.patch
 Patch20:	vlc-2.1.2-fix-default-font.patch
 #Patch22:	vlc-2.1.2-live555-201306.patch
 #Patch23:	vlc-live555-20210101.patch
@@ -143,6 +143,21 @@ Patch20:	vlc-2.1.2-fix-default-font.patch
 Patch27:	https://gitlab.archlinux.org/archlinux/packaging/packages/vlc/-/raw/main/taglib-2.patch
 # vaapi support with current ffmpeg
 #Patch28:	https://code.videolan.org/videolan/vlc/-/merge_requests/6606.patch
+
+Patch0126:	0183-avcodec-avoid-signedness-mismatch-warning.patch
+Patch0127:	0184-avcodec-use-p_dec-fmt_out-instead-of-context-channel.patch
+Patch0128:	0185-avcodec-audio-decoder-to-use-ch_layout.patch
+Patch0129:	0186-avcodec-use-p_enc-audio-channels-instead-of-context-.patch
+Patch0130:	0187-codec-avcodec-map-AYUV-as-RAWVIDEO-with-ffmpeg-6.0.patch
+Patch0131:	0188-avcodec-encoder-fix-channel_layout-conditionals.patch
+Patch0132:	0189-codec-avcodec-fix-audio-channel_layout-conditionals.patch
+Patch0133:	0190-use-ch_layout-from-ffmpeg-5.1.patch
+Patch0134:	0191-avcodec-add-handling-of-new-ch_layout-in-audio-encod.patch
+Patch0135:	0192-avcodec-use-ch_layout-for-channel-layout-in-audio-en.patch
+Patch0136:	0193-codec-avcodec-bypass-removed-define-for-Intel-workar.patch
+Patch0137:	0194-fix-avio-callbacks-signature-with-ffmpeg-6.1.patch
+# avcodec: vaapi: support VAAPI with latest FFmpeg
+Patch0138:	https://code.videolan.org/videolan/vlc/-/merge_requests/6606.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 
