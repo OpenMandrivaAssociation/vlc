@@ -843,7 +843,7 @@ export CPPFLAGS="$CPPFLAGS -I/usr/include/ebml"
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/speex"
 # locate libsmbclient.h
 export CPPFLAGS="$CPPFLAGS -I%{_includedir}/samba-4.0"
-
+export QMAKE=qmake-qt6
 #echo "%revision" >> src/revision.txt
 #echo "const char psz_vlc_changeset[] = \"%revision\";" >> src/revision.c
 
