@@ -128,7 +128,7 @@ Patch2:		vlc-3.0.0-libarchive-tar.patch
 Patch3:		vlc-3.0.20-mpg123-buildfix.patch
 #Patch3:		vlc-3.0-clang.patch
 #Patch4:		vlc-3.0-lua-5.3.patch
-Patch6:		vlc-3.0.9.2-compile.patch
+#Patch6:		vlc-3.0.9.2-compile.patch
 
 #Patch20:	vlc-2.1.2-fix-default-font.patch
 #Patch21:	https://git.alpinelinux.org/aports/plain/community/vlc/libplacebo-5.patch
