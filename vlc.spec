@@ -926,7 +926,8 @@ export QMAKE=qmake-qt6
 		-Dpostproc=disabled \
   		-Dlive555=enabled \
 		-Dbranch_protection=disabled \
-  		-Dsrt=disabled
+  		-Dsrt=disabled \
+		-Drist=disabled
 
 %meson_build
 		
