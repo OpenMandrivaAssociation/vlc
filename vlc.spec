@@ -851,7 +851,7 @@ export QMAKE=qmake-qt6
 %meson	\
 		-Dvlc=true \
   		-Dtests=disabled \
-		-Dnls=true \
+		-Dnls=enabled \
   		-Dstream_outputs=true \
 		-Dvideolan_manager=true \
   		-Daddon_manager=true \
