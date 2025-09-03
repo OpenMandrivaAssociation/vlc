@@ -930,7 +930,8 @@ export QMAKE=qmake-qt6
   		-Dsrt=disabled \
 		-Drist=disabled \
   		-Daribb24=enabled \
-		-Daribcaption=disabled
+		-Daribcaption=disabled \
+  		-Dshine=disabled
 
 %meson_build
 		
