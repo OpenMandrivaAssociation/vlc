@@ -140,6 +140,7 @@ Patch3:		vlc-3.0.20-mpg123-buildfix.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 
+BuildRequires:	meson
 BuildRequires:	git
 BuildRequires:	desktop-file-utils
 BuildRequires:	libtool
@@ -835,7 +836,7 @@ sed -i -e 's/.*ERROR.*I78ef29975181ee22429c9bd4b11d96d9e68b7a9c.*/AC_MSG_WARN([O
 
 # (crazy) try with autoreconf only
 # actually our libtool breaks huh?
-autoreconf -vif
+#autoreconf -vif
 %build
 # add missing ebml include dir
 export CPPFLAGS="$CPPFLAGS -I/usr/include/ebml"
@@ -847,160 +848,91 @@ export QMAKE=qmake-qt6
 #echo "%revision" >> src/revision.txt
 #echo "const char psz_vlc_changeset[] = \"%revision\";" >> src/revision.c
 
-%configure \
-%if %{without lua}
-	--disable-lua \
-%endif
-	--disable-dependency-tracking \
-%ifarch %{ix86}
-	--disable-sse \
-%endif
-	--disable-sid \
-%if %{with bonjour}
-	--enable-bonjour \
-%else
-	--disable-bonjour \
-%endif
-%if %{with smb}
-	--enable-smbclient \
-%else
-	--disable-smbclient \
-%endif
-%if %{with ncurses}
-	--enable-ncurses \
-%endif
-%if %{with lirc}
-	--enable-lirc \
-%endif
-	--enable-xvideo \
-%if %{with aa}
-	--enable-aa \
-%endif
-%if %{with sdl}
-	--enable-sdl \
-%endif
-%if %{with mad}
-	--enable-mad \
-%endif
-%if %{with ogg}
-	--enable-vorbis \
-	--enable-ogg \
-%else
-	--disable-vorbis \
-	--disable-ogg \
-%endif
-%if %{with theora}
-	--enable-theora \
-%endif
-%if %{with speex}
-	--enable-speex \
-%else
-	--disable-speex \
-%endif
-%if %{with flac}
-	--enable-flac \
-%else
-	--disable-flac \
-%endif
-%if %{with mkv}
-	--enable-mkv \
-%else
-	--disable-mkv \
-%endif
-%if %{with dv}
-	--enable-dv1394 \
-%else
-	--disable-dv1394 \
-%endif
-%if %{with dvbpsi}
-	--enable-dvbpsi \
-%else
-	--disable-dvbpsi \
-%endif
-%if %{with shout}
-	--enable-shout \
-%endif
-%if ! %{with pulse}
-	--disable-pulse \
-%endif
-%if %{with jack}
-	--enable-jack \
-%endif
-%if ! %{with alsa}
-	--disable-alsa \
-%endif
-%if %{with mpeg2dec}
-	--enable-libmpeg2 \
-%else
-	--disable-libmpeg2 \
-%endif
-%if %{with faad}
-	--enable-faad \
-%else
-	--disable-faad \
-%endif
-%if %{with dts}
-	--enable-dca \
-%else
-	--disable-dca \
-%endif
-%if ! %{with svlc}
-	--disable-skins2 \
-%endif
-%if ! %{with dvdnav}
-	--disable-dvdnav \
-%endif
-%if %{with live}
-	--enable-live555 \
-%endif
-%if %{with gnutls}
-	--enable-gnutls \
-%endif
---disable-rpath \
-%if %{with vcd}
-	--enable-vcdx \
-%endif
-%if %{with cddb}
-	--enable-libcddb \
-%else
-	--disable-libcddb \
-%endif
-%if %{with x264}
-	--enable-x264 \
-	--enable-x26410b \
-%else
-	--disable-x264 \
-	--disable-x26410b \
-%endif
-%if %{with x265}
-	--enable-x265 \
-%else
-	--disable-x265 \
-%endif
-%if %{with twolame}
-	--enable-twolame \
-%endif
-%if %{with bluray}
-	--enable-bluray \
-%else
-	--disable-bluray \
-%endif
-	--enable-realrtsp \
-%if %{with kde}
-	--with-kde-solid=%{_datadir}/apps/solid/actions \
-%else
-	--without-kde-solid \
-%endif
-%ifarch x86_64
-	--with-pic
-%endif
+%meson	\
+		-Dvlc=true \
+  		-Dtests=false \
+		-Dnls=true \
+  		-Dstream_outputs=true \
+		-Dvideolan_manager=true \
+  		-Daddon_manager=true \
+		-Drun_as_root=false \
+  		-Dssp=auto \
+		-Dextra_checks=false \
+  		-Dwinstore_app=false \
+		-Dupdate-check=disabled \
+  		-Drust=disabled \
+		-Dsse=auto \
+  		-Davx=disabled \
+		-Dchromecast=enabled \
+  		-Dqt=enabled \
+		-Dqt_gtk=enabled \
+  		-Dskins2=enabled \
+		-Ddbus=enabled \
+  		-Dwayland=wayland \
+		-Dx11=enabled \
+  		-Dxcb=enabled \
+		-Davcodec=enabled \
+  		-Dmerge-ffmpeg=false \
+		-Dlibva=enabled \
+  		-Domxil=false \
+		-Davformat=enabled \
+  		-Dalsa=enabled \
+		-Dpipewire=enabled \
+  		-Dpulse=enabled \
+		-Doss=enabled \
+  		-Dsndio=enabled \
+		-Dogg=enabled \
+  		-Dmpg123=enabled \
+		-Dschroedinger=auto \
+  		-Drsvg=enabled \
+		-Dcairo=enabled \
+  		-Dfreetype=enabled \
+		-Dflac=enabled \
+  		-Dopus=enabled \
+		-Dtheoraenc=enabled \
+  		-Dtheoradec=enabled \
+		-Ddaaladec=disabled \
+  		-Dvorbis=enabled \
+		-Dx265=auto \
+  		-Dx264=auto \
+		-Dx262=auto \
+  		-Dfdk-aac=auto \
+		-Dvpx=enabled \
+  		-Daom=enabled \
+		-Drav1e=enabled \
+  		-Ddav1d=enabled \
+		-Dtwolame=enabled \
+  		-Dvpl=enabled \
+		-Dsoxr=enabled \
+  		-Dspeex=enabled \
+		-Dspeexdsp=enabled \
+  		-Ddrm=enabled \
+		-Davahi=enabled \
+  		-Dupnp=enabled \
+		-Dlibxml2=enabled \
+  		-Dfaad=auto \
+		-Dfluidsynth=enabled \
+  		-Dmicrodns=auto \
+		-Dgnutls=enabled \
+  		-Dlibsecret=enabled \
+		-Dmatroska=enabled \
+  		-Dpng=enabled \
+		-Djpeg=enabled \
+  		-Dlibplacebo=enabled \
+		-Dvulkan=enabled \
+  		-Dfreerdp=auto \
+		-Dvnc=auto \
+  		-Dswscale=enabled \
+		-Dpostproc=disabled \
+  		-Dlive555=enabled
 
-%make_build --output-sync=target
+%meson_build
+		
+  
 
 %install
-mkdir -p %{buildroot}%{_libdir}
-%make_install transform=""
-find %{buildroot}%{_libdir}/vlc -name \*.la -exec %__rm -f {} \;
+%meson_install
+
 %find_lang %{name}
 rm -rf installed-docs
 mv %{buildroot}%{_datadir}/doc/vlc installed-docs
