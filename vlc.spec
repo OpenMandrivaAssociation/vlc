@@ -850,7 +850,7 @@ export QMAKE=qmake-qt6
 
 %meson	\
 		-Dvlc=true \
-  		-Dtests=false \
+  		-Dtests=disabled \
 		-Dnls=true \
   		-Dstream_outputs=true \
 		-Dvideolan_manager=true \
