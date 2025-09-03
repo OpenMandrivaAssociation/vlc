@@ -924,7 +924,8 @@ export QMAKE=qmake-qt6
 		-Dvnc=auto \
   		-Dswscale=enabled \
 		-Dpostproc=disabled \
-  		-Dlive555=enabled
+  		-Dlive555=enabled \
+		-Dbranch_protection=disabled
 
 %meson_build
 		
