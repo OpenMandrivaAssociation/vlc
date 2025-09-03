@@ -194,6 +194,7 @@ BuildRequires:	pkgconfig(gstreamer-app-1.0)
 BuildRequires:	pkgconfig(libjpeg)
 BuildRequires:	pkgconfig(dav1d)
 BuildRequires:	pkgconfig(aom)
+BuildRequires:	pkgconfig(vpl)
 # Intel Media SDK is x86 only
 %ifarch %{x86_64}
 BuildRequires:	pkgconfig(mfx)
