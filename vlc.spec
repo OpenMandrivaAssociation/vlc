@@ -149,6 +149,7 @@ BuildRequires:	flex
 BuildRequires:	bison
 BuildRequires:	gettext-devel
 BuildRequires:	libmpcdec-devel
+BuildRequires:	pkgconfig(aribb24)
 BuildRequires:	pkgconfig(minizip)
 BuildRequires:	pkgconfig(libgcrypt)
 BuildRequires:	pkgconfig(vpx) >= 1.8.0
@@ -928,7 +929,7 @@ export QMAKE=qmake-qt6
 		-Dbranch_protection=disabled \
   		-Dsrt=disabled \
 		-Drist=disabled \
-  		-Daribb24=disabled
+  		-Daribb24=enabled
 
 %meson_build
 		
