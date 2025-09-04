@@ -935,7 +935,8 @@ export QMAKE=qmake-qt6
 		-Daribcaption=disabled \
   		-Dshine=disabled \
 		-Dwasapi=disabled \
-  		-Dmacosx_avfoundation=disabled
+  		-Dmacosx_avfoundation=disabled \
+		-Ddsm=disabled
 
 %meson_build
 		
