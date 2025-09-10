@@ -159,6 +159,7 @@ Patch111:	0194-fix-avio-callbacks-signature-with-ffmpeg-6.1.patch
 
 # vaapi: support VAAPI with latest FFmpeg
 Patch120:	https://code.videolan.org/videolan/vlc/-/merge_requests/6606.patch
+Patch121:	vlc-3.0.21-ffmpeg-8.0.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 
@@ -1464,7 +1465,6 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/video_filter/libmotionblur_plugin.so*
 %{_libdir}/vlc/plugins/video_filter/libmotiondetect_plugin.so*
 %{_libdir}/vlc/plugins/video_filter/libposterize_plugin.so
-%{_libdir}/vlc/plugins/video_filter/libpostproc_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libpsychedelic_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libpuzzle_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libripple_plugin.so
