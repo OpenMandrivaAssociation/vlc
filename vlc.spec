@@ -89,17 +89,18 @@
 %define libnamecore %mklibname vlccore %{coremajor}
 %define devname %mklibname -d %{name}
 
-%bcond_without faad
 %if %{with plf}
 # make EVR of plf build higher than regular to allow update, needed with rpm5 mkrel
 %define extrarelsuffix plf
 %define distsuffix plf
 %bcond_without faac
+%bcond_without faad
 %bcond_without dts
 %bcond_without x264
 %bcond_without x265
 %else
 %bcond_with faac
+%bcond_with faad
 %bcond_with dts
 %bcond_with x264
 %bcond_with x265
