@@ -1,7 +1,28 @@
-diff -up vlc-3.0.21/modules/codec/avcodec/audio.c.omv~ vlc-3.0.21/modules/codec/avcodec/audio.c
---- vlc-3.0.21/modules/codec/avcodec/audio.c.omv~	2025-09-10 13:50:46.420794763 +0200
-+++ vlc-3.0.21/modules/codec/avcodec/audio.c	2025-09-10 13:50:52.246914438 +0200
-@@ -269,9 +269,9 @@ int InitAudioDec( vlc_object_t *obj )
+diff -up vlc-3.0.22/modules/codec/Makefile.am.7~ vlc-3.0.22/modules/codec/Makefile.am
+--- vlc-3.0.22/modules/codec/Makefile.am.7~	2025-11-13 23:17:54.000000000 +0100
++++ vlc-3.0.22/modules/codec/Makefile.am	2025-12-03 18:47:56.828652986 +0100
+@@ -539,7 +539,7 @@ libx264_plugin_la_SOURCES = codec/x264.c
+ libx264_plugin_la_CPPFLAGS = $(AM_CPPFLAGS) $(CPPFLAGS_x264) -DMODULE_NAME_IS_x264
+ libx264_plugin_la_CFLAGS = $(AM_CFLAGS) $(CFLAGS_x264)
+ libx264_plugin_la_LDFLAGS = $(AM_LDFLAGS) $(LDFLAGS_x264) -rpath '$(codecdir)'
+-libx264_plugin_la_LIBADD = $(LIBS_x264) $(LIBM)
++libx264_plugin_la_LIBADD = $(LIBS_x264) $(LIBM) -lx264
+ EXTRA_LTLIBRARIES += libx264_plugin.la
+ codec_LTLIBRARIES += $(LTLIBx264)
+ 
+@@ -547,7 +547,7 @@ libx26410b_plugin_la_SOURCES = codec/x26
+ libx26410b_plugin_la_CPPFLAGS = $(AM_CPPFLAGS) -DMODULE_NAME_IS_x26410b
+ libx26410b_plugin_la_CFLAGS = $(AM_CFLAGS) $(CFLAGS_x26410b)
+ libx26410b_plugin_la_LDFLAGS = $(AM_LDFLAGS) $(LDFLAGS_x26410b) -rpath '$(codecdir)'
+-libx26410b_plugin_la_LIBADD = $(LIBS_x26410b) $(LIBM)
++libx26410b_plugin_la_LIBADD = $(LIBS_x26410b) $(LIBM) -lx264
+ EXTRA_LTLIBRARIES += libx26410b_plugin.la
+ codec_LTLIBRARIES += $(LTLIBx26410b)
+ 
+diff -up vlc-3.0.22/modules/codec/avcodec/audio.c.7~ vlc-3.0.22/modules/codec/avcodec/audio.c
+--- vlc-3.0.22/modules/codec/avcodec/audio.c.7~	2025-11-13 23:17:54.000000000 +0100
++++ vlc-3.0.22/modules/codec/avcodec/audio.c	2025-12-03 18:47:56.827074468 +0100
+@@ -271,9 +271,9 @@ int InitAudioDec( vlc_object_t *obj )
      p_dec->pf_flush  = Flush;
  
      /* XXX: Writing input format makes little sense. */
@@ -13,10 +34,10 @@ diff -up vlc-3.0.21/modules/codec/avcodec/audio.c.omv~ vlc-3.0.21/modules/codec/
          p_dec->fmt_in.i_level = avctx->level;
  
      return VLC_SUCCESS;
-diff -up vlc-3.0.21/modules/codec/avcodec/encoder.c.omv~ vlc-3.0.21/modules/codec/avcodec/encoder.c
---- vlc-3.0.21/modules/codec/avcodec/encoder.c.omv~	2025-09-10 13:51:18.761999841 +0200
-+++ vlc-3.0.21/modules/codec/avcodec/encoder.c	2025-09-10 13:56:27.041735053 +0200
-@@ -473,30 +473,30 @@ int InitVideoEnc( vlc_object_t *p_this )
+diff -up vlc-3.0.22/modules/codec/avcodec/encoder.c.7~ vlc-3.0.22/modules/codec/avcodec/encoder.c
+--- vlc-3.0.22/modules/codec/avcodec/encoder.c.7~	2025-11-13 23:17:54.000000000 +0100
++++ vlc-3.0.22/modules/codec/avcodec/encoder.c	2025-12-03 18:50:01.108654111 +0100
+@@ -484,30 +484,30 @@ int InitVideoEnc( vlc_object_t *p_this )
      psz_val = var_GetString( p_enc, ENC_CFG_PREFIX "aac-profile" );
      /* libavcodec uses faac encoder atm, and it has issues with
       * other than low-complexity profile, so default to that */
@@ -57,7 +78,7 @@ diff -up vlc-3.0.21/modules/codec/avcodec/encoder.c.omv~ vlc-3.0.21/modules/code
          }
      }
      free( psz_val );
-@@ -1025,7 +1025,7 @@ errmsg:
+@@ -1052,7 +1052,7 @@ errmsg:
          p_sys->i_sample_bytes = (p_enc->fmt_in.audio.i_bitspersample / 8);
          p_sys->i_frame_size = p_context->frame_size > 1 ?
                                      p_context->frame_size :
@@ -66,36 +87,21 @@ diff -up vlc-3.0.21/modules/codec/avcodec/encoder.c.omv~ vlc-3.0.21/modules/code
          p_sys->i_buffer_out = av_samples_get_buffer_size(NULL,
                  p_enc->fmt_out.audio.i_channels, p_sys->i_frame_size,
                  p_sys->p_context->sample_fmt, DEFAULT_ALIGN);
-@@ -1226,8 +1226,14 @@ static block_t *EncodeVideo( encoder_t *
-         frame->pict_type = 0;
- 
-         frame->repeat_pict = p_pict->i_nb_fields - 2;
--        frame->interlaced_frame = !p_pict->b_progressive;
--        frame->top_field_first = !!p_pict->b_top_field_first;
-+	if(p_pict->b_progressive)
-+		frame->flags &= ~AV_FRAME_FLAG_INTERLACED;
-+	else
-+		frame->flags |= AV_FRAME_FLAG_INTERLACED;
-+	if(!!p_pict->b_top_field_first)
-+		frame->flags |= AV_FRAME_FLAG_TOP_FIELD_FIRST;
-+	else
-+		frame->flags &= ~AV_FRAME_FLAG_TOP_FIELD_FIRST;
- 
-         frame->format = p_sys->p_context->pix_fmt;
-         frame->width = p_sys->p_context->width;
-@@ -1481,9 +1487,6 @@ void EndVideoEnc( vlc_object_t *p_this )
+@@ -1519,11 +1519,6 @@ void EndVideoEnc( vlc_object_t *p_this )
  
      av_frame_free( &p_sys->frame );
  
 -    vlc_avcodec_lock();
--    avcodec_close( p_sys->p_context );
+-    avcodec_free_context( &p_sys->p_context );
 -    vlc_avcodec_unlock();
-     avcodec_free_context( &p_sys->p_context );
+-
+-
+     av_free( p_sys->p_interleave_buf );
+     av_free( p_sys->p_buffer );
  
- 
-diff -up vlc-3.0.21/modules/codec/avcodec/vaapi.c.omv~ vlc-3.0.21/modules/codec/avcodec/vaapi.c
---- vlc-3.0.21/modules/codec/avcodec/vaapi.c.omv~	2025-09-10 13:56:40.161751959 +0200
-+++ vlc-3.0.21/modules/codec/avcodec/vaapi.c	2025-09-10 13:56:45.787174805 +0200
+diff -up vlc-3.0.22/modules/codec/avcodec/vaapi.c.7~ vlc-3.0.22/modules/codec/avcodec/vaapi.c
+--- vlc-3.0.22/modules/codec/avcodec/vaapi.c.7~	2025-11-13 23:17:54.000000000 +0100
++++ vlc-3.0.22/modules/codec/avcodec/vaapi.c	2025-12-03 18:47:56.827867033 +0100
 @@ -100,9 +100,9 @@ static int GetVaProfile(AVCodecContext *
          count = 18;
          break;
@@ -121,41 +127,19 @@ diff -up vlc-3.0.21/modules/codec/avcodec/vaapi.c.omv~ vlc-3.0.21/modules/codec/
          {
              i_profile = VAProfileVP9Profile2;
              i_vlc_chroma = VLC_CODEC_VAAPI_420_10BPP;
-diff -up vlc-3.0.21/modules/codec/avcodec/video.c.omv~ vlc-3.0.21/modules/codec/avcodec/video.c
---- vlc-3.0.21/modules/codec/avcodec/video.c.omv~	2025-09-10 13:44:23.206535036 +0200
-+++ vlc-3.0.21/modules/codec/avcodec/video.c	2025-09-10 13:50:37.246732565 +0200
-@@ -198,14 +198,14 @@ static int lavc_GetVideoFormat(decoder_t
+diff -up vlc-3.0.22/modules/codec/avcodec/video.c.7~ vlc-3.0.22/modules/codec/avcodec/video.c
+--- vlc-3.0.22/modules/codec/avcodec/video.c.7~	2025-11-13 23:17:54.000000000 +0100
++++ vlc-3.0.22/modules/codec/avcodec/video.c	2025-12-03 18:53:07.111098672 +0100
+@@ -198,7 +198,7 @@ static int lavc_GetVideoFormat(decoder_t
+         fmt->i_frame_rate = ctx->framerate.num;
          fmt->i_frame_rate_base = ctx->framerate.den;
  # if LIBAVCODEC_VERSION_MICRO <  100
-         // for some reason libav don't thinkg framerate presents actually same thing as in ffmpeg
--        fmt->i_frame_rate_base *= __MAX(ctx->ticks_per_frame, 1);
-+        fmt->i_frame_rate_base *= __MAX(ctx->codec_descriptor->props & AV_CODEC_PROP_FIELDS, 1);
+-        // for some reason libav don't thinkg framerate presents actually same thing as in ffmpeg
++        // for some reason libav don't think framerate presents actually same thing as in ffmpeg
+         fmt->i_frame_rate_base *= __MAX(ctx->ticks_per_frame, 1);
  # endif
      }
-     else if (ctx->time_base.num > 0 && ctx->time_base.den > 0)
-     {
-         fmt->i_frame_rate = ctx->time_base.den;
-         fmt->i_frame_rate_base = ctx->time_base.num
--                                 * __MAX(ctx->ticks_per_frame, 1);
-+                                 * __MAX(ctx->codec_descriptor->props & AV_CODEC_PROP_FIELDS, 1);
-     }
- 
-     /* FIXME we should only set the known values and let the core decide
-@@ -328,11 +328,11 @@ static int lavc_UpdateVideoFormat(decode
-     /* always have date in fields/ticks units */
-     if(dec->p_sys->pts.i_divider_num)
-         date_Change(&dec->p_sys->pts, fmt_out.i_frame_rate *
--                                      __MAX(ctx->ticks_per_frame, 1),
-+                                      __MAX(ctx->codec_descriptor->props & AV_CODEC_PROP_FIELDS, 1),
-                                       fmt_out.i_frame_rate_base);
-     else
-         date_Init(&dec->p_sys->pts, fmt_out.i_frame_rate *
--                                    __MAX(ctx->ticks_per_frame, 1),
-+                                    __MAX(ctx->codec_descriptor->props & AV_CODEC_PROP_FIELDS, 1),
-                                     fmt_out.i_frame_rate_base);
- 
-     fmt_out.p_palette = dec->fmt_out.video.p_palette;
-@@ -626,9 +626,9 @@ static int InitVideoDecCommon( decoder_t
+@@ -624,9 +624,9 @@ static int InitVideoDecCommon( decoder_t
      p_dec->pf_flush  = Flush;
  
      /* XXX: Writing input format makes little sense. */
@@ -167,16 +151,7 @@ diff -up vlc-3.0.21/modules/codec/avcodec/video.c.omv~ vlc-3.0.21/modules/codec/
          p_dec->fmt_in.i_level = p_context->level;
      return VLC_SUCCESS;
  }
-@@ -945,7 +945,7 @@ static vlc_tick_t interpolate_next_pts(
-         p_sys->pts.i_divider_num == 0 )
-         return VLC_TICK_INVALID;
- 
--    int i_tick = p_context->ticks_per_frame;
-+    int i_tick = p_context->codec_descriptor->props & AV_CODEC_PROP_FIELDS;
-     if( i_tick <= 0 )
-         i_tick = 1;
- 
-@@ -1426,8 +1426,8 @@ static picture_t *DecodeBlock( decoder_t
+@@ -1431,8 +1431,8 @@ static picture_t *DecodeBlock( decoder_t
          /* Hack to force display of still pictures */
          p_pic->b_force = p_sys->b_first_frame;
          p_pic->i_nb_fields = 2 + frame->repeat_pict;
@@ -187,36 +162,15 @@ diff -up vlc-3.0.21/modules/codec/avcodec/video.c.omv~ vlc-3.0.21/modules/codec/
  
          if (DecodeSidedata(p_dec, frame, p_pic))
              i_pts = VLC_TICK_INVALID;
-diff -up vlc-3.0.21/modules/codec/Makefile.am.omv~ vlc-3.0.21/modules/codec/Makefile.am
---- vlc-3.0.21/modules/codec/Makefile.am.omv~	2025-09-10 14:10:30.779994075 +0200
-+++ vlc-3.0.21/modules/codec/Makefile.am	2025-09-10 14:11:24.778917925 +0200
-@@ -539,7 +539,7 @@ libx264_plugin_la_SOURCES = codec/x264.c
- libx264_plugin_la_CPPFLAGS = $(AM_CPPFLAGS) $(CPPFLAGS_x264) -DMODULE_NAME_IS_x264
- libx264_plugin_la_CFLAGS = $(AM_CFLAGS) $(CFLAGS_x264)
- libx264_plugin_la_LDFLAGS = $(AM_LDFLAGS) $(LDFLAGS_x264) -rpath '$(codecdir)'
--libx264_plugin_la_LIBADD = $(LIBS_x264) $(LIBM)
-+libx264_plugin_la_LIBADD = $(LIBS_x264) $(LIBM) -lx264
- EXTRA_LTLIBRARIES += libx264_plugin.la
- codec_LTLIBRARIES += $(LTLIBx264)
+diff -up vlc-3.0.22/modules/demux/avformat/demux.c.7~ vlc-3.0.22/modules/demux/avformat/demux.c
+--- vlc-3.0.22/modules/demux/avformat/demux.c.7~	2025-11-13 23:17:54.000000000 +0100
++++ vlc-3.0.22/modules/demux/avformat/demux.c	2025-12-03 18:53:43.738562582 +0100
+@@ -133,7 +133,7 @@ static void get_rotation(es_format_t *fm
+     AVDictionaryEntry *rotation = av_dict_get(s->metadata, kRotateKey, NULL, 0);
+     long angle = 0;
  
-@@ -547,7 +547,7 @@ libx26410b_plugin_la_SOURCES = codec/x26
- libx26410b_plugin_la_CPPFLAGS = $(AM_CPPFLAGS) -DMODULE_NAME_IS_x26410b
- libx26410b_plugin_la_CFLAGS = $(AM_CFLAGS) $(CFLAGS_x26410b)
- libx26410b_plugin_la_LDFLAGS = $(AM_LDFLAGS) $(LDFLAGS_x26410b) -rpath '$(codecdir)'
--libx26410b_plugin_la_LIBADD = $(LIBS_x26410b) $(LIBM)
-+libx26410b_plugin_la_LIBADD = $(LIBS_x26410b) $(LIBM) -lx264
- EXTRA_LTLIBRARIES += libx26410b_plugin.la
- codec_LTLIBRARIES += $(LTLIBx26410b)
- 
-diff -up vlc-3.0.21/modules/demux/avformat/demux.c.omv~ vlc-3.0.21/modules/demux/avformat/demux.c
---- vlc-3.0.21/modules/demux/avformat/demux.c.omv~	2025-09-10 14:45:01.187932404 +0200
-+++ vlc-3.0.21/modules/demux/avformat/demux.c	2025-09-10 14:46:04.595065408 +0200
-@@ -138,7 +138,7 @@ static void get_rotation(es_format_t *fm
-         else
-             fmt->video.orientation = ORIENT_NORMAL;
-     }
--    int32_t *matrix = (int32_t *)av_stream_get_side_data(s, AV_PKT_DATA_DISPLAYMATRIX, NULL);
+-    int32_t *matrix = GetStreamSideData(s, AV_PKT_DATA_DISPLAYMATRIX);
 +    int32_t *matrix = (int32_t *)av_packet_side_data_get(s->codecpar->coded_side_data, s->codecpar->nb_coded_side_data, AV_PKT_DATA_DISPLAYMATRIX);
      if( matrix ) {
-         angle = lround(av_display_rotation_get(matrix));
- 
+         bool flipped = (int64_t)matrix[0] * matrix[4] < (int64_t)matrix[1] * matrix[3];
+         if (flipped) {

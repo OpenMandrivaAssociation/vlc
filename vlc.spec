@@ -51,7 +51,7 @@
 %bcond_without speex
 %bcond_without flac
 %bcond_without mkv
-%bcond_without a52
+%bcond_with a52
 %bcond_without vcd
 %bcond_without cddb
 %bcond_without dv
@@ -89,18 +89,17 @@
 %define libnamecore %mklibname vlccore %{coremajor}
 %define devname %mklibname -d %{name}
 
+%bcond_without faad
 %if %{with plf}
 # make EVR of plf build higher than regular to allow update, needed with rpm5 mkrel
 %define extrarelsuffix plf
 %define distsuffix plf
 %bcond_without faac
-%bcond_without faad
 %bcond_without dts
 %bcond_without x264
 %bcond_without x265
 %else
 %bcond_with faac
-%bcond_with faad
 %bcond_with dts
 %bcond_with x264
 %bcond_with x265
@@ -111,8 +110,8 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	3.0.21
-Release:	10
+Version:	3.0.22
+Release:	1
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
@@ -130,35 +129,11 @@ Source100:	%{name}.rpmlintrc
 Patch1:		vlc-2.0.1-automake-1.12.patch
 Patch2:		vlc-3.0.0-libarchive-tar.patch
 Patch3:		vlc-3.0.20-mpg123-buildfix.patch
-#Patch3:		vlc-3.0-clang.patch
 Patch4:		vlc-3.0-lua-5.3.patch
 Patch6:		vlc-3.0.9.2-compile.patch
-# disable, because it is not compatibile with patches for vaapi. For ffmpeg 6/7 use other set of patches.
-#Patch7:		vlc-3.0.20-ffmpeg7.patch
 Patch20:	vlc-2.1.2-fix-default-font.patch
-#Patch22:	vlc-2.1.2-live555-201306.patch
-#Patch23:	vlc-live555-20210101.patch
 
-#Patch25:	vlc-3.0.16-dav1d-0.9.3.patch
-#Patch26:	Remove_legacy_caca.patch
-Patch27:	https://gitlab.archlinux.org/archlinux/packaging/packages/vlc/-/raw/main/taglib-2.patch
-
-# FFmpeg 6/7
-Patch100:	0183-avcodec-avoid-signedness-mismatch-warning.patch
-Patch101:	0184-avcodec-use-p_dec-fmt_out-instead-of-context-channel.patch
-Patch102:	0185-avcodec-audio-decoder-to-use-ch_layout.patch
-Patch103:	0186-avcodec-use-p_enc-audio-channels-instead-of-context-.patch
-Patch104:	0187-codec-avcodec-map-AYUV-as-RAWVIDEO-with-ffmpeg-6.0.patch
-Patch105:	0188-avcodec-encoder-fix-channel_layout-conditionals.patch
-Patch106:	0189-codec-avcodec-fix-audio-channel_layout-conditionals.patch
-Patch107:	0190-use-ch_layout-from-ffmpeg-5.1.patch
-Patch108:	0191-avcodec-add-handling-of-new-ch_layout-in-audio-encod.patch
-Patch109:	0192-avcodec-use-ch_layout-for-channel-layout-in-audio-en.patch
-Patch110:	0193-codec-avcodec-bypass-removed-define-for-Intel-workar.patch
-Patch111:	0194-fix-avio-callbacks-signature-with-ffmpeg-6.1.patch
-
-# vaapi: support VAAPI with latest FFmpeg
-Patch120:	https://code.videolan.org/videolan/vlc/-/merge_requests/6606.patch
+# FFmpeg 8
 Patch121:	vlc-3.0.21-ffmpeg-8.0.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
@@ -437,6 +412,16 @@ BuildRequires:	pkgconfig(zvbi-0.2)
 This package adds support for Raw VBI, Teletext and Closed Caption based on
 the ZVBI library to VLC.
 %endif
+
+%package plugin-sndio
+Summary:	VLC plugin for playing audio through libsndio
+Group:		Video
+Requires:	%{name}-core = %{version}
+BuildRequires:	pkgconfig(sndio)
+Enhances:	(vlc and %{_lib}sndio7.2)
+
+%description plugin-sndio
+VLC plugin for playing audio through libsndio
 
 %if %{with kate}
 %package plugin-kate
@@ -1228,6 +1213,7 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/codec/libsubsdec_plugin.so*
 %if %{with x264}
 %{_libdir}/vlc/plugins/codec/libx264_plugin.so*
+%{_libdir}/vlc/plugins/codec/libx26410b_plugin.so
 %endif
 %if %{with x265}
 %{_libdir}/vlc/plugins/codec/libx265_plugin.so*
@@ -1305,6 +1291,7 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_libdir}/vlc/plugins/demux/libxa_plugin.so*
 %{_libdir}/vlc/plugins/demux/libcaf_plugin.so
 %{_libdir}/vlc/plugins/demux/libdiracsys_plugin.so
+%{_libdir}/vlc/plugins/demux/libdmxmus_plugin.so
 %if %{with satellite}
 %{_libdir}/vlc/plugins/access/libsatellite_plugin.so*
 %endif
@@ -1514,8 +1501,7 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %if %{with kde}
 %{_datadir}/apps/solid/actions/*.desktop
 %endif
-
-%{_datadir}/metainfo/vlc.appdata.xml
+%{_datadir}/metainfo/org.videolan.vlc.appdata.xml
 
 %files -n %{libname}
 %{_libdir}/libvlc.so.%{libmajor}*
@@ -1551,6 +1537,9 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_datadir}/applications/mandriva-svlc.desktop
 %{_datadir}/vlc/skins2
 %endif
+
+%files plugin-sndio
+%{_libdir}/vlc/plugins/audio_output/libsndio_plugin.so
 
 %if %{with zvbi}
 %files plugin-zvbi
