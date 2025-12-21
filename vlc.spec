@@ -143,6 +143,10 @@ Patch121:	vlc-3.0.21-ffmpeg-8.0.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
 BuildRequires:	git
 BuildRequires:	desktop-file-utils
 BuildRequires:	libtool
