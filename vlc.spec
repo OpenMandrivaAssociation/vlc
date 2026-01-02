@@ -826,9 +826,15 @@ sed -i -e 's/.*ERROR.*I78ef29975181ee22429c9bd4b11d96d9e68b7a9c.*/AC_MSG_WARN([O
 #autoconf
 #automake -acf
 
+libtoolize --install --force --copy
+aclocal -I m4
+autoheader
+autoconf
+automake -acf
+
 # (crazy) try with autoreconf only
 # actually our libtool breaks huh?
-autoreconf -vif
+#autoreconf -vif
 %build
 # add missing ebml include dir
 export CPPFLAGS="$CPPFLAGS -I/usr/include/ebml"
