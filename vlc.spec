@@ -147,7 +147,7 @@ BuildRequires:	make
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libtool-base
-#BuildRequires:	slibtool
+BuildRequires:	slibtool
 BuildRequires:	git
 BuildRequires:	desktop-file-utils
 BuildRequires:	libtool
