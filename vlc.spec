@@ -843,6 +843,7 @@ export CPPFLAGS="$CPPFLAGS -Wno-unreachable-code-generic-assoc"
 #echo "const char psz_vlc_changeset[] = \"%revision\";" >> src/revision.c
 
 %configure \
+	--disable-dolt \
 %if %{without lua}
 	--disable-lua \
 %endif
