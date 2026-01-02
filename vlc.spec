@@ -147,7 +147,7 @@ BuildRequires:	make
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libtool-base
-BuildRequires:	slibtool
+#BuildRequires:	slibtool
 BuildRequires:	git
 BuildRequires:	desktop-file-utils
 BuildRequires:	libtool
@@ -185,7 +185,7 @@ BuildRequires:	pkgconfig(portaudio-2.0)
 # with ffmpeg 6.1
 # https://trac.ffmpeg.org/ticket/10672#ticket
 BuildRequires:	pkgconfig(vdpau)
-Suggests:	vdpau-drivers
+#Suggests:	vdpau-drivers
 BuildRequires:	pkgconfig(libvncclient)
 BuildRequires:	pkgconfig(xcb-util)
 BuildRequires:	pkgconfig(xcb-keysyms)
@@ -843,7 +843,6 @@ export CPPFLAGS="$CPPFLAGS -Wno-unreachable-code-generic-assoc"
 #echo "const char psz_vlc_changeset[] = \"%revision\";" >> src/revision.c
 
 %configure \
-	--disable-dolt \
 %if %{without lua}
 	--disable-lua \
 %endif
