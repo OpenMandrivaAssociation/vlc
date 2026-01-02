@@ -111,7 +111,7 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	3.0.22
+Version:	3.0.23
 Release:	1
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
