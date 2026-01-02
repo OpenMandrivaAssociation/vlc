@@ -143,6 +143,7 @@ Patch20:	vlc-2.1.2-fix-default-font.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 
+BuildRequires:	make
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libtool-base
