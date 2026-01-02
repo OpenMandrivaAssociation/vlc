@@ -139,7 +139,7 @@ Patch20:	vlc-2.1.2-fix-default-font.patch
 #Patch100:	vlc-3.0.22-qt6.patch
 
 # FFmpeg 8
-Patch121:	vlc-3.0.21-ffmpeg-8.0.patch
+#Patch121:	vlc-3.0.21-ffmpeg-8.0.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 
