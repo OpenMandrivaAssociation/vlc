@@ -111,7 +111,7 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	3.0.22
+Version:	3.0.23
 Release:	1
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
@@ -139,10 +139,11 @@ Patch20:	vlc-2.1.2-fix-default-font.patch
 #Patch100:	vlc-3.0.22-qt6.patch
 
 # FFmpeg 8
-Patch121:	vlc-3.0.21-ffmpeg-8.0.patch
+#Patch121:	vlc-3.0.21-ffmpeg-8.0.patch
 
 Obsoletes:	%{name}-plugin-opengl < %{EVRD}
 
+BuildRequires:	make
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libtool-base
@@ -184,7 +185,7 @@ BuildRequires:	pkgconfig(portaudio-2.0)
 # with ffmpeg 6.1
 # https://trac.ffmpeg.org/ticket/10672#ticket
 BuildRequires:	pkgconfig(vdpau)
-Suggests:	vdpau-drivers
+#Suggests:	vdpau-drivers
 BuildRequires:	pkgconfig(libvncclient)
 BuildRequires:	pkgconfig(xcb-util)
 BuildRequires:	pkgconfig(xcb-keysyms)
@@ -819,15 +820,17 @@ sed -i -e 's/.*ERROR.*I78ef29975181ee22429c9bd4b11d96d9e68b7a9c.*/AC_MSG_WARN([O
 ./bootstrap
 %endif
 
-#libtoolize --install --force --copy
-#aclocal -I m4
-#autoheader
-#autoconf
-#automake -acf
+# AS of vlc 3.0.23 run it instead of autoreconf due this error:
+# ../doltlibtool: line 19: /builddir/build/BUILD/vlc-3.0.23-build/vlc-3.0.23/compat/../libtool: No such file or directory
+libtoolize --install --force --copy
+aclocal -I m4
+autoheader
+autoconf
+automake -acf
 
 # (crazy) try with autoreconf only
 # actually our libtool breaks huh?
-autoreconf -vif
+#autoreconf -vif
 %build
 # add missing ebml include dir
 export CPPFLAGS="$CPPFLAGS -I/usr/include/ebml"
