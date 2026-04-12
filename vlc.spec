@@ -134,6 +134,9 @@ Patch4:		vlc-3.0-lua-5.3.patch
 Patch6:		vlc-3.0.9.2-compile.patch
 Patch20:	vlc-2.1.2-fix-default-font.patch
 
+# Fedora patch. Support for gstreamer 1.28
+Patch21:	gstreamer128.patch
+
 # NOT YET: Compiles, UI comes up, but when playing a video, it doesn't
 # embed properly in the UI and a fullscreen video remains unscaled
 #Patch100:	vlc-3.0.22-qt6.patch
