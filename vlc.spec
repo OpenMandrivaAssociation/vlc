@@ -134,6 +134,9 @@ Patch4:		vlc-3.0-lua-5.3.patch
 Patch6:		vlc-3.0.9.2-compile.patch
 Patch20:	vlc-2.1.2-fix-default-font.patch
 
+# Fedora patch. Support for gstreamer 1.28
+Patch21:	gstreamer128.patch
+
 # NOT YET: Compiles, UI comes up, but when playing a video, it doesn't
 # embed properly in the UI and a fullscreen video remains unscaled
 #Patch100:	vlc-3.0.22-qt6.patch
@@ -820,6 +823,11 @@ sed -i -e 's/.*ERROR.*I78ef29975181ee22429c9bd4b11d96d9e68b7a9c.*/AC_MSG_WARN([O
 ./bootstrap
 %endif
 
+# fake it
+ln -sf %{_bindir}/libtoolize slibtoolize
+ln -sf %{_bindir}/libtool slibtool
+export PATH=$PWD:$PATH
+
 # AS of vlc 3.0.23 run it instead of autoreconf due this error:
 # ../doltlibtool: line 19: /builddir/build/BUILD/vlc-3.0.23-build/vlc-3.0.23/compat/../libtool: No such file or directory
 libtoolize --install --force --copy
@@ -843,7 +851,7 @@ export CPPFLAGS="$CPPFLAGS -Wno-unreachable-code-generic-assoc"
 
 #echo "%revision" >> src/revision.txt
 #echo "const char psz_vlc_changeset[] = \"%revision\";" >> src/revision.c
-
+ln -sf %{_bindir}/libtool libtool
 %configure \
 %if %{without lua}
 	--disable-lua \
