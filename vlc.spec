@@ -848,7 +848,7 @@ export CPPFLAGS="$CPPFLAGS -Wno-unreachable-code-generic-assoc"
 
 #echo "%revision" >> src/revision.txt
 #echo "const char psz_vlc_changeset[] = \"%revision\";" >> src/revision.c
-
+ln -sf %{_bindir}/libtool libtool
 %configure \
 %if %{without lua}
 	--disable-lua \
