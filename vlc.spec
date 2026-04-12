@@ -820,6 +820,11 @@ sed -i -e 's/.*ERROR.*I78ef29975181ee22429c9bd4b11d96d9e68b7a9c.*/AC_MSG_WARN([O
 ./bootstrap
 %endif
 
+# fake it
+ln -sf %{_bindir}/libtoolize slibtoolize
+ln -sf %{_bindir}/libtool slibtool
+export PATH=$PWD:$PATH
+
 # AS of vlc 3.0.23 run it instead of autoreconf due this error:
 # ../doltlibtool: line 19: /builddir/build/BUILD/vlc-3.0.23-build/vlc-3.0.23/compat/../libtool: No such file or directory
 libtoolize --install --force --copy
