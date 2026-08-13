@@ -113,7 +113,7 @@
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
 Version:	3.0.23
-Release:	9
+Release:	10
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
@@ -853,6 +853,8 @@ export CPPFLAGS="$CPPFLAGS -Wno-unreachable-code-generic-assoc"
 #echo "%revision" >> src/revision.txt
 #echo "const char psz_vlc_changeset[] = \"%revision\";" >> src/revision.c
 ln -sf %{_bindir}/libtool libtool
+# libarchive.pc injects -L/usr/lib; lld then targets elf32-i386 and fails
+export ARCHIVE_LIBS="-larchive"
 %configure \
 %if %{without lua}
 	--disable-lua \
@@ -1002,6 +1004,10 @@ ln -sf %{_bindir}/libtool libtool
 %else
        --disable-chromecast
 %endif
+
+# libarchive.pc puts -L/usr/lib on the link line; lld then emulates elf32-i386
+find . \( -name Makefile -o -name '*.la' \) -print0 | xargs -0 -r sed -i \
+	-e 's|-L/usr/lib ||g' -e 's| -L/usr/lib$||g'
 
 %make_build --output-sync=target
 
