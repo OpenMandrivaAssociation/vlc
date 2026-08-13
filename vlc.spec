@@ -112,7 +112,7 @@
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
 Version:	3.0.23
-Release:	7
+Release:	8
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
@@ -181,7 +181,7 @@ BuildRequires:	pkgconfig(libproxy-1.0)
 BuildRequires:	pkgconfig(librsvg-2.0)
 BuildRequires:	pkgconfig(libssh2)
 BuildRequires:	pkgconfig(libchromaprint)
-BuildRequires:	pkgconfig(opencv4)
+BuildRequires:	pkgconfig(opencv5)
 BuildRequires:	pkgconfig(opus)
 BuildRequires:	pkgconfig(portaudio-2.0)
 # vdpau is disabled for now because it causes crashes
