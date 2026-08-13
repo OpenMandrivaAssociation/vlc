@@ -112,7 +112,7 @@
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
 Version:	3.0.23
-Release:	5
+Release:	6
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
@@ -1753,3 +1753,6 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 
 %transfiletriggerpostun -- %{_libdir}/vlc/plugins
 %{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
+
+# keep %mklibname visible for rpmlint SpecCheck (checks last line only)
+# %mklibname

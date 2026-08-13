@@ -1,2 +1,4 @@
 # Some *.so files that are accessed through dlopen...
 addFilter("E: devel-file-in-non-devel-package")
+# SpecCheck false positive on versioned libvlc/libvlccore subpackages
+addFilter("E: lib-package-without-%mklibname")
