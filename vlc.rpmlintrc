@@ -1,0 +1,6 @@
+# Binary-package rpmlint noise; SRPM check skipped via --skip-spec-check
+addFilter("incorrect-fsf-address")
+addFilter("no-dependency-on")
+addFilter("description-line-too-long")
+addFilter("devel-file-in-non-devel-package")
+addFilter("lib-package-without-%mklibname")
