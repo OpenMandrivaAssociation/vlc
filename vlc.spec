@@ -1760,6 +1760,3 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 
 %transfiletriggerpostun -- %{_libdir}/vlc/plugins
 %{_libdir}/vlc/vlc-cache-gen %{_libdir}/vlc/plugins
-
-# keep %mklibname visible for rpmlint SpecCheck (checks last line only)
-# %mklibname
