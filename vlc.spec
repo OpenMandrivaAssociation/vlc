@@ -843,6 +843,9 @@ export CPPFLAGS="$CPPFLAGS -Wno-unreachable-code-generic-assoc"
 ln -sf %{_bindir}/libtool libtool
 # libarchive.pc injects -L/usr/lib; lld then targets elf32-i386 and fails
 export ARCHIVE_LIBS="-larchive"
+# Autoconf 2.72 adds -std=gnu23. VLC 3.0 is not C23-clean and
+# vlc-cache-gen then segfaults while loading plugins.
+export ac_cv_prog_cc_c23=no
 %configure \
 %if %{without lua}
 	--disable-lua \
