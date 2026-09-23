@@ -211,7 +211,7 @@ BuildRequires:	pkgconfig(dav1d)
 BuildRequires:	pkgconfig(aom)
 # Intel Media SDK is x86 only
 %ifarch %{x86_64}
-BuildRequires:	pkgconfig(mfx)
+BuildRequires:	pkgconfig(vpl)
 %endif
 %if %{with sysfs}
 BuildRequires:	sysfsutils-devel
