@@ -1516,6 +1516,10 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %{_mandir}/man1/vlc.*
 %{_mandir}/man1/vlc-wrapper.1*
 %{_datadir}/applications/vlc.desktop
+%{_datadir}/applications/vlc-openbd.desktop
+%{_datadir}/applications/vlc-opencda.desktop
+%{_datadir}/applications/vlc-opendvd.desktop
+%{_datadir}/applications/vlc-openvcd.desktop
 %{_miconsdir}/vlc.png
 %{_iconsdir}/vlc.png
 %{_liconsdir}/vlc.png
