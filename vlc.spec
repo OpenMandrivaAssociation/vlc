@@ -33,7 +33,6 @@
 %bcond_without sdl_image
 %bcond_without xvideo
 %bcond_without twolame
-%bcond_without schroedinger
 %bcond_without fluidsynth
 %bcond_without gme
 %bcond_without zvbi
@@ -112,8 +111,8 @@
 
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
-Version:	3.0.23
-Release:	10
+Version:	3.0.24
+Release:	1
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
@@ -134,9 +133,6 @@ Patch3:		vlc-3.0.20-mpg123-buildfix.patch
 Patch4:		vlc-3.0-lua-5.3.patch
 Patch6:		vlc-3.0.9.2-compile.patch
 Patch20:	vlc-2.1.2-fix-default-font.patch
-
-# Fedora patch. Support for gstreamer 1.28
-Patch21:	gstreamer128.patch
 
 # NOT YET: Compiles, UI comes up, but when playing a video, it doesn't
 # embed properly in the UI and a fullscreen video remains unscaled
@@ -632,21 +628,11 @@ GME library.
 Summary:	Rist plugin for the VLC media player
 Group:		Video/Players
 Requires:	%{name}-core = %{version}
+# 3.0.24 builds RIST against external librist (main and simple profiles).
+BuildRequires:	pkgconfig(librist)
 
 %description plugin-rist
 This plugin adds support for the RIST (Reliable Internet Stream Transport) input module to the VLC media player.
-
-%if %{with schroedinger}
-%package plugin-schroedinger
-Summary:	Dirac plugin for VLC based on Schroedinger
-Group:		Video
-Requires:	%{name}-core = %{version}
-BuildRequires:	pkgconfig(schroedinger-1.0)
-
-%description plugin-schroedinger
-These plugins add support for the Dirac video format based on Schroedinger.
-to the VLC media player.
-%endif
 
 %package plugin-speex
 Summary:	Ogg Speex codec plugin for the VLC media player
@@ -1658,12 +1644,6 @@ install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 %files plugin-rist
 %{_libdir}/vlc/plugins/access/librist_plugin.so
 %{_libdir}/vlc/plugins/access_output/libaccess_output_rist_plugin.so
-
-%if %{with schroedinger}
-%files plugin-schroedinger
-%doc README
-%{_libdir}/vlc/plugins/codec/libschroedinger_plugin.so
-%endif
 
 %if %{with twolame}
 %files plugin-twolame
