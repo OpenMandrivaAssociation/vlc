@@ -133,6 +133,8 @@ Patch3:		vlc-3.0.20-mpg123-buildfix.patch
 Patch4:		vlc-3.0-lua-5.3.patch
 Patch6:		vlc-3.0.9.2-compile.patch
 Patch20:	vlc-2.1.2-fix-default-font.patch
+# libmpcdec 1.2.6 has no mpc_decoder_destroy.
+Patch22:	vlc-3.0.24-mpcdec-destroy.patch
 
 # NOT YET: Compiles, UI comes up, but when playing a video, it doesn't
 # embed properly in the UI and a fullscreen video remains unscaled
