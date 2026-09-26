@@ -112,7 +112,7 @@
 Summary:	MPEG, MPEG2, DVD and DivX player
 Name:		vlc
 Version:	3.0.24
-Release:	3
+Release:	4
 #gw the shared libraries are LGPL
 License:	GPLv2+ and LGPLv2+
 Group:		Video
@@ -998,12 +998,6 @@ export ac_cv_prog_cc_c23=no
 # libarchive.pc puts -L/usr/lib on the link line; lld then emulates elf32-i386
 find . \( -name Makefile -o -name '*.la' \) -print0 | xargs -0 -r sed -i \
 	-e 's|-L/usr/lib ||g' -e 's| -L/usr/lib$||g'
-# glibc resolves a lazy weak __deregister_frame_info to NULL while
-# running destructors. Bind every relocation up front or cache-gen
-# segfaults after it has scanned the plugins.
-sed -i 's#./vlc-cache-gen$(EXEEXT) `realpath ../modules`#LD_BIND_NOW=1 ./vlc-cache-gen$(EXEEXT) `realpath ../modules`#' bin/Makefile
-sed -i 's#"$(DESTDIR)$(vlclibdir)/vlc-cache-gen$(EXEEXT)"#LD_BIND_NOW=1 "$(DESTDIR)$(vlclibdir)/vlc-cache-gen$(EXEEXT)"#' Makefile
-
 %make_build --output-sync=target
 
 %install
@@ -1048,22 +1042,9 @@ install -m 644 %{pngdir}/16x16/vlc.png %{buildroot}/%{_miconsdir}/vlc.png
 install -m 644 %{pngdir}/32x32/vlc.png %{buildroot}/%{_iconsdir}/vlc.png
 install -m 644 %{pngdir}/48x48/vlc.png %{buildroot}/%{_liconsdir}/vlc.png
 
-# Same destructor crash as the build-time cache generator. -Wl,-z,now on
-# these binaries does not cover libraries they dlopen; LD_BIND_NOW does.
-for bin in %{buildroot}%{_bindir}/vlc %{buildroot}%{_libdir}/vlc/vlc-cache-gen; do
-	mv "$bin" "$bin.bin"
-	cat > "$bin" << 'EOF'
-#!/bin/sh
-export LD_BIND_NOW=1
-exec "$0.bin" "$@"
-EOF
-	chmod 755 "$bin"
-done
-
 %files core
 %dir %{_libdir}/vlc
 %{_libdir}/vlc/vlc-cache-gen
-%{_libdir}/vlc/vlc-cache-gen.bin
 %dir %{_libdir}/vlc/plugins
 %ghost %{_libdir}/vlc/plugins/plugins.dat
 %dir %{_libdir}/vlc/plugins/access
@@ -1111,7 +1092,6 @@ done
 %{_bindir}/rvlc
 %{_bindir}/qvlc
 %{_bindir}/vlc
-%{_bindir}/vlc.bin
 %{_bindir}/vlc-wrapper
 %dir %{_datadir}/vlc/
 %{_datadir}/vlc/*.*
